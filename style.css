@@ -26,6 +26,9 @@
   justify-content: center;
   position: relative;
   z-index: 1;
+  width: 93px;   /* 280 × 0.33 */
+  height: 112px; /* 340 × 0.33 */
+  overflow: hidden;
 }
 
 .partner-badge a {
