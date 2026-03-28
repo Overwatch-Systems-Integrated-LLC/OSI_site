@@ -43,10 +43,8 @@
 }
 
 .partner-badge iframe {
-  width: 280px;
-  height: 340px;
+  width: 93px;
+  height: 113px;
   border: none;
   background: transparent;
-  transform: scale(0.33);
-  transform-origin: top left;
 }
