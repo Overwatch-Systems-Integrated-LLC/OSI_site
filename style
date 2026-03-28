@@ -1,0 +1,48 @@
+.partners-section {
+  padding: 3rem 0;
+}
+
+.partners-heading {
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  margin: 0 0 2.5rem;
+}
+
+.partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.partner-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 72px;
+  background: #16161a;
+  border: 0.5px solid #2a2a2e;
+  border-radius: 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.partner-badge:hover {
+  border-color: #3d3d44;
+  background: #1c1c22;
+}
+
+.partner-badge img {
+  max-width: 90px;
+  max-height: 36px;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0.55);
+  transition: filter 0.2s;
+}
+
+.partner-badge:hover img {
+  filter: grayscale(0.6) brightness(0.85);
+}
