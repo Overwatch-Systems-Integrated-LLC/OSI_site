@@ -41,3 +41,10 @@
   position: relative;
   z-index: 1;
 }
+
+.partner-badge iframe {
+  width: 280px;
+  height: 340px;
+  border: none;
+  background: transparent;
+}
