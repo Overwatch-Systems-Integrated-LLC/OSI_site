@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — Overwatch Systems Integrated</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #18487a;
+      --cyan:   #26aee4;
+      --dark:   #090d12;
+      --dark2:  #0e1520;
+      --dark3:  #141e2e;
+      --steel:  #b8c8d8;
+      --muted:  #5a7a96;
+      --white:  #eaf2f8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark2); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 80px;
+      background: rgba(9,13,18,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(38,174,228,0.12);
+    }
+
+    .nav-logo img { height: 60px; display: block; }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--steel);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; left: 0; bottom: -4px;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width 0.25s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: var(--cyan); }
+    .nav-links a.active::after { width: 100%; }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan) !important;
+      padding: 0.45rem 1.2rem;
+      transition: background 0.2s, color 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--cyan) !important; color: var(--dark) !important; }
+    .nav-cta::after { display: none !important; }
+
+    .nav-toggle { display: none; }
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: fixed;
+        top: 72px; left: 0; right: 0; background: var(--dark2);
+        padding: 2rem; gap: 1.5rem; border-bottom: 1px solid rgba(38,174,228,0.15); }
+      .nav-links.open { display: flex; }
+      .nav-toggle {
+        display: block; background: none; border: none; cursor: pointer;
+        color: var(--cyan);
+      }
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 140px 5% 60px;
+      background: var(--dark2);
+      border-bottom: 1px solid rgba(38,174,228,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(38,174,228,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38,174,228,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .page-header-content { position: relative; z-index: 1; max-width: 700px; }
+
+    .page-eyebrow {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+
+    .page-title span { color: var(--cyan); }
+
+    .page-sub {
+      font-size: 1rem;
+      color: var(--steel);
+      line-height: 1.75;
+      max-width: 580px;
+    }
+
+    /* ── SERVICE SECTIONS ── */
+    .service-section {
+      padding: 5rem 5%;
+      border-bottom: 1px solid rgba(38,174,228,0.08);
+      scroll-margin-top: 80px;
+    }
+
+    .service-section:nth-child(even) {
+      background: var(--dark2);
+    }
+
+    .service-inner {
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .service-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .service-sidebar { position: sticky; top: 100px; }
+
+    .service-icon-large {
+      width: 72px; height: 72px;
+      border: 1px solid rgba(38,174,228,0.25);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-icon-large svg {
+      width: 36px; height: 36px;
+      stroke: var(--cyan); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .service-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .service-body p {
+      font-size: 0.95rem;
+      color: var(--steel);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .service-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--steel);
+      line-height: 1.5;
+    }
+
+    .service-bullets li::before {
+      content: '';
+      display: block;
+      flex-shrink: 0;
+      width: 6px; height: 6px;
+      border: 1px solid var(--cyan);
+      margin-top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .service-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--cyan);
+      transition: background 0.2s, color 0.2s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .service-cta:hover { background: var(--cyan); color: var(--dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(38,174,228,0.1);
+      padding: 2.5rem 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    .footer-logo img { height: 36px; opacity: 0.8; }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="IconOnly_Logo.png" alt="Overwatch Systems Integrated">
+  </div>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html" class="active">Services</a></li>
+    <li><a href="index.html#how-it-works">How It Works</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-grid"></div>
+  <div class="page-header-content">
+    <div class="page-eyebrow">What We Do</div>
+    <h1 class="page-title">Our <span>Services</span></h1>
+    <p class="page-sub">From a single camera system to a fully integrated facility — OSI delivers end-to-end solutions built around your environment, your requirements, and your budget.</p>
+  </div>
+</div>
+
+<!-- SECURITY SYSTEMS -->
+<section class="service-section" id="security-systems">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="service-label">Service 01</div>
+      <div class="service-title">Security Systems</div>
+    </div>
+    <div class="service-body">
+      <p>Full-spectrum physical security integration built around your facility and threat profile. OSI designs, installs, and maintains complete security ecosystems — configured, tested, and documented to a professional standard so your team always knows exactly what's in place and why.</p>
+      <ul class="service-bullets">
+        <li>IP camera systems — fixed, PTZ, and specialty lenses</li>
+        <li>Access control — card readers, key fobs, and credential management</li>
+        <li>Intrusion detection — door contacts, motion, glass break, and perimeter sensors</li>
+        <li>Video management platforms including Milestone and Axis VMS</li>
+        <li>AI-powered video analytics for intelligent alerting and forensic search</li>
+        <li>Full system documentation delivered with every project</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HAZARDOUS ENVIRONMENT -->
+<section class="service-section" id="hazardous-environment">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="service-label">Service 02</div>
+      <div class="service-title">Hazardous Environment Solutions</div>
+    </div>
+    <div class="service-body">
+      <p>When the environment itself is the challenge, standard equipment isn't enough. OSI specializes in deploying reliable security and automation systems in conditions where off-the-shelf solutions fail. We understand the compliance requirements and the real-world conditions — because we've worked in them.</p>
+      <ul class="service-bullets">
+        <li>Explosion-proof camera and sensor enclosures (Class I, II, III environments)</li>
+        <li>Extreme temperature rated equipment for heat and cold exposure</li>
+        <li>High-vibration and shock-resistant installations</li>
+        <li>Chemical and corrosive environment rated hardware</li>
+        <li>Industrial automation integration with security systems</li>
+        <li>Compliance-aware design for regulated environments</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- NETWORK INFRASTRUCTURE -->
+<section class="service-section" id="network-infrastructure">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      </div>
+      <div class="service-label">Service 03</div>
+      <div class="service-title">Network Infrastructure</div>
+    </div>
+    <div class="service-body">
+      <p>A secure system is only as strong as the network behind it. OSI handles the full network stack using Netgear-certified expertise — building networks designed specifically for the demands of security and automation systems, not repurposed office IT.</p>
+      <ul class="service-bullets">
+        <li>Structured cabling — Cat6/Cat6A design and installation</li>
+        <li>Fiber optic runs for long-distance and high-bandwidth links</li>
+        <li>WiFi site surveys and enterprise wireless deployment</li>
+        <li>Managed switching and VLAN segmentation</li>
+        <li>Network design optimized for IP camera and access control traffic</li>
+        <li>Full as-built documentation for every network installation</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM INTEGRATION -->
+<section class="service-section" id="system-integration">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <div class="service-label">Service 04</div>
+      <div class="service-title">System Integration</div>
+    </div>
+    <div class="service-body">
+      <p>Modern facilities run on multiple platforms that rarely talk to each other out of the box. OSI bridges that gap — integrating video management systems, AI analytics, access control, automation platforms, and network infrastructure into a single cohesive operation.</p>
+      <p>We place a strong emphasis on clear, precise documentation for every integration project, giving your team a complete and accurate picture of the system from day one.</p>
+      <ul class="service-bullets">
+        <li>Milestone and Axis VMS configuration and integration</li>
+        <li>AI-powered video analytics — object detection, behavioral alerting, forensic search</li>
+        <li>Access control and video management platform unification</li>
+        <li>Industrial automation and security system cross-integration</li>
+        <li>Third-party platform API and middleware integration</li>
+        <li>Comprehensive as-built documentation and system diagrams</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MONITORING -->
+<section class="service-section" id="monitoring">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.21H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 7.29 7.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div class="service-label">Service 05</div>
+      <div class="service-title">24/7 Monitoring</div>
+    </div>
+    <div class="service-body">
+      <p>Through a trusted professional monitoring partnership, OSI clients have access to around-the-clock system monitoring with rapid alert response. Your facility stays protected even when your team isn't on site.</p>
+      <ul class="service-bullets">
+        <li>24/7 alarm monitoring through a professional central station</li>
+        <li>Video verified alarm response to reduce false dispatches</li>
+        <li>Intrusion, access, and environmental alert monitoring</li>
+        <li>Seamless integration with your installed OSI system</li>
+        <li>Rapid escalation protocols tailored to your facility</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAINTENANCE -->
+<section class="service-section" id="maintenance">
+  <div class="service-inner">
+    <div class="service-sidebar">
+      <div class="service-icon-large">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="service-label">Service 06</div>
+      <div class="service-title">Maintenance & Support</div>
+    </div>
+    <div class="service-body">
+      <p>A system that isn't maintained is a system waiting to fail. OSI offers ongoing maintenance agreements across all service areas — security, networking, hazardous environment systems, and integrations. We stay local, we know your system, and we respond fast when something needs attention.</p>
+      <ul class="service-bullets">
+        <li>Scheduled preventive maintenance visits</li>
+        <li>Camera cleaning, lens adjustment, and health checks</li>
+        <li>Firmware and software updates for cameras, recorders, and platforms</li>
+        <li>Network equipment inspection and performance review</li>
+        <li>Priority response for service calls under maintenance agreement</li>
+        <li>Available for systems installed by OSI or inherited from prior integrators</li>
+      </ul>
+      <a href="index.html#contact" class="service-cta">Request a Consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="Official_Logo.svg" alt="Overwatch Systems Integrated">
+  </div>
+  <div class="footer-copy">&copy; 2026 Overwatch Systems Integrated. All rights reserved.</div>
+</footer>
+
+<script>
+  document.querySelector('.nav-toggle').addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.toggle('open');
+  });
+</script>
+
+</body>
+</html>
