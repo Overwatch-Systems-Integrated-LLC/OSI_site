@@ -24,6 +24,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .partner-badge a {
@@ -34,17 +36,14 @@
 
 .partner-badge svg {
   width: auto;
-  height: 50px;
-}
-
-.partner-badge {
-  position: relative;
-  z-index: 1;
+  height: 200px;
 }
 
 .partner-badge iframe {
-  width: auto;
-  height: 100px;
+  width: 280px;
+  height: 340px;
   border: none;
   background: transparent;
+  transform: scale(0.33);
+  transform-origin: top left;
 }
