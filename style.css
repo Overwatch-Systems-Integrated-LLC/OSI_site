@@ -36,3 +36,8 @@
   width: auto;
   height: 200px;
 }
+
+.partner-badge {
+  position: relative;
+  z-index: 1;
+}
