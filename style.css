@@ -1,3 +1,31 @@
+.partners-section {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.partners-heading {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  margin: 0 auto 2rem;
+  font-family: 'Courier New', monospace;
+}
+
+.partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.partner-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .partner-badge a {
   display: flex;
   align-items: center;
@@ -6,6 +34,5 @@
 
 .partner-badge svg {
   width: auto;
-  height: 56px; /* fits within the 72px badge height with padding */
-  max-width: 120px;
+  height: 200px;
 }
