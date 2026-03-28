@@ -4,7 +4,7 @@
 }
 
 .partners-heading {
-  font-size: 11px;
+  font-size: 22px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #4a4a4a;
@@ -34,7 +34,7 @@
 
 .partner-badge svg {
   width: auto;
-  height: 200px;
+  height: 50px;
 }
 
 .partner-badge {
@@ -43,8 +43,8 @@
 }
 
 .partner-badge iframe {
-  width: 280px;
-  height: 340px;
+  width: auto;
+  height: 100px;
   border: none;
   background: transparent;
 }
