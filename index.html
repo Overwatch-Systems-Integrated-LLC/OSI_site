@@ -9,7 +9,6 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -90,19 +89,18 @@
       position: relative;
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
       padding: 100px 5% 60px;
     }
 
     .hero-grid {
-  position: absolute; inset: 0;
-  z-index: 0;
-  background-image:
-    linear-gradient(rgba(38,174,228,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(38,174,228,0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridScroll 20s linear infinite;
-}
-    
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(38,174,228,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(38,174,228,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
     @keyframes gridScroll {
       0%   { background-position: 0 0; }
       100% { background-position: 60px 60px; }
@@ -524,23 +522,6 @@
         Get a Quote
       </a>
     </div>
-  </div>
-</section>
-
-<!-- Partners Section -->
-<section class="partners-section">
-  <p class="partners-heading">Partners</p>
-  <div class="partners-grid">
-
-    <div class="partner-badge">
-      <iframe src="cyd-partner-badge.html" scrolling="no" frameborder="0"></iframe>
-    </div>
-
-  </div>
-</section>
-
-    <!-- Add more .partner-badge divs here as needed -->
-
   </div>
 </section>
 
