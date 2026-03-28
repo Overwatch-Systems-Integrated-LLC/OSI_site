@@ -95,12 +95,14 @@
     }
 
     .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(38,174,228,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(38,174,228,0.05) 1px, transparent 1px);
-      background-size: 60px 60px;
-      animation: gridScroll 20s linear infinite;
+  position: absolute; inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(38,174,228,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(38,174,228,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridScroll 20s linear infinite;
+}
     }
     @keyframes gridScroll {
       0%   { background-position: 0 0; }
