@@ -38,6 +38,7 @@
   background: transparent;
   transform: scale(0.33);
   transform-origin: center top;
+  overflow: visible;
 }
 
 .partner-badge {
