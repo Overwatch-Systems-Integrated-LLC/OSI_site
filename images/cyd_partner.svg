@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="300" viewBox="0 0 260 300">
+  <defs>
+
+    <radialGradient id="shieldBody" cx="50%" cy="40%" r="65%">
+      <stop offset="0%"   stop-color="#5c7e30"/>
+      <stop offset="100%" stop-color="#253d0f"/>
+    </radialGradient>
+
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#f5e07a"/>
+      <stop offset="45%"  stop-color="#c8971e"/>
+      <stop offset="100%" stop-color="#e8c84a"/>
+    </linearGradient>
+
+    <linearGradient id="chiefFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#1e3208"/>
+      <stop offset="100%" stop-color="#131f05"/>
+    </linearGradient>
+
+    <!-- Subtle highlight overlay — top-center bright wash for depth -->
+    <radialGradient id="shieldHighlight" cx="50%" cy="20%" r="48%">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.00"/>
+    </radialGradient>
+
+    <filter id="starGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="shieldShadow" x="-12%" y="-8%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.40"/>
+    </filter>
+
+    <!-- Heraldic escutcheon outline used to clip the chief + pale stripes -->
+    <clipPath id="shieldClip">
+      <path d="M 18,18 L 242,18 L 242,150 Q 242,226 130,284 Q 18,226 18,150 Z"/>
+    </clipPath>
+
+    <linearGradient id="ribbonFront" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#244010"/>
+      <stop offset="100%" stop-color="#15240a"/>
+    </linearGradient>
+
+    <filter id="ribbonShadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- WAVING RIBBON — BACK TAILS (drawn behind the shield)                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Left tail: flares up-and-out from behind the shield to a forked end -->
+  <path d="M 54,234 L 6,214 L 24,232 L 4,251 L 54,258 Z"
+        fill="#16240a" stroke="#c8971e" stroke-width="1" opacity="0.97"/>
+  <!-- Right tail (mirror of left) -->
+  <path d="M 206,234 L 254,214 L 236,232 L 256,251 L 206,258 Z"
+        fill="#16240a" stroke="#c8971e" stroke-width="1" opacity="0.97"/>
+
+  <!-- ── OUTER SHIELD — classic flat-top heraldic escutcheon (patriot shield) ─ -->
+  <!--
+    Flat top edge, straight sides dropping to the "fess" line, then both
+    sides sweep inward to a single point at the base. This is the
+    American-Revolution-era escutcheon shape from the reference shield.
+  -->
+  <path d="M 12,12 L 248,12 L 248,150
+           Q 248,232 130,292
+           Q 12,232 12,150 Z"
+        fill="url(#goldBorder)" filter="url(#shieldShadow)"/>
+
+  <!-- ── INNER SHIELD — green body ─────────────────────────────────────── -->
+  <path d="M 18,18 L 242,18 L 242,150
+           Q 242,226 130,284
+           Q 18,226 18,150 Z"
+        fill="url(#shieldBody)"/>
+
+  <!-- ── PALE STRIPES — vertical bars evoking the 13-stripe patriot field ── -->
+  <g clip-path="url(#shieldClip)" opacity="0.55">
+    <rect x="18"     y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="52.4"   y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="86.9"   y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="121.4"  y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="155.8"  y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="190.3"  y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+    <rect x="224.8"  y="62" width="17.2" height="228" fill="#c8971e" opacity="0.10"/>
+  </g>
+
+  <!-- ── HIGHLIGHT WASH — adds subtle 3-D roundness ────────────────────── -->
+  <path d="M 18,18 L 242,18 L 242,150
+           Q 242,226 130,284
+           Q 18,226 18,150 Z"
+        fill="url(#shieldHighlight)"/>
+
+  <!-- ── FILIGREE INSET BORDER ──────────────────────────────────────────── -->
+  <path d="M 24,24 L 236,24 L 236,149
+           Q 236,221 130,276
+           Q 24,221 24,149 Z"
+        fill="none" stroke="#d4af37" stroke-width="0.7" opacity="0.28"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- CHIEF — horizontal honor band across the top of the shield          -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <g clip-path="url(#shieldClip)">
+    <rect x="18" y="18" width="224" height="44" fill="url(#chiefFill)"/>
+  </g>
+  <!-- Gold fess rule dividing chief from the striped field -->
+  <line x1="20" y1="62" x2="240" y2="62" stroke="#d4af37" stroke-width="1.4" opacity="0.85"/>
+  <line x1="20" y1="64.5" x2="240" y2="64.5" stroke="#c8971e" stroke-width="0.6" opacity="0.5"/>
+  <!-- Thin inner accent line near top of chief -->
+  <line x1="34" y1="24" x2="226" y2="24" stroke="#d4af37" stroke-width="0.5" opacity="0.35"/>
+
+  <!-- Chief text -->
+  <text x="130" y="46"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="11.5" font-weight="700"
+        fill="#d4af37" letter-spacing="3">OFFICIAL PARTNER</text>
+
+  <!-- ── HALO RINGS around the canton star ─────────────────────────────── -->
+  <circle cx="130" cy="96" r="24" fill="none" stroke="#d4af37" stroke-width="0.7" opacity="0.22"/>
+  <circle cx="130" cy="96" r="20" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.18"/>
+
+  <!-- ── 5-POINTED STAR (center 130,96) ────────────────────────────────── -->
+  <polygon
+    points="130,79  134.1,91.9  146.2,90.7  136.7,98.1  143.8,107.7  130,103  116.2,107.7  123.3,98.1  113.8,90.7  125.9,91.9"
+    fill="#d4af37" filter="url(#starGlow)"/>
+
+  <!-- ── SEPARATOR ─────────────────────────────────────────────────────── -->
+  <line x1="50" y1="124" x2="210" y2="124" stroke="#d4af37" stroke-width="0.85" opacity="0.45"/>
+
+  <!-- ── MAIN TEXT ─────────────────────────────────────────────────────── -->
+  <text x="130" y="152"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="28" font-weight="700"
+        fill="#ffffff" letter-spacing="0.5">Claim</text>
+
+  <text x="130" y="184"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="28" font-weight="700"
+        fill="#d4af37" letter-spacing="0.5">Your</text>
+
+  <text x="130" y="216"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="28" font-weight="700"
+        fill="#ffffff" letter-spacing="0.5">Discount</text>
+
+  <!-- ── SEPARATOR ─────────────────────────────────────────────────────── -->
+  <line x1="62" y1="227" x2="198" y2="227" stroke="#d4af37" stroke-width="0.85" opacity="0.45"/>
+
+  <!-- ── THREE DECORATIVE STARS (center 130,239) ───────────────────────── -->
+  <polygon points="88,234.5  89.1,237.3  92.3,237.3  89.8,239.2  90.7,242  88,240.4  85.3,242  86.2,239.2  83.7,237.3  86.9,237.3"
+           fill="#d4af37" opacity="0.9"/>
+  <polygon points="130,234  131.2,237.1  134.8,237.1  131.9,239.2  133,242.3  130,240.5  127,242.3  128.1,239.2  125.2,237.1  128.8,237.1"
+           fill="#d4af37"/>
+  <polygon points="172,234.5  173.1,237.3  176.3,237.3  173.8,239.2  174.7,242  172,240.4  169.3,242  170.2,239.2  167.7,237.3  170.9,237.3"
+           fill="#d4af37" opacity="0.9"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- WAVING RIBBON — FOLDS + FRONT BAND (drawn over the shield)           -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Underside folds where the front band turns back behind the shield -->
+  <path d="M 54,236 L 70,250 L 54,260 Z" fill="#0c1605"/>
+  <path d="M 206,236 L 190,250 L 206,260 Z" fill="#0c1605"/>
+
+  <!-- Front draped band — sags in the center, draped over the shield point -->
+  <path d="M 64,246 Q 130,262 196,246 L 196,272 Q 130,288 64,272 Z"
+        fill="url(#ribbonFront)" stroke="#c8971e" stroke-width="1.2"
+        filter="url(#ribbonShadow)"/>
+  <!-- Thin gold accent rules following the band's wave -->
+  <path d="M 70,250 Q 130,265 190,250" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.5"/>
+  <path d="M 70,268 Q 130,283 190,268" fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Banner text -->
+  <text x="130" y="271"
+        text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="15" font-weight="700"
+        fill="#e8c84a" letter-spacing="3">VETERANS</text>
+
+</svg>

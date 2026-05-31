@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Camera Coverage Sandbox — Overwatch Systems Integrated</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon.png">
+  <link rel="apple-touch-icon" href="../images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+
+    :root {
+      --navy:  #18487a;
+      --cyan:  #26aee4;
+      --dark:  #090d12;
+      --dark2: #0e1520;
+      --dark3: #141e2e;
+      --steel: #b8c8d8;
+      --muted: #5a7a96;
+      --white: #eaf2f8;
+    }
+
+    body {
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark2); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+
+    /* ── GATE ── */
+    #gate {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(9,13,18,0.97);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .gate-card {
+      background: var(--dark2);
+      border: 1px solid rgba(38,174,228,0.25);
+      padding: 2.5rem 2.5rem 2rem;
+      max-width: 460px; width: 90%;
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+    }
+    .gate-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.75rem; }
+    .gate-logo img { height: 38px; }
+    .gate-logo-text {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); line-height: 1.2;
+    }
+    .gate-logo-text small {
+      display: block; font-weight: 400; font-size: 0.75rem;
+      color: var(--muted); letter-spacing: 0.05em;
+    }
+    .gate-eyebrow {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.4rem;
+    }
+    .gate-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.7rem; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--white); line-height: 1.15; margin-bottom: 0.75rem;
+    }
+    .gate-title span { color: var(--cyan); }
+    .gate-sub { color: var(--steel); font-size: 0.85rem; line-height: 1.65; margin-bottom: 1.75rem; }
+    .gate-form { display: flex; flex-direction: column; gap: 1rem; }
+    .gate-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .gate-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .gate-field label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    }
+    .gate-field input {
+      background: var(--dark3); border: 1px solid rgba(38,174,228,0.18);
+      color: var(--white); padding: 0.6rem 0.85rem;
+      font-family: 'Inter', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .gate-field input:focus { border-color: var(--cyan); }
+    .gate-field input::placeholder { color: var(--muted); }
+    .gate-error { color: #e05c5c; font-size: 0.78rem; display: none; margin-top: -0.4rem; }
+    .gate-submit {
+      margin-top: 0.5rem; background: var(--cyan); color: var(--dark);
+      border: none; cursor: pointer; font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.85rem 1.5rem;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: opacity 0.2s;
+    }
+    .gate-submit:hover { opacity: 0.88; }
+    .gate-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+    .gate-privacy { font-size: 0.72rem; color: var(--muted); margin-top: 1rem; line-height: 1.55; }
+
+    /* ── APP ── */
+    #app { display: none; flex-direction: column; height: 100vh; }
+    #app.visible { display: flex; }
+
+    /* ── NAV ── */
+    .sb-nav {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.25rem; height: 64px;
+      background: rgba(9,13,18,0.95);
+      border-bottom: 1px solid rgba(38,174,228,0.15);
+      backdrop-filter: blur(12px); gap: 1rem;
+    }
+    .sb-nav-left { display: flex; align-items: center; gap: 1rem; }
+    .sb-nav-logo { height: 44px; display: block; }
+    .sb-nav-divider {
+      width: 1px; height: 30px;
+      background: rgba(38,174,228,0.2);
+    }
+    .sb-nav-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan);
+    }
+    .sb-nav-right { display: flex; align-items: center; gap: 1.25rem; }
+    .sb-nav-back {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; white-space: nowrap;
+      transition: color 0.2s;
+    }
+    .sb-nav-back:hover { color: var(--white); }
+    .sb-nav-user { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+    .sb-nav-user b { color: var(--cyan); font-weight: 500; }
+
+    /* ── BODY LAYOUT ── */
+    .sandbox-body { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      width: 234px; flex-shrink: 0;
+      background: var(--dark2);
+      border-right: 1px solid rgba(38,174,228,0.1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 0.9rem 1rem 0.75rem;
+      border-bottom: 1px solid rgba(38,174,228,0.08); flex-shrink: 0;
+    }
+    .section-eyebrow {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+    }
+    .section-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--white); margin-top: 0.15rem;
+    }
+    .camera-list {
+      padding: 0.6rem; overflow-y: auto; flex: 1;
+      display: flex; flex-direction: column; gap: 0.45rem;
+    }
+    .camera-card {
+      background: var(--dark3); border: 1px solid rgba(38,174,228,0.1);
+      padding: 0.7rem; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      user-select: none;
+    }
+    .camera-card:hover { border-color: rgba(38,174,228,0.38); }
+    .camera-card.active { border-color: var(--cyan); background: rgba(38,174,228,0.07); }
+    .cam-card-top { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.45rem; }
+    .cam-icon-wrap {
+      width: 30px; height: 30px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cam-icon-wrap svg { width: 26px; height: 26px; }
+    .cam-model {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.02em; color: var(--white); line-height: 1.1;
+    }
+    .cam-type-label {
+      font-size: 0.68rem; color: var(--muted);
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-top: 0.1rem; display: flex; align-items: center; gap: 0.3rem;
+    }
+    .cam-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .cam-specs { font-size: 0.7rem; color: var(--muted); line-height: 1.55; }
+    .sidebar-how {
+      padding: 0.75rem 1rem;
+      border-top: 1px solid rgba(38,174,228,0.08); flex-shrink: 0;
+    }
+    .how-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.5rem;
+    }
+    .how-item { display: flex; gap: 0.4rem; font-size: 0.7rem; color: var(--muted); line-height: 1.7; }
+    .how-n {
+      color: var(--cyan); font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; min-width: 14px; flex-shrink: 0;
+    }
+
+    /* ── MAIN CANVAS AREA ── */
+    .sandbox-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .toolbar {
+      flex-shrink: 0; display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.45rem 0.9rem; background: var(--dark3);
+      border-bottom: 1px solid rgba(38,174,228,0.08); flex-wrap: wrap;
+    }
+    .tb-group { display: flex; align-items: center; gap: 0.45rem; }
+    .tb-sep { width: 1px; height: 22px; background: rgba(38,174,228,0.14); flex-shrink: 0; }
+    .tb-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap;
+    }
+    .tb-input {
+      width: 68px; background: var(--dark2);
+      border: 1px solid rgba(38,174,228,0.18); color: var(--white);
+      padding: 0.28rem 0.5rem; font-family: 'Inter', sans-serif; font-size: 0.8rem; outline: none;
+    }
+    .tb-input:focus { border-color: var(--cyan); }
+    .tb-btn {
+      display: flex; align-items: center; gap: 0.3rem;
+      background: var(--dark2); border: 1px solid rgba(38,174,228,0.2); color: var(--steel);
+      padding: 0.28rem 0.7rem; font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+      cursor: pointer; transition: border-color 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .tb-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .tb-btn.export { background: var(--cyan); color: var(--dark); border-color: var(--cyan); }
+    .tb-btn.export:hover { opacity: 0.88; color: var(--dark); }
+    .tb-btn.danger:hover { border-color: #e05c5c; color: #e05c5c; }
+    .tb-spacer { flex: 1; }
+
+    .canvas-wrapper {
+      flex: 1; position: relative; overflow: hidden; background: var(--dark);
+    }
+    #sandbox-canvas { display: block; cursor: crosshair; position: absolute; top: 0; left: 0; }
+    .upload-hint {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      pointer-events: none; gap: 0.75rem; transition: opacity 0.3s;
+    }
+    .upload-hint.hidden { opacity: 0; }
+    .upload-hint-icon { opacity: 0.22; }
+    .upload-hint-text {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: center;
+    }
+    .upload-hint-sub { font-size: 0.78rem; color: var(--muted); opacity: 0.6; text-align: center; }
+
+    /* ── RIGHT PROPERTIES ── */
+    .properties {
+      width: 208px; flex-shrink: 0; background: var(--dark2);
+      border-left: 1px solid rgba(38,174,228,0.1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .prop-header {
+      padding: 0.9rem 1rem 0.75rem;
+      border-bottom: 1px solid rgba(38,174,228,0.08); flex-shrink: 0;
+    }
+    .prop-body { padding: 0.9rem; flex: 1; overflow-y: auto; }
+    .prop-empty { font-size: 0.78rem; color: var(--muted); line-height: 1.65; text-align: center; padding-top: 0.5rem; }
+    #prop-cam { display: none; }
+    .prop-model { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; }
+    .prop-type { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.9rem; }
+    .prop-spec-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.77rem; padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(38,174,228,0.06);
+    }
+    .prop-spec-row:last-child { border-bottom: none; }
+    .prop-spec-k { color: var(--muted); }
+    .prop-spec-v { color: var(--steel); }
+    .prop-divider { border: none; border-top: 1px solid rgba(38,174,228,0.1); margin: 0.85rem 0; }
+    .prop-field { display: flex; flex-direction: column; gap: 0.45rem; }
+    .prop-field-lbl {
+      display: flex; justify-content: space-between;
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    }
+    .prop-field-lbl b { color: var(--cyan); font-weight: 600; }
+    input[type="range"] { width: 100%; accent-color: var(--cyan); }
+    .prop-note { font-size: 0.68rem; color: var(--muted); line-height: 1.5; margin-top: 0.5rem; font-style: italic; }
+    .delete-btn {
+      width: 100%; margin-top: 1rem; background: transparent;
+      border: 1px solid rgba(224,92,92,0.3); color: #e05c5c;
+      padding: 0.5rem; font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+    }
+    .delete-btn:hover { background: rgba(224,92,92,0.1); border-color: #e05c5c; }
+    .prop-disclaimer {
+      padding: 0.65rem 0.9rem; border-top: 1px solid rgba(38,174,228,0.08);
+      font-size: 0.66rem; color: var(--muted); line-height: 1.55; flex-shrink: 0;
+    }
+
+    /* ── FOOTER BAR ── */
+    .sb-footer {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 0.35rem 1rem; background: var(--dark2);
+      border-top: 1px solid rgba(38,174,228,0.08); font-size: 0.7rem; color: var(--muted);
+    }
+    .sb-footer b { color: var(--cyan); font-weight: 500; }
+
+    /* ── TUTORIAL TOOLTIP ── */
+    #tutorial-wrap {
+      position: fixed; inset: 0; z-index: 8000;
+      pointer-events: none;
+    }
+    #tutorial-wrap.hidden { display: none; }
+
+    /* pulsing ring on targeted element */
+    .tut-target-ring {
+      position: fixed; border-radius: 4px;
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 0 0 rgba(38,174,228,0.6);
+      animation: tutRing 1.4s ease-out infinite;
+      pointer-events: none; z-index: 8001;
+      transition: all 0.3s ease;
+    }
+    @keyframes tutRing {
+      0%   { box-shadow: 0 0 0 0   rgba(38,174,228,0.5); }
+      70%  { box-shadow: 0 0 0 10px rgba(38,174,228,0);   }
+      100% { box-shadow: 0 0 0 0   rgba(38,174,228,0);    }
+    }
+
+    #tutorial-tip {
+      position: fixed;
+      background: var(--dark2);
+      border: 1px solid rgba(38,174,228,0.35);
+      padding: 1rem 1.1rem;
+      max-width: 260px; min-width: 200px;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      pointer-events: all;
+      z-index: 8002;
+      transition: top 0.3s ease, left 0.3s ease;
+    }
+
+    /* Arrow decoration */
+    .tut-arrow {
+      position: absolute; width: 0; height: 0;
+    }
+    .tut-arrow.up {
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-bottom: 9px solid rgba(38,174,228,0.35);
+      top: -9px; left: 20px;
+    }
+    .tut-arrow.down {
+      border-left: 7px solid transparent; border-right: 7px solid transparent;
+      border-top: 9px solid rgba(38,174,228,0.35);
+      bottom: -9px; left: 20px;
+    }
+    .tut-arrow.left {
+      border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+      border-right: 9px solid rgba(38,174,228,0.35);
+      left: -9px; top: 20px;
+    }
+    .tut-arrow.right {
+      border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+      border-left: 9px solid rgba(38,174,228,0.35);
+      right: -9px; top: 20px;
+    }
+
+    .tut-step-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 0.35rem;
+    }
+    .tut-text {
+      font-size: 0.82rem; color: var(--steel); line-height: 1.55;
+      margin-bottom: 0.9rem;
+    }
+    .tut-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .tut-skip {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      padding: 0; transition: color 0.2s;
+    }
+    .tut-skip:hover { color: var(--steel); }
+    .tut-next {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      background: var(--cyan); color: var(--dark); border: none; cursor: pointer;
+      padding: 0.3rem 0.8rem;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+      transition: opacity 0.2s;
+    }
+    .tut-next:hover { opacity: 0.88; }
+
+    /* ── MODAL OVERLAY (export + consult) ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9500;
+      background: rgba(9,13,18,0.88);
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-card {
+      background: var(--dark2);
+      border: 1px solid rgba(38,174,228,0.25);
+      padding: 2rem;
+      max-width: 500px; width: 90%;
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+    .modal-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--white);
+    }
+    .modal-title span { color: var(--cyan); }
+    .modal-close {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 1.2rem; padding: 0; line-height: 1;
+      transition: color 0.2s; flex-shrink: 0; margin-top: 2px;
+    }
+    .modal-close:hover { color: var(--white); }
+
+    .export-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .export-opt {
+      border: 1px solid rgba(38,174,228,0.15); background: var(--dark3);
+      padding: 1.1rem; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .export-opt:hover { border-color: var(--cyan); background: rgba(38,174,228,0.05); }
+    .export-opt-icon {
+      width: 32px; height: 32px; margin-bottom: 0.65rem;
+      color: var(--cyan);
+    }
+    .export-opt-title {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase; color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .export-opt-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+    .modal-divider { border: none; border-top: 1px solid rgba(38,174,228,0.1); margin: 1.25rem 0; }
+
+    .consult-form { display: flex; flex-direction: column; gap: 0.85rem; }
+    .consult-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    .cf-field { display: flex; flex-direction: column; gap: 0.3rem; }
+    .cf-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    }
+    .cf-input, .cf-textarea {
+      background: var(--dark3); border: 1px solid rgba(38,174,228,0.18);
+      color: var(--white); padding: 0.55rem 0.8rem;
+      font-family: 'Inter', sans-serif; font-size: 0.85rem;
+      outline: none; transition: border-color 0.2s;
+      width: 100%;
+    }
+    .cf-input:focus, .cf-textarea:focus { border-color: var(--cyan); }
+    .cf-input::placeholder, .cf-textarea::placeholder { color: var(--muted); }
+    .cf-textarea { resize: vertical; min-height: 70px; }
+    .cf-submit {
+      background: var(--cyan); color: var(--dark); border: none; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; padding: 0.75rem;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      transition: opacity 0.2s;
+    }
+    .cf-submit:hover { opacity: 0.88; }
+    .cf-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+    .cf-note { font-size: 0.7rem; color: var(--muted); line-height: 1.5; text-align: center; }
+    .cf-success {
+      text-align: center; padding: 1rem;
+      font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600;
+      letter-spacing: 0.04em; color: var(--cyan);
+      display: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 920px) { .properties { display: none; } }
+    @media (max-width: 640px) {
+      .sidebar { width: 190px; }
+      .sb-nav-user { display: none; }
+    }
+    @media (max-width: 480px) { .sidebar { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     REGISTRATION GATE
+     ══════════════════════════════════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">
+      <img src="../images/IconOnly_Logo.png" alt="OSI">
+      <div class="gate-logo-text">
+        Overwatch Systems
+        <small>Integrated</small>
+      </div>
+    </div>
+    <div class="gate-eyebrow">Free Planning Tool</div>
+    <div class="gate-title">Camera Coverage <span>Sandbox</span></div>
+    <p class="gate-sub">Place Axis cameras on your facility map and instantly visualize field-of-view coverage, overlap zones, and blind spots — no software to install.</p>
+    <form class="gate-form" id="gate-form" novalidate>
+      <div class="gate-row">
+        <div class="gate-field">
+          <label for="g-name">Full Name *</label>
+          <input id="g-name" name="name" type="text" placeholder="Jane Smith" required autocomplete="name">
+        </div>
+        <div class="gate-field">
+          <label for="g-company">Company</label>
+          <input id="g-company" name="company" type="text" placeholder="ACME Industries" autocomplete="organization">
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="g-email">Email Address *</label>
+        <input id="g-email" name="email" type="email" placeholder="jane@example.com" required autocomplete="email">
+      </div>
+      <div class="gate-error" id="gate-error">Please enter your name and a valid email address.</div>
+      <button class="gate-submit" type="submit" id="gate-submit">Access Tool &rarr;</button>
+    </form>
+    <p class="gate-privacy">Your information is shared only with Overwatch Systems Integrated and will not be sold or distributed to third parties. <a href="index.html#contact" style="color:var(--cyan)">Contact us</a> with any questions.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     TUTORIAL OVERLAY
+     ══════════════════════════════════════════════════════════════════════ -->
+<div id="tutorial-wrap" class="hidden">
+  <div class="tut-target-ring" id="tut-ring"></div>
+  <div id="tutorial-tip">
+    <div class="tut-arrow" id="tut-arrow"></div>
+    <div class="tut-step-label" id="tut-label"></div>
+    <div class="tut-text" id="tut-text"></div>
+    <div class="tut-actions">
+      <button class="tut-skip" id="tut-skip">Skip Tour</button>
+      <button class="tut-next" id="tut-next">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     EXPORT / CONSULT MODAL
+     ══════════════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="export-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">Export <span>Camera Plan</span></div>
+      <button class="modal-close" id="modal-close" title="Close">&times;</button>
+    </div>
+
+    <div class="export-options">
+      <div class="export-opt" id="opt-download">
+        <svg class="export-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <div class="export-opt-title">Download PNG</div>
+        <div class="export-opt-desc">Save the camera layout to your device for your own records.</div>
+      </div>
+      <div class="export-opt" id="opt-consult">
+        <svg class="export-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.21H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 7.29 7.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <div class="export-opt-title">Request Consult</div>
+        <div class="export-opt-desc">Send your plan to OSI and request a free design consultation.</div>
+      </div>
+    </div>
+
+    <!-- Consultation Form (hidden initially) -->
+    <div id="consult-section" style="display:none">
+      <hr class="modal-divider">
+      <div class="modal-title" style="font-size:1rem;margin-bottom:1rem;">Request a <span>Consultation</span></div>
+      <div class="consult-form" id="consult-form-wrap">
+        <div class="consult-row">
+          <div class="cf-field">
+            <label class="cf-label">Name *</label>
+            <input class="cf-input" id="cf-name" type="text" placeholder="Jane Smith" required>
+          </div>
+          <div class="cf-field">
+            <label class="cf-label">Phone</label>
+            <input class="cf-input" id="cf-phone" type="tel" placeholder="(555) 000-0000">
+          </div>
+        </div>
+        <div class="cf-field">
+          <label class="cf-label">Email *</label>
+          <input class="cf-input" id="cf-email" type="email" placeholder="jane@example.com" required>
+        </div>
+        <div class="cf-field">
+          <label class="cf-label">Facility / Project Notes</label>
+          <textarea class="cf-textarea" id="cf-message" placeholder="Tell us about your facility, any specific coverage requirements, or questions you have…"></textarea>
+        </div>
+        <button class="cf-submit" id="cf-submit">Send Plan &amp; Request Consultation &rarr;</button>
+        <p class="cf-note">Your plan details will be included automatically. We will also trigger a PNG download for your records.</p>
+      </div>
+      <div class="cf-success" id="cf-success">
+        ✓ &nbsp; Your plan has been sent to OSI. We'll be in touch shortly.<br>
+        <span style="font-size:0.8rem;font-weight:400;color:var(--steel)">Your PNG has also been saved to your downloads.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     MAIN APPLICATION
+     ══════════════════════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- Nav with full OSI logo -->
+  <nav class="sb-nav">
+    <div class="sb-nav-left">
+      <img src="../images/Official_Logo.svg" alt="Overwatch Systems Integrated" class="sb-nav-logo">
+      <div class="sb-nav-divider"></div>
+      <span class="sb-nav-title">Camera Coverage Sandbox</span>
+    </div>
+    <div class="sb-nav-right">
+      <div class="sb-nav-user">Logged in as: <b id="nav-user"></b></div>
+      <a href="services.html" class="sb-nav-back">&larr; Back to OSI</a>
+    </div>
+  </nav>
+
+  <div class="sandbox-body">
+
+    <!-- ── LEFT SIDEBAR ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="section-eyebrow">Select Type</div>
+        <div class="section-title">Camera Models</div>
+      </div>
+      <div class="camera-list" id="camera-list"></div>
+      <div class="sidebar-how">
+        <div class="how-title">How To Use</div>
+        <div class="how-item"><span class="how-n">1.</span><span>Upload your facility map</span></div>
+        <div class="how-item"><span class="how-n">2.</span><span>Select a camera type above</span></div>
+        <div class="how-item"><span class="how-n">3.</span><span>Click the map to place cameras</span></div>
+        <div class="how-item"><span class="how-n">4.</span><span>Click a camera to select it</span></div>
+        <div class="how-item"><span class="how-n">5.</span><span>Drag to move, rotate with the handle</span></div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CANVAS ── -->
+    <main class="sandbox-main">
+      <div class="toolbar" id="toolbar">
+        <div class="tb-group">
+          <span class="tb-label">Scale:</span>
+          <input class="tb-input" id="scale-input" type="number" value="4" min="0.5" max="100" step="0.5" title="Pixels per meter">
+          <span class="tb-label">px / m</span>
+        </div>
+        <div class="tb-sep"></div>
+        <div class="tb-group">
+          <button class="tb-btn" id="upload-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Map
+          </button>
+          <input type="file" id="file-input" accept="image/*" style="display:none">
+        </div>
+        <div class="tb-sep"></div>
+        <div class="tb-spacer"></div>
+        <div class="tb-group">
+          <button class="tb-btn danger" id="clear-btn">Clear All</button>
+          <button class="tb-btn export" id="export-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export PNG
+          </button>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper" id="canvas-wrapper">
+        <canvas id="sandbox-canvas"></canvas>
+        <div class="upload-hint" id="upload-hint">
+          <svg class="upload-hint-icon" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#26aee4" stroke-width="0.9">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <div class="upload-hint-text">Upload a facility map to begin</div>
+          <div class="upload-hint-sub">Or place cameras directly on the grid &mdash; drag &amp; drop an image anytime</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── RIGHT PROPERTIES ── -->
+    <aside class="properties">
+      <div class="prop-header">
+        <div class="section-eyebrow">Selected Camera</div>
+        <div class="section-title">Properties</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-empty" id="prop-empty">Click a placed camera to view and adjust its properties.</div>
+        <div id="prop-cam">
+          <div class="prop-model" id="prop-model"></div>
+          <div class="prop-type" id="prop-type"></div>
+          <div id="prop-specs"></div>
+          <hr class="prop-divider">
+          <div class="prop-field" id="rot-field">
+            <div class="prop-field-lbl">Rotation <b id="rot-val">0&deg;</b></div>
+            <input type="range" id="rot-slider" min="0" max="359" value="0">
+            <div class="prop-note">Drag the handle on the canvas or use this slider.</div>
+          </div>
+          <button class="delete-btn" id="delete-btn">&#x2715; Delete Camera</button>
+        </div>
+      </div>
+      <div class="prop-disclaimer">
+        FOV angles and coverage ranges are estimates based on Axis published datasheets. For planning purposes only.
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="sb-footer">
+    <div><b id="cam-count">0</b> cameras placed &nbsp;&middot;&nbsp; Brighter zones indicate overlapping coverage</div>
+    <div>Overwatch Systems Integrated &copy; 2026</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+'use strict';
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const FORMSPREE    = 'https://formspree.io/f/mzdjepoo';
+const STORAGE_KEY  = 'osi_sandbox_v1';
+const TUT_KEY      = 'osi_sandbox_toured_v1';
+const HIT_R        = 14;
+const HANDLE_DIST  = 40;
+const HANDLE_R     = 11;
+const RAD          = Math.PI / 180;
+
+// ── CAMERA DEFINITIONS ────────────────────────────────────────────────────────
+const DEFS = [
+  {
+    id: 'bullet', model: 'Axis P1375-E', type: 'Fixed Bullet',
+    fovDeg: 84, rangeM: 40, cones: 1, color: '#26aee4',
+    specs: [['Resolution','4K (8MP)'],['H-FOV','84°'],['Range','~40 m'],['IR Range','50 m']]
+  },
+  {
+    id: 'ptz', model: 'Axis Q6135-LE', type: 'PTZ Dome',
+    fovDeg: 62, rangeM: 200, cones: 1, color: '#4dd890',
+    specs: [['Resolution','1080p (2MP)'],['H-FOV','62° (wide)'],['Range','~200 m'],['Zoom','32× optical']]
+  },
+  {
+    id: 'multi', model: 'Axis P4705-PLVE', type: 'Multidirectional',
+    fovDeg: 84, rangeM: 30, cones: 4, color: '#f5a623',
+    specs: [['Sensors','4 × 4K'],['Each FOV','84°'],['Range','~30 m'],['Total','360°']]
+  },
+  {
+    id: 'fisheye', model: 'Axis M3058-PLVE', type: '360° Fisheye',
+    fovDeg: 360, rangeM: 15, cones: 0, color: '#e05c5c',
+    specs: [['Resolution','12 MP'],['Coverage','360°'],['Range','~15 m'],['Mount','Ceiling / Wall']]
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const state = {
+  activeType: 'bullet',
+  cameras: [],
+  selectedId: null,
+  bgImage: null,
+  scale: 4,
+  nextId: 1,
+  mode: 'idle',
+  dragOffset: { x: 0, y: 0 },
+  userData: null
+};
+
+// ── DOM ───────────────────────────────────────────────────────────────────────
+const gateEl       = document.getElementById('gate');
+const appEl        = document.getElementById('app');
+const gateForm     = document.getElementById('gate-form');
+const gateSubmit   = document.getElementById('gate-submit');
+const gateError    = document.getElementById('gate-error');
+const navUser      = document.getElementById('nav-user');
+const camListEl    = document.getElementById('camera-list');
+const canvas       = document.getElementById('sandbox-canvas');
+const ctx          = canvas.getContext('2d');
+const wrapper      = document.getElementById('canvas-wrapper');
+const fileInput    = document.getElementById('file-input');
+const uploadHint   = document.getElementById('upload-hint');
+const camCount     = document.getElementById('cam-count');
+const propEmpty    = document.getElementById('prop-empty');
+const propCam      = document.getElementById('prop-cam');
+const propModel    = document.getElementById('prop-model');
+const propType     = document.getElementById('prop-type');
+const propSpecs    = document.getElementById('prop-specs');
+const rotSlider    = document.getElementById('rot-slider');
+const rotVal       = document.getElementById('rot-val');
+const scaleInput   = document.getElementById('scale-input');
+const exportModal  = document.getElementById('export-modal');
+const tutWrap      = document.getElementById('tutorial-wrap');
+const tutRing      = document.getElementById('tut-ring');
+const tutTip       = document.getElementById('tutorial-tip');
+const tutLabel     = document.getElementById('tut-label');
+const tutText      = document.getElementById('tut-text');
+const tutArrow     = document.getElementById('tut-arrow');
+
+// ── REGISTRATION ──────────────────────────────────────────────────────────────
+function boot() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      state.userData = data;
+      openApp(data.name);
+      return;
+    } catch (_) {}
+  }
+}
+
+gateForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name    = document.getElementById('g-name').value.trim();
+  const email   = document.getElementById('g-email').value.trim();
+  const company = document.getElementById('g-company').value.trim();
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    gateError.style.display = 'block'; return;
+  }
+  gateError.style.display = 'none';
+  gateSubmit.disabled = true;
+  gateSubmit.textContent = 'Submitting…';
+
+  try {
+    await fetch(FORMSPREE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ _subject: 'Camera Sandbox Registration', name, email, company, source: 'OSI Camera Coverage Sandbox' })
+    });
+  } catch (_) {}
+
+  const userData = { name, email, company };
+  state.userData = userData;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+  openApp(name);
+});
+
+function openApp(userName) {
+  gateEl.style.display = 'none';
+  appEl.classList.add('visible');
+  navUser.textContent = userName.split(' ')[0];
+  resizeCanvas();
+  buildPalette();
+  redraw();
+
+  // Start tutorial for first-time visitors
+  if (!localStorage.getItem(TUT_KEY)) {
+    setTimeout(startTutorial, 600);
+  }
+}
+
+// ── TUTORIAL ──────────────────────────────────────────────────────────────────
+const TUT_STEPS = [
+  {
+    targetId: 'upload-btn',
+    label: 'Step 1 of 5',
+    text: 'Start by uploading your facility map. Click Upload Map or drag and drop an image onto the canvas.',
+    arrow: 'up',
+    advance: 'image-loaded'
+  },
+  {
+    targetId: 'camera-list',
+    label: 'Step 2 of 5',
+    text: 'Select a camera type from this panel. Each model reflects real Axis datasheet specs.',
+    arrow: 'left',
+    advance: 'camera-selected'
+  },
+  {
+    targetId: 'canvas-wrapper',
+    label: 'Step 3 of 5',
+    text: 'Click anywhere on the map to place a camera. The colored cone shows its field of view.',
+    arrow: 'right',
+    advance: 'camera-placed'
+  },
+  {
+    targetId: 'canvas-wrapper',
+    label: 'Step 4 of 5',
+    text: 'Click a placed camera to select it. Then drag it to reposition or use the rotation handle to aim it.',
+    arrow: 'right',
+    advance: 'camera-selected-placed'
+  },
+  {
+    targetId: 'export-btn',
+    label: 'Step 5 of 5',
+    text: 'When done, export your plan as a PNG — or send it directly to OSI to request a free consultation.',
+    arrow: 'up',
+    advance: 'manual'
+  }
+];
+
+let tutStep = -1;
+
+function startTutorial() {
+  tutStep = 0;
+  tutWrap.classList.remove('hidden');
+  showTutStep();
+}
+
+function showTutStep() {
+  if (tutStep < 0 || tutStep >= TUT_STEPS.length) { endTutorial(); return; }
+  const step = TUT_STEPS[tutStep];
+  const target = document.getElementById(step.targetId);
+  if (!target) { endTutorial(); return; }
+
+  tutLabel.textContent = step.label;
+  tutText.textContent  = step.text;
+
+  // Position the ring around the target
+  const r = target.getBoundingClientRect();
+  tutRing.style.top    = (r.top    - 4) + 'px';
+  tutRing.style.left   = (r.left   - 4) + 'px';
+  tutRing.style.width  = (r.width  + 8) + 'px';
+  tutRing.style.height = (r.height + 8) + 'px';
+
+  // Arrow direction
+  tutArrow.className = 'tut-arrow ' + step.arrow;
+
+  // Position tooltip based on arrow direction
+  const GAP = 18;
+  const tipW = 260, tipH = 130;
+
+  let tipTop, tipLeft;
+  if (step.arrow === 'up') {
+    // Tip below target
+    tipTop  = r.bottom + GAP;
+    tipLeft = Math.max(8, Math.min(r.left, window.innerWidth - tipW - 8));
+  } else if (step.arrow === 'down') {
+    tipTop  = r.top - tipH - GAP;
+    tipLeft = Math.max(8, Math.min(r.left, window.innerWidth - tipW - 8));
+  } else if (step.arrow === 'left') {
+    // Tip to the right of target
+    tipTop  = r.top + r.height / 2 - tipH / 2;
+    tipLeft = r.right + GAP;
+  } else if (step.arrow === 'right') {
+    // Tip to the left of target
+    tipTop  = r.top + r.height / 2 - tipH / 2;
+    tipLeft = r.left - tipW - GAP;
+  }
+
+  tipTop  = Math.max(8, Math.min(tipTop,  window.innerHeight - tipH - 8));
+  tipLeft = Math.max(8, Math.min(tipLeft, window.innerWidth  - tipW - 8));
+
+  tutTip.style.top  = tipTop  + 'px';
+  tutTip.style.left = tipLeft + 'px';
+
+  // Last step: change "Next" to "Done"
+  document.getElementById('tut-next').textContent = tutStep === TUT_STEPS.length - 1 ? 'Done ✓' : 'Next →';
+}
+
+function advanceTutorial(trigger) {
+  if (tutStep < 0 || tutStep >= TUT_STEPS.length) return;
+  const expected = TUT_STEPS[tutStep].advance;
+  if (expected === trigger) {
+    tutStep++;
+    if (tutStep >= TUT_STEPS.length) { endTutorial(); return; }
+    showTutStep();
+  }
+}
+
+function endTutorial() {
+  tutWrap.classList.add('hidden');
+  tutStep = -1;
+  localStorage.setItem(TUT_KEY, '1');
+}
+
+document.getElementById('tut-next').addEventListener('click', () => {
+  tutStep++;
+  if (tutStep >= TUT_STEPS.length) { endTutorial(); return; }
+  showTutStep();
+});
+document.getElementById('tut-skip').addEventListener('click', endTutorial);
+
+// ── PALETTE ───────────────────────────────────────────────────────────────────
+function buildPalette() {
+  camListEl.innerHTML = '';
+  DEFS.forEach(def => {
+    const card = document.createElement('div');
+    card.className = 'camera-card' + (def.id === state.activeType ? ' active' : '');
+    card.innerHTML = `
+      <div class="cam-card-top">
+        <div class="cam-icon-wrap">${iconSVG(def.id, def.color)}</div>
+        <div>
+          <div class="cam-model">${def.model}</div>
+          <div class="cam-type-label">
+            <span class="cam-dot" style="background:${def.color}"></span>${def.type}
+          </div>
+        </div>
+      </div>
+      <div class="cam-specs">${def.specs[1][0]}: ${def.specs[1][1]} &nbsp;&middot;&nbsp; ${def.specs[2][0]}: ${def.specs[2][1]}</div>
+    `;
+    card.addEventListener('click', () => {
+      state.activeType = def.id;
+      state.selectedId = null;
+      updateProperties();
+      buildPalette();
+      redraw();
+      advanceTutorial('camera-selected');
+    });
+    camListEl.appendChild(card);
+  });
+}
+
+function iconSVG(id, c) {
+  switch (id) {
+    case 'bullet': return `<svg viewBox="0 0 28 28" fill="none">
+      <rect x="2" y="11" width="15" height="6" rx="1" stroke="${c}" stroke-width="1.5"/>
+      <path d="M17 12.5 L26 9.5 L26 18.5 Z" fill="${c}" opacity="0.45"/>
+      <circle cx="5.5" cy="14" r="1.5" fill="${c}"/></svg>`;
+    case 'ptz': return `<svg viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="15" r="8" stroke="${c}" stroke-width="1.5"/>
+      <path d="M14 7 Q14 3 14 2" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="14" cy="15" r="3.5" fill="${c}" opacity="0.5"/>
+      <line x1="6" y1="15" x2="2" y2="15" stroke="${c}" stroke-width="1" opacity="0.4"/>
+      <line x1="22" y1="15" x2="26" y2="15" stroke="${c}" stroke-width="1" opacity="0.4"/></svg>`;
+    case 'multi': return `<svg viewBox="0 0 28 28" fill="none">
+      <rect x="9" y="9" width="10" height="10" rx="1" stroke="${c}" stroke-width="1.5"/>
+      <line x1="14" y1="9" x2="14" y2="3" stroke="${c}" stroke-width="1.5"/>
+      <line x1="14" y1="19" x2="14" y2="25" stroke="${c}" stroke-width="1.5"/>
+      <line x1="9" y1="14" x2="3" y2="14" stroke="${c}" stroke-width="1.5"/>
+      <line x1="19" y1="14" x2="25" y2="14" stroke="${c}" stroke-width="1.5"/>
+      <circle cx="14" cy="2.5" r="1.5" fill="${c}"/>
+      <circle cx="14" cy="25.5" r="1.5" fill="${c}"/>
+      <circle cx="2.5" cy="14" r="1.5" fill="${c}"/>
+      <circle cx="25.5" cy="14" r="1.5" fill="${c}"/></svg>`;
+    case 'fisheye': return `<svg viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="11" stroke="${c}" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="7" stroke="${c}" stroke-width="1" opacity="0.5"/>
+      <circle cx="14" cy="14" r="2.5" fill="${c}"/>
+      <line x1="14" y1="3" x2="14" y2="25" stroke="${c}" stroke-width="0.75" opacity="0.3"/>
+      <line x1="3" y1="14" x2="25" y2="14" stroke="${c}" stroke-width="0.75" opacity="0.3"/></svg>`;
+    default: return `<svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="10" stroke="${c}" stroke-width="1.5"/></svg>`;
+  }
+}
+
+// ── CANVAS SIZING ─────────────────────────────────────────────────────────────
+function resizeCanvas() {
+  const r = wrapper.getBoundingClientRect();
+  canvas.width  = r.width;
+  canvas.height = r.height;
+}
+
+new ResizeObserver(() => { resizeCanvas(); redraw(); }).observe(wrapper);
+
+// ── DRAW ──────────────────────────────────────────────────────────────────────
+function redraw() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  if (state.bgImage) {
+    uploadHint.classList.add('hidden');
+    const iw = state.bgImage.naturalWidth, ih = state.bgImage.naturalHeight;
+    const s  = Math.min(W / iw, H / ih);
+    ctx.drawImage(state.bgImage, (W - iw * s) / 2, (H - ih * s) / 2, iw * s, ih * s);
+  } else {
+    uploadHint.classList.remove('hidden');
+    drawGrid(W, H);
+  }
+
+  state.cameras.forEach(c => drawFOV(c));
+  state.cameras.forEach(c => drawIcon(c));
+
+  if (state.selectedId != null) {
+    const sel = state.cameras.find(c => c.id === state.selectedId);
+    if (sel) drawHandle(sel);
+  }
+
+  camCount.textContent = state.cameras.length;
+}
+
+function drawGrid(W, H) {
+  ctx.fillStyle = '#0e1520';
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(38,174,228,0.07)';
+  ctx.lineWidth = 1;
+  const g = 40;
+  for (let x = 0.5; x < W; x += g) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0.5; y < H; y += g) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+}
+
+function drawFOV(cam) {
+  const def = DEFS.find(d => d.id === cam.type);
+  const rPx = def.rangeM * state.scale;
+  ctx.save();
+  if (def.fovDeg >= 360) {
+    // Fisheye — very subtle radial gradient
+    const gr = ctx.createRadialGradient(cam.x, cam.y, 2, cam.x, cam.y, rPx);
+    gr.addColorStop(0,    rgba(def.color, 0.18));
+    gr.addColorStop(0.5,  rgba(def.color, 0.07));
+    gr.addColorStop(1,    rgba(def.color, 0.01));
+    ctx.beginPath();
+    ctx.arc(cam.x, cam.y, rPx, 0, Math.PI * 2);
+    ctx.fillStyle = gr;
+    ctx.fill();
+  } else if (def.cones === 4) {
+    for (let i = 0; i < 4; i++) {
+      cone(cam.x, cam.y, cam.rotation + i * Math.PI / 2, def.fovDeg, rPx, def.color);
+    }
+  } else {
+    cone(cam.x, cam.y, cam.rotation, def.fovDeg, rPx, def.color);
+  }
+  ctx.restore();
+}
+
+function cone(x, y, angle, fovDeg, rPx, color) {
+  const half = (fovDeg / 2) * RAD;
+  const a0 = angle - half, a1 = angle + half;
+
+  // Darker / more subtle gradient — less opaque as requested
+  const gr = ctx.createRadialGradient(x, y, 2, x, y, rPx);
+  gr.addColorStop(0,    rgba(color, 0.20));
+  gr.addColorStop(0.5,  rgba(color, 0.08));
+  gr.addColorStop(1,    rgba(color, 0.01));
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.arc(x, y, rPx, a0, a1);
+  ctx.closePath();
+  ctx.fillStyle = gr;
+  ctx.fill();
+
+  // Edge lines — subtle
+  ctx.beginPath();
+  ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a0) * rPx, y + Math.sin(a0) * rPx);
+  ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a1) * rPx, y + Math.sin(a1) * rPx);
+  ctx.strokeStyle = rgba(color, 0.18);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
+
+function drawIcon(cam) {
+  const def  = DEFS.find(d => d.id === cam.type);
+  const isSel = cam.id === state.selectedId;
+  const c    = def.color;
+  ctx.save();
+  ctx.translate(cam.x, cam.y);
+
+  ctx.beginPath();
+  ctx.arc(0, 0, 12, 0, Math.PI * 2);
+  ctx.fillStyle = isSel ? rgba(c, 0.18) : 'rgba(9,13,18,0.88)';
+  ctx.fill();
+  ctx.strokeStyle = isSel ? c : rgba(c, 0.72);
+  ctx.lineWidth = isSel ? 2 : 1.5;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+  ctx.fillStyle = c;
+  ctx.fill();
+
+  if (def.fovDeg < 360 && def.cones !== 4) {
+    ctx.rotate(cam.rotation);
+    ctx.beginPath();
+    ctx.moveTo(4, 0); ctx.lineTo(11, 0);
+    ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(9.5, -2.5); ctx.lineTo(12.5, 0); ctx.lineTo(9.5, 2.5);
+    ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawHandle(cam) {
+  const def = DEFS.find(d => d.id === cam.type);
+  const c   = def.color;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cam.x, cam.y, 17, 0, Math.PI * 2);
+  ctx.setLineDash([3, 3]);
+  ctx.strokeStyle = rgba(c, 0.45);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  if (def.fovDeg >= 360) return;
+
+  const hx = cam.x + Math.cos(cam.rotation) * HANDLE_DIST;
+  const hy = cam.y + Math.sin(cam.rotation) * HANDLE_DIST;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cam.x, cam.y); ctx.lineTo(hx, hy);
+  ctx.setLineDash([2, 3]);
+  ctx.strokeStyle = rgba(c, 0.35);
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.beginPath();
+  ctx.arc(hx, hy, 8, 0, Math.PI * 2);
+  ctx.fillStyle = '#0e1520'; ctx.fill();
+  ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.fillStyle = c;
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('↻', hx, hy + 0.5);
+  ctx.restore();
+}
+
+// ── INTERACTION ───────────────────────────────────────────────────────────────
+function getXY(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+
+function dist2(ax, ay, bx, by) {
+  return Math.sqrt((ax - bx) ** 2 + (ay - by) ** 2);
+}
+
+function cameraAt(x, y) {
+  for (let i = state.cameras.length - 1; i >= 0; i--) {
+    const c = state.cameras[i];
+    if (dist2(x, y, c.x, c.y) <= HIT_R) return c;
+  }
+  return null;
+}
+
+function nearHandle(x, y, cam) {
+  const hx = cam.x + Math.cos(cam.rotation) * HANDLE_DIST;
+  const hy = cam.y + Math.sin(cam.rotation) * HANDLE_DIST;
+  return dist2(x, y, hx, hy) <= HANDLE_R;
+}
+
+canvas.addEventListener('mousedown',  onDown);
+canvas.addEventListener('touchstart', onDown, { passive: false });
+
+function onDown(e) {
+  e.preventDefault();
+  const { x, y } = getXY(e);
+
+  if (state.selectedId != null) {
+    const sel = state.cameras.find(c => c.id === state.selectedId);
+    const def = sel && DEFS.find(d => d.id === sel.type);
+    if (sel && def.fovDeg < 360 && nearHandle(x, y, sel)) {
+      state.mode = 'rotating'; return;
+    }
+  }
+
+  const hit = cameraAt(x, y);
+  if (hit) {
+    state.selectedId = hit.id;
+    state.mode = 'dragging';
+    state.dragOffset = { x: x - hit.x, y: y - hit.y };
+    updateProperties();
+    redraw();
+    advanceTutorial('camera-selected-placed');
+    return;
+  }
+
+  const cam = { id: state.nextId++, type: state.activeType, x, y, rotation: -Math.PI / 2 };
+  state.cameras.push(cam);
+  state.selectedId = cam.id;
+  state.mode = 'idle';
+  buildPalette();
+  updateProperties();
+  redraw();
+  advanceTutorial('camera-placed');
+}
+
+canvas.addEventListener('mousemove',  onMove);
+canvas.addEventListener('touchmove', onMove, { passive: false });
+
+function onMove(e) {
+  e.preventDefault();
+  const { x, y } = getXY(e);
+
+  if (state.mode === 'dragging' && state.selectedId != null) {
+    const cam = state.cameras.find(c => c.id === state.selectedId);
+    if (cam) { cam.x = x - state.dragOffset.x; cam.y = y - state.dragOffset.y; redraw(); }
+    return;
+  }
+  if (state.mode === 'rotating' && state.selectedId != null) {
+    const cam = state.cameras.find(c => c.id === state.selectedId);
+    if (cam) {
+      cam.rotation = Math.atan2(y - cam.y, x - cam.x);
+      const deg = Math.round(((cam.rotation / RAD) + 360) % 360);
+      rotSlider.value = deg; rotVal.textContent = deg + '°';
+      redraw();
+    }
+    return;
+  }
+
+  if (state.selectedId != null) {
+    const sel = state.cameras.find(c => c.id === state.selectedId);
+    const def = sel && DEFS.find(d => d.id === sel.type);
+    if (sel && def.fovDeg < 360 && nearHandle(x, y, sel)) {
+      canvas.style.cursor = 'grab'; return;
+    }
+  }
+  canvas.style.cursor = cameraAt(x, y) ? 'move' : 'crosshair';
+}
+
+canvas.addEventListener('mouseup',  onUp);
+canvas.addEventListener('touchend', onUp);
+function onUp() { state.mode = 'idle'; }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    state.selectedId = null; updateProperties(); redraw();
+  }
+  if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedId != null) {
+    if (document.activeElement.tagName === 'INPUT') return;
+    deleteSelected();
+  }
+});
+
+// ── PROPERTIES ────────────────────────────────────────────────────────────────
+function updateProperties() {
+  if (state.selectedId == null) {
+    propEmpty.style.display = 'block'; propCam.style.display = 'none'; return;
+  }
+  const cam = state.cameras.find(c => c.id === state.selectedId);
+  if (!cam) { propEmpty.style.display = 'block'; propCam.style.display = 'none'; return; }
+  const def = DEFS.find(d => d.id === cam.type);
+
+  propEmpty.style.display = 'none'; propCam.style.display = 'block';
+  propModel.textContent = def.model; propType.textContent = def.type;
+  propSpecs.innerHTML = def.specs.map(([k, v]) =>
+    `<div class="prop-spec-row"><span class="prop-spec-k">${k}</span><span class="prop-spec-v">${v}</span></div>`
+  ).join('');
+  const deg = Math.round(((cam.rotation / RAD) + 360) % 360);
+  rotSlider.value = deg; rotVal.textContent = deg + '°';
+  document.getElementById('rot-field').style.display = def.fovDeg >= 360 ? 'none' : 'flex';
+}
+
+rotSlider.addEventListener('input', () => {
+  const cam = state.cameras.find(c => c.id === state.selectedId);
+  if (!cam) return;
+  cam.rotation = parseInt(rotSlider.value) * RAD;
+  rotVal.textContent = rotSlider.value + '°';
+  redraw();
+});
+
+document.getElementById('delete-btn').addEventListener('click', deleteSelected);
+function deleteSelected() {
+  state.cameras = state.cameras.filter(c => c.id !== state.selectedId);
+  state.selectedId = null; updateProperties(); redraw();
+}
+
+// ── TOOLBAR ───────────────────────────────────────────────────────────────────
+document.getElementById('upload-btn').addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  loadImage(URL.createObjectURL(file));
+  fileInput.value = '';
+});
+
+wrapper.addEventListener('dragover', (e) => e.preventDefault());
+wrapper.addEventListener('drop', (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImage(URL.createObjectURL(file));
+});
+
+function loadImage(src) {
+  const img = new Image();
+  img.onload = () => {
+    state.bgImage = img;
+    redraw();
+    advanceTutorial('image-loaded');
+  };
+  img.src = src;
+}
+
+scaleInput.addEventListener('change', () => {
+  const v = parseFloat(scaleInput.value);
+  if (v > 0) { state.scale = v; redraw(); }
+});
+
+document.getElementById('clear-btn').addEventListener('click', () => {
+  if (!state.cameras.length) return;
+  if (confirm('Remove all placed cameras?')) {
+    state.cameras = []; state.selectedId = null; updateProperties(); redraw();
+  }
+});
+
+// ── EXPORT MODAL ──────────────────────────────────────────────────────────────
+document.getElementById('export-btn').addEventListener('click', () => {
+  // Reset consult section
+  document.getElementById('consult-section').style.display = 'none';
+  document.getElementById('consult-form-wrap').style.display = 'flex';
+  document.getElementById('cf-success').style.display = 'none';
+  document.getElementById('cf-submit').disabled = false;
+  document.getElementById('cf-submit').textContent = 'Send Plan & Request Consultation →';
+
+  // Pre-fill from registration data
+  if (state.userData) {
+    const nameEl  = document.getElementById('cf-name');
+    const emailEl = document.getElementById('cf-email');
+    if (!nameEl.value  && state.userData.name)  nameEl.value  = state.userData.name;
+    if (!emailEl.value && state.userData.email) emailEl.value = state.userData.email;
+  }
+
+  exportModal.classList.remove('hidden');
+});
+
+document.getElementById('modal-close').addEventListener('click', () => exportModal.classList.add('hidden'));
+exportModal.addEventListener('click', (e) => { if (e.target === exportModal) exportModal.classList.add('hidden'); });
+
+document.getElementById('opt-download').addEventListener('click', () => {
+  triggerDownload();
+  exportModal.classList.add('hidden');
+});
+
+document.getElementById('opt-consult').addEventListener('click', () => {
+  document.getElementById('consult-section').style.display = 'block';
+  document.getElementById('opt-consult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+
+document.getElementById('cf-submit').addEventListener('click', async () => {
+  const name    = document.getElementById('cf-name').value.trim();
+  const email   = document.getElementById('cf-email').value.trim();
+  const phone   = document.getElementById('cf-phone').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+  const btn     = document.getElementById('cf-submit');
+
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Please enter your name and a valid email address.'); return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    await fetch(FORMSPREE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        _subject: 'Camera Coverage Consultation Request',
+        name, email, phone, message,
+        cameras_placed: state.cameras.length,
+        camera_types: state.cameras.map(c => c.type).join(', '),
+        source: 'Camera Sandbox – Export & Consult'
+      })
+    });
+  } catch (_) {}
+
+  // Trigger PNG download automatically
+  triggerDownload();
+
+  document.getElementById('consult-form-wrap').style.display = 'none';
+  document.getElementById('cf-success').style.display = 'block';
+});
+
+function triggerDownload() {
+  const W = canvas.width, H = canvas.height, FH = 44;
+  const exp = document.createElement('canvas');
+  exp.width = W; exp.height = H + FH;
+  const ec = exp.getContext('2d');
+
+  ec.drawImage(canvas, 0, 0);
+
+  ec.fillStyle = '#0e1520';
+  ec.fillRect(0, H, W, FH);
+  ec.strokeStyle = 'rgba(38,174,228,0.2)';
+  ec.lineWidth = 1;
+  ec.beginPath(); ec.moveTo(0, H); ec.lineTo(W, H); ec.stroke();
+
+  ec.fillStyle = '#26aee4';
+  ec.font = '700 12px Rajdhani, sans-serif';
+  ec.textAlign = 'left'; ec.textBaseline = 'middle';
+  ec.fillText('OVERWATCH SYSTEMS INTEGRATED', 16, H + FH / 2);
+
+  ec.fillStyle = '#5a7a96';
+  ec.font = '300 10px Inter, sans-serif';
+  ec.textAlign = 'right';
+  ec.fillText(
+    `Camera Coverage Plan  ·  ${new Date().toLocaleDateString()}  ·  FOV estimates for planning purposes only`,
+    W - 16, H + FH / 2
+  );
+
+  const a = document.createElement('a');
+  a.download = `OSI_Camera_Plan_${new Date().toISOString().slice(0,10)}.png`;
+  a.href = exp.toDataURL('image/png');
+  a.click();
+}
+
+// ── UTIL ──────────────────────────────────────────────────────────────────────
+function rgba(hex, a) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildPalette();
+boot();
+
+})();
+</script>
+</body>
+</html>
