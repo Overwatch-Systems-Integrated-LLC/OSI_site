@@ -26,6 +26,7 @@ Working knowledge for the OSI marketing website. Keep this updated when the stru
 │   ├── Official_Logo.svg       Full logo (nav + footer)
 │   ├── IconOnly_Logo.png       Icon-only logo (mobile/compact)
 │   ├── favicon.ico / favicon.png
+│   ├── og-image.png            1200×630 social-share preview (Open Graph / Twitter card)
 │   ├── cyd_partner.svg         ClaimYourDiscount "Veterans" partner badge (LIVE source of truth)
 │   ├── cyd_partner.png         Raster export of the badge (520×300, transparent) for email/PDF use
 │   ├── cyd-partner-badge.html  Legacy standalone badge page (unused; safe to remove)
