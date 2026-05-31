@@ -242,7 +242,40 @@
     .tb-btn.export { background: var(--cyan); color: var(--dark); border-color: var(--cyan); }
     .tb-btn.export:hover { opacity: 0.88; color: var(--dark); }
     .tb-btn.danger:hover { border-color: #e05c5c; color: #e05c5c; }
+    .tb-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(38,174,228,0.1); }
+    .tb-btn svg { flex-shrink: 0; }
     .tb-spacer { flex: 1; }
+
+    /* Clear dropdown */
+    .tb-dropdown { position: relative; }
+    .tb-menu {
+      position: absolute; top: calc(100% + 4px); right: 0; z-index: 50;
+      background: var(--dark2); border: 1px solid rgba(38,174,228,0.25);
+      min-width: 152px; display: none; flex-direction: column;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+    .tb-dropdown.open .tb-menu { display: flex; }
+    .tb-menu-item {
+      background: none; border: none; color: var(--steel); text-align: left;
+      padding: 0.5rem 0.85rem; font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
+    }
+    .tb-menu-item:hover { background: rgba(38,174,228,0.1); color: var(--cyan); }
+    .tb-menu-item.danger:hover { background: rgba(224,92,92,0.12); color: #e05c5c; }
+
+    /* Draw-mode hint toast */
+    .draw-toast {
+      position: fixed; bottom: 46px; left: 50%; transform: translateX(-50%);
+      z-index: 7500; pointer-events: none;
+      background: rgba(14,21,32,0.96); border: 1px solid rgba(38,174,228,0.35);
+      color: var(--steel); font-size: 0.78rem; line-height: 1.5;
+      padding: 0.5rem 1rem; max-width: 90vw; text-align: center;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      display: none;
+    }
+    .draw-toast.show { display: block; }
+    .draw-toast b { color: var(--cyan); font-weight: 600; }
 
     .canvas-wrapper {
       flex: 1; position: relative; overflow: hidden; background: var(--dark);
@@ -274,6 +307,7 @@
     .prop-body { padding: 0.9rem; flex: 1; overflow-y: auto; }
     .prop-empty { font-size: 0.78rem; color: var(--muted); line-height: 1.65; text-align: center; padding-top: 0.5rem; }
     #prop-cam { display: none; }
+    #prop-shape { display: none; }
     .prop-model { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; }
     .prop-type { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.9rem; }
     .prop-spec-row {
@@ -348,6 +382,14 @@
       z-index: 8002;
       transition: top 0.3s ease, left 0.3s ease;
     }
+
+    .tut-close {
+      position: absolute; top: 0.45rem; right: 0.6rem;
+      background: none; border: none; color: var(--muted);
+      cursor: pointer; font-size: 1.05rem; line-height: 1;
+      padding: 0.15rem 0.3rem; transition: color 0.2s;
+    }
+    .tut-close:hover { color: var(--white); }
 
     /* Arrow decoration */
     .tut-arrow {
@@ -539,7 +581,8 @@
   <div class="tut-target-ring" id="tut-ring"></div>
   <div id="tutorial-tip">
     <div class="tut-arrow" id="tut-arrow"></div>
-    <div class="tut-step-label" id="tut-label"></div>
+    <button class="tut-close" id="tut-close" title="Exit tutorial" aria-label="Exit tutorial">&times;</button>
+    <div class="tut-step-label" id="tut-label" style="margin-right:1.1rem;"></div>
     <div class="tut-text" id="tut-text"></div>
     <div class="tut-actions">
       <button class="tut-skip" id="tut-skip">Skip Tour</button>
@@ -665,9 +708,33 @@
           <input type="file" id="file-input" accept="image/*" style="display:none">
         </div>
         <div class="tb-sep"></div>
+        <div class="tb-group">
+          <span class="tb-label">Draw:</span>
+          <button class="tb-btn" id="draw-line" data-tool="line" title="Draw a line">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+            Line
+          </button>
+          <button class="tb-btn" id="draw-box" data-tool="box" title="Draw a box">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="1"/></svg>
+            Box
+          </button>
+          <button class="tb-btn" id="draw-circle" data-tool="circle" title="Draw a circle">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>
+            Circle
+          </button>
+        </div>
+        <div class="tb-sep"></div>
         <div class="tb-spacer"></div>
         <div class="tb-group">
-          <button class="tb-btn danger" id="clear-btn">Clear All</button>
+          <div class="tb-dropdown" id="clear-dropdown">
+            <button class="tb-btn danger" id="clear-btn">Clear &#x25BE;</button>
+            <div class="tb-menu">
+              <button class="tb-menu-item" data-clear="cameras">Clear Cameras</button>
+              <button class="tb-menu-item" data-clear="drawings">Clear Drawings</button>
+              <button class="tb-menu-item" data-clear="map">Clear Map</button>
+              <button class="tb-menu-item danger" data-clear="all">Clear All</button>
+            </div>
+          </div>
           <button class="tb-btn export" id="export-btn">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export PNG
@@ -696,7 +763,13 @@
         <div class="section-title">Properties</div>
       </div>
       <div class="prop-body">
-        <div class="prop-empty" id="prop-empty">Click a placed camera to view and adjust its properties.</div>
+        <div class="prop-empty" id="prop-empty">Click a placed camera or a drawn shape to view and adjust its properties.</div>
+        <div id="prop-shape">
+          <div class="prop-model" id="prop-shape-title"></div>
+          <div class="prop-type">Annotation</div>
+          <div class="prop-note" style="font-style:normal;margin-top:0.75rem;">Drawn shapes are planning guides only. They are included when you export your plan.</div>
+          <button class="delete-btn" id="delete-shape-btn">&#x2715; Delete Shape</button>
+        </div>
         <div id="prop-cam">
           <div class="prop-model" id="prop-model"></div>
           <div class="prop-type" id="prop-type"></div>
@@ -716,6 +789,9 @@
     </aside>
 
   </div>
+
+  <!-- Draw-mode hint -->
+  <div class="draw-toast" id="draw-toast"></div>
 
   <!-- Footer -->
   <div class="sb-footer">
@@ -739,6 +815,7 @@ const TUT_KEY      = 'osi_sandbox_toured_v1';
 const HIT_R        = 14;
 const HANDLE_DIST  = 40;
 const HANDLE_R     = 11;
+const SHAPE_HIT    = 8;
 const RAD          = Math.PI / 180;
 
 // ── CAMERA DEFINITIONS ────────────────────────────────────────────────────────
@@ -775,7 +852,11 @@ const state = {
   nextId: 1,
   mode: 'idle',
   dragOffset: { x: 0, y: 0 },
-  userData: null
+  userData: null,
+  drawTool: null,        // null | 'line' | 'box' | 'circle'
+  shapes: [],            // { id, kind, x1, y1, x2, y2 }
+  pending: null,         // in-progress shape { x1, y1, x2, y2 }
+  selectedShapeId: null
 };
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
@@ -794,6 +875,8 @@ const uploadHint   = document.getElementById('upload-hint');
 const camCount     = document.getElementById('cam-count');
 const propEmpty    = document.getElementById('prop-empty');
 const propCam      = document.getElementById('prop-cam');
+const propShape    = document.getElementById('prop-shape');
+const drawToast    = document.getElementById('draw-toast');
 const propModel    = document.getElementById('prop-model');
 const propType     = document.getElementById('prop-type');
 const propSpecs    = document.getElementById('prop-specs');
@@ -981,6 +1064,10 @@ document.getElementById('tut-next').addEventListener('click', () => {
   showTutStep();
 });
 document.getElementById('tut-skip').addEventListener('click', endTutorial);
+document.getElementById('tut-close').addEventListener('click', endTutorial);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !tutWrap.classList.contains('hidden')) endTutorial();
+});
 
 // ── PALETTE ───────────────────────────────────────────────────────────────────
 function buildPalette() {
@@ -1001,6 +1088,7 @@ function buildPalette() {
       <div class="cam-specs">${def.specs[1][0]}: ${def.specs[1][1]} &nbsp;&middot;&nbsp; ${def.specs[2][0]}: ${def.specs[2][1]}</div>
     `;
     card.addEventListener('click', () => {
+      if (state.drawTool) setDrawTool(null);
       state.activeType = def.id;
       state.selectedId = null;
       updateProperties();
@@ -1069,6 +1157,7 @@ function redraw() {
   }
 
   state.cameras.forEach(c => drawFOV(c));
+  drawShapes();
   state.cameras.forEach(c => drawIcon(c));
 
   if (state.selectedId != null) {
@@ -1094,15 +1183,21 @@ function drawFOV(cam) {
   const rPx = def.rangeM * state.scale;
   ctx.save();
   if (def.fovDeg >= 360) {
-    // Fisheye — very subtle radial gradient
+    // Fisheye — flat coverage that falls off only at the outer edge
     const gr = ctx.createRadialGradient(cam.x, cam.y, 2, cam.x, cam.y, rPx);
-    gr.addColorStop(0,    rgba(def.color, 0.18));
-    gr.addColorStop(0.5,  rgba(def.color, 0.07));
-    gr.addColorStop(1,    rgba(def.color, 0.01));
+    gr.addColorStop(0,    rgba(def.color, 0.15));
+    gr.addColorStop(0.75, rgba(def.color, 0.15));
+    gr.addColorStop(1,    rgba(def.color, 0));
     ctx.beginPath();
     ctx.arc(cam.x, cam.y, rPx, 0, Math.PI * 2);
     ctx.fillStyle = gr;
     ctx.fill();
+    // Defined outer ring
+    ctx.beginPath();
+    ctx.arc(cam.x, cam.y, rPx, 0, Math.PI * 2);
+    ctx.strokeStyle = rgba(def.color, 0.45);
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
   } else if (def.cones === 4) {
     for (let i = 0; i < 4; i++) {
       cone(cam.x, cam.y, cam.rotation + i * Math.PI / 2, def.fovDeg, rPx, def.color);
@@ -1117,11 +1212,11 @@ function cone(x, y, angle, fovDeg, rPx, color) {
   const half = (fovDeg / 2) * RAD;
   const a0 = angle - half, a1 = angle + half;
 
-  // Darker / more subtle gradient — less opaque as requested
+  // Flat fill that holds across the cone and falls off only near the outer edge
   const gr = ctx.createRadialGradient(x, y, 2, x, y, rPx);
-  gr.addColorStop(0,    rgba(color, 0.20));
-  gr.addColorStop(0.5,  rgba(color, 0.08));
-  gr.addColorStop(1,    rgba(color, 0.01));
+  gr.addColorStop(0,    rgba(color, 0.16));
+  gr.addColorStop(0.75, rgba(color, 0.16));
+  gr.addColorStop(1,    rgba(color, 0));
 
   ctx.beginPath();
   ctx.moveTo(x, y);
@@ -1130,12 +1225,18 @@ function cone(x, y, angle, fovDeg, rPx, color) {
   ctx.fillStyle = gr;
   ctx.fill();
 
-  // Edge lines — subtle
+  // Bold, defined boundary: two side edges + the outer coverage arc
   ctx.beginPath();
   ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a0) * rPx, y + Math.sin(a0) * rPx);
   ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a1) * rPx, y + Math.sin(a1) * rPx);
-  ctx.strokeStyle = rgba(color, 0.18);
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = rgba(color, 0.5);
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(x, y, rPx, a0, a1);
+  ctx.strokeStyle = rgba(color, 0.45);
+  ctx.lineWidth = 1.5;
   ctx.stroke();
 }
 
@@ -1212,6 +1313,78 @@ function drawHandle(cam) {
   ctx.restore();
 }
 
+// ── SHAPES (annotations) ───────────────────────────────────────────────────────
+function drawShapes() {
+  state.shapes.forEach(s => drawShape(s, s.id === state.selectedShapeId, false));
+  if (state.pending && state.drawTool) {
+    drawShape({ kind: state.drawTool, x1: state.pending.x1, y1: state.pending.y1,
+                x2: state.pending.x2, y2: state.pending.y2 }, false, true);
+  }
+}
+
+function drawShape(s, selected, preview) {
+  ctx.save();
+  ctx.strokeStyle = preview ? rgba('#26aee4', 0.9) : (selected ? '#26aee4' : '#b8c8d8');
+  ctx.lineWidth = selected ? 2.5 : 2;
+  if (preview) ctx.setLineDash([6, 4]);
+
+  ctx.beginPath();
+  if (s.kind === 'line') {
+    ctx.moveTo(s.x1, s.y1); ctx.lineTo(s.x2, s.y2);
+  } else if (s.kind === 'box') {
+    const lx = Math.min(s.x1, s.x2), ty = Math.min(s.y1, s.y2);
+    ctx.rect(lx, ty, Math.abs(s.x2 - s.x1), Math.abs(s.y2 - s.y1));
+  } else if (s.kind === 'circle') {
+    ctx.arc(s.x1, s.y1, dist2(s.x1, s.y1, s.x2, s.y2), 0, Math.PI * 2);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  if (selected) {
+    ctx.fillStyle = '#26aee4';
+    const pts = s.kind === 'circle' ? [[s.x1, s.y1]] : [[s.x1, s.y1], [s.x2, s.y2]];
+    pts.forEach(([px, py]) => { ctx.beginPath(); ctx.arc(px, py, 3.5, 0, Math.PI * 2); ctx.fill(); });
+  }
+  ctx.restore();
+}
+
+// Distance from point to a line segment
+function pointToSeg(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len2 = dx * dx + dy * dy;
+  let t = len2 ? ((px - x1) * dx + (py - y1) * dy) / len2 : 0;
+  t = Math.max(0, Math.min(1, t));
+  return dist2(px, py, x1 + t * dx, y1 + t * dy);
+}
+
+// Hit-test the outline of a shape (so clicking inside an empty box still places a camera)
+function shapeAt(x, y) {
+  for (let i = state.shapes.length - 1; i >= 0; i--) {
+    const s = state.shapes[i];
+    if (s.kind === 'line') {
+      if (pointToSeg(x, y, s.x1, s.y1, s.x2, s.y2) <= SHAPE_HIT) return s;
+    } else if (s.kind === 'box') {
+      const lx = Math.min(s.x1, s.x2), rx = Math.max(s.x1, s.x2);
+      const ty = Math.min(s.y1, s.y2), by = Math.max(s.y1, s.y2);
+      const d = Math.min(
+        pointToSeg(x, y, lx, ty, rx, ty),
+        pointToSeg(x, y, rx, ty, rx, by),
+        pointToSeg(x, y, rx, by, lx, by),
+        pointToSeg(x, y, lx, by, lx, ty)
+      );
+      if (d <= SHAPE_HIT) return s;
+    } else if (s.kind === 'circle') {
+      const r = dist2(s.x1, s.y1, s.x2, s.y2);
+      if (Math.abs(dist2(x, y, s.x1, s.y1) - r) <= SHAPE_HIT) return s;
+    }
+  }
+  return null;
+}
+
+function isValidShape(p) {
+  return dist2(p.x1, p.y1, p.x2, p.y2) >= 4;
+}
+
 // ── INTERACTION ───────────────────────────────────────────────────────────────
 function getXY(e) {
   const r = canvas.getBoundingClientRect();
@@ -1244,6 +1417,28 @@ function onDown(e) {
   e.preventDefault();
   const { x, y } = getXY(e);
 
+  // ── DRAW MODE: two-click shape placement ──
+  if (state.drawTool) {
+    if (!state.pending) {
+      state.pending = { x1: x, y1: y, x2: x, y2: y };
+      state.mode = 'drawing';
+    } else {
+      state.pending.x2 = x; state.pending.y2 = y;
+      if (isValidShape(state.pending)) {
+        state.shapes.push({
+          id: state.nextId++, kind: state.drawTool,
+          x1: state.pending.x1, y1: state.pending.y1,
+          x2: state.pending.x2, y2: state.pending.y2
+        });
+      }
+      state.pending = null;
+      state.mode = 'idle';
+    }
+    updateDrawToast();
+    redraw();
+    return;
+  }
+
   if (state.selectedId != null) {
     const sel = state.cameras.find(c => c.id === state.selectedId);
     const def = sel && DEFS.find(d => d.id === sel.type);
@@ -1254,6 +1449,7 @@ function onDown(e) {
 
   const hit = cameraAt(x, y);
   if (hit) {
+    state.selectedShapeId = null;
     state.selectedId = hit.id;
     state.mode = 'dragging';
     state.dragOffset = { x: x - hit.x, y: y - hit.y };
@@ -1263,8 +1459,19 @@ function onDown(e) {
     return;
   }
 
+  const shape = shapeAt(x, y);
+  if (shape) {
+    state.selectedId = null;
+    state.selectedShapeId = shape.id;
+    state.mode = 'idle';
+    updateProperties();
+    redraw();
+    return;
+  }
+
   const cam = { id: state.nextId++, type: state.activeType, x, y, rotation: -Math.PI / 2 };
   state.cameras.push(cam);
+  state.selectedShapeId = null;
   state.selectedId = cam.id;
   state.mode = 'idle';
   buildPalette();
@@ -1279,6 +1486,13 @@ canvas.addEventListener('touchmove', onMove, { passive: false });
 function onMove(e) {
   e.preventDefault();
   const { x, y } = getXY(e);
+
+  // Draw-mode preview (rubber-band to cursor between the two clicks)
+  if (state.drawTool) {
+    if (state.pending) { state.pending.x2 = x; state.pending.y2 = y; redraw(); }
+    canvas.style.cursor = 'crosshair';
+    return;
+  }
 
   if (state.mode === 'dragging' && state.selectedId != null) {
     const cam = state.cameras.find(c => c.id === state.selectedId);
@@ -1312,16 +1526,31 @@ function onUp() { state.mode = 'idle'; }
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    state.selectedId = null; updateProperties(); redraw();
+    if (state.pending) { state.pending = null; state.mode = 'idle'; updateDrawToast(); redraw(); return; }
+    if (state.drawTool) { setDrawTool(null); return; }
+    state.selectedId = null; state.selectedShapeId = null; updateProperties(); redraw();
   }
-  if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedId != null) {
-    if (document.activeElement.tagName === 'INPUT') return;
-    deleteSelected();
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (state.selectedId != null) deleteSelected();
+    else if (state.selectedShapeId != null) deleteSelectedShape();
   }
 });
 
 // ── PROPERTIES ────────────────────────────────────────────────────────────────
 function updateProperties() {
+  // Shape selected → show shape panel
+  if (state.selectedShapeId != null) {
+    const s = state.shapes.find(sh => sh.id === state.selectedShapeId);
+    if (s) {
+      propEmpty.style.display = 'none'; propCam.style.display = 'none'; propShape.style.display = 'block';
+      document.getElementById('prop-shape-title').textContent = s.kind.charAt(0).toUpperCase() + s.kind.slice(1);
+      return;
+    }
+  }
+  propShape.style.display = 'none';
+
   if (state.selectedId == null) {
     propEmpty.style.display = 'block'; propCam.style.display = 'none'; return;
   }
@@ -1353,8 +1582,49 @@ function deleteSelected() {
   state.selectedId = null; updateProperties(); redraw();
 }
 
+document.getElementById('delete-shape-btn').addEventListener('click', deleteSelectedShape);
+function deleteSelectedShape() {
+  state.shapes = state.shapes.filter(s => s.id !== state.selectedShapeId);
+  state.selectedShapeId = null; updateProperties(); redraw();
+}
+
 // ── TOOLBAR ───────────────────────────────────────────────────────────────────
 document.getElementById('upload-btn').addEventListener('click', () => fileInput.click());
+
+// ── DRAW TOOLS ──────────────────────────────────────────────────────────────────
+const drawButtons = {
+  line:   document.getElementById('draw-line'),
+  box:    document.getElementById('draw-box'),
+  circle: document.getElementById('draw-circle')
+};
+
+function setDrawTool(tool) {
+  state.drawTool = tool;
+  state.pending = null;
+  state.mode = 'idle';
+  Object.entries(drawButtons).forEach(([k, btn]) => btn.classList.toggle('active', k === tool));
+  if (tool) {
+    state.selectedId = null;
+    state.selectedShapeId = null;
+    updateProperties();
+    canvas.style.cursor = 'crosshair';
+  }
+  updateDrawToast();
+  redraw();
+}
+
+function updateDrawToast() {
+  if (!state.drawTool) { drawToast.classList.remove('show'); return; }
+  const label = state.drawTool.charAt(0).toUpperCase() + state.drawTool.slice(1);
+  drawToast.innerHTML = state.pending
+    ? 'Click to set the end point. &nbsp;<b>Esc</b> to cancel this shape.'
+    : `Drawing <b>${label}</b>. Click a start point, then an end point. &nbsp;<b>Esc</b> or click the tool to exit.`;
+  drawToast.classList.add('show');
+}
+
+Object.entries(drawButtons).forEach(([k, btn]) => {
+  btn.addEventListener('click', () => setDrawTool(state.drawTool === k ? null : k));
+});
 
 fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
@@ -1385,12 +1655,41 @@ scaleInput.addEventListener('change', () => {
   if (v > 0) { state.scale = v; redraw(); }
 });
 
-document.getElementById('clear-btn').addEventListener('click', () => {
-  if (!state.cameras.length) return;
-  if (confirm('Remove all placed cameras?')) {
-    state.cameras = []; state.selectedId = null; updateProperties(); redraw();
-  }
+const clearDropdown = document.getElementById('clear-dropdown');
+document.getElementById('clear-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  clearDropdown.classList.toggle('open');
 });
+document.addEventListener('click', (e) => {
+  if (!clearDropdown.contains(e.target)) clearDropdown.classList.remove('open');
+});
+clearDropdown.querySelectorAll('.tb-menu-item').forEach(item => {
+  item.addEventListener('click', () => {
+    clearDropdown.classList.remove('open');
+    doClear(item.dataset.clear);
+  });
+});
+
+function doClear(what) {
+  if (what === 'cameras') {
+    if (!state.cameras.length) return;
+    if (!confirm('Remove all placed cameras?')) return;
+    state.cameras = []; state.selectedId = null;
+  } else if (what === 'drawings') {
+    if (!state.shapes.length) return;
+    if (!confirm('Remove all drawn shapes?')) return;
+    state.shapes = []; state.selectedShapeId = null; state.pending = null;
+  } else if (what === 'map') {
+    if (!state.bgImage) return;
+    if (!confirm('Remove the uploaded map?')) return;
+    state.bgImage = null;
+  } else if (what === 'all') {
+    if (!confirm('Clear everything — cameras, drawings, and the uploaded map?')) return;
+    state.cameras = []; state.shapes = []; state.bgImage = null;
+    state.selectedId = null; state.selectedShapeId = null; state.pending = null;
+  }
+  updateProperties(); redraw();
+}
 
 // ── EXPORT MODAL ──────────────────────────────────────────────────────────────
 document.getElementById('export-btn').addEventListener('click', () => {
