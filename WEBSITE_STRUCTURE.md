@@ -34,8 +34,7 @@ Working knowledge for the OSI marketing website. Keep this updated when the stru
 │   ├── Axis_logo.png, Netgear.png, Cisco.png, Siemens.png   Vendor logos
 └── pages/                Sub-pages (NOTE the path rules in §2)
     ├── services.html             Services detail page (linked from nav + homepage cards)
-    ├── camera-sandbox.html       "Camera Coverage Sandbox" interactive tool (linked as "Sandbox")
-    └── OSI_How_It_Works.html     Standalone How-It-Works page — ORPHANED (nothing links to it; see KNOWN ISSUES)
+    └── camera-sandbox.html       "Camera Coverage Sandbox" interactive tool (linked as "Sandbox")
 ```
 
 > **Local-only note:** the working copy at `D:\OSI\05_Marketing_&_Web\Website_Dev` may also contain a `stock images/` folder. That folder is **not** in the repo — it's a local scratch/asset folder and is not deployed.
@@ -90,10 +89,7 @@ Each category has a **"Request a Consultation →"** button → `../index.html#c
 ### `pages/camera-sandbox.html` (~1500 lines, "Camera Coverage Sandbox")
 Interactive **free planning tool**: visitor uploads/uses a facility map and places Axis cameras to visualize field-of-view coverage, overlap, and blind spots. Entirely client-side (inline CSS + JS, canvas/SVG).
 - **Email gate:** `<form id="gate-form">` collects name + email before revealing the tool. Privacy note links to `../index.html#contact`.
-- "← Back to OSI" button (`.sb-nav-back`) currently points to `services.html` (the Services page), not the homepage.
-
-### `pages/OSI_How_It_Works.html` (~491 lines) — ORPHANED
-A standalone "How It Works" page. **Nothing links to it** — the nav "How It Works" goes to the homepage section `#how-it-works` instead. Either wire it up or remove it (see KNOWN ISSUES).
+- "← Back to OSI" button (`.sb-nav-back`) → `../index.html` (homepage).
 
 ### `404.html` — 3rd-party template
 Title is "Play | Open source Project by UIdeck". Served by GitHub Pages on unknown URLs. See KNOWN ISSUES — it references an `assets/` folder that isn't in the repo.
@@ -161,10 +157,8 @@ There is no staging environment — `main` is production. Verify links after str
 
 1. **`404.html` is broken/unstyled.** It's a UIdeck template that references an `assets/` folder (`assets/css/bootstrap.min.css`, `assets/css/ud-styles.css`, `assets/images/favicon.svg`, etc.) that **does not exist in the repo**, and its nav links to non-existent pages (`about.html`, `pricing.html`, `contact.html`, `blog.html`). Result: the live 404 page renders unstyled with dead links. **Recommend** replacing it with a small branded 404 that links back to `index.html`.
 2. **`css/style.css` is orphaned.** No HTML file links it; `index.html` defines its own `.partner-badge` styles inline. Either wire it in or delete it to avoid confusion. (Note its `.partner-badge svg { height:220px }` / `iframe` rules reflect an older badge approach.)
-3. **`pages/OSI_How_It_Works.html` is orphaned.** Nothing links to it; the nav "How It Works" uses the homepage `#how-it-works` section. Decide whether to link it or remove it.
-4. **"← Back to OSI" on the sandbox** points to `services.html`, not the homepage — confirm that's intended.
-5. **No `<meta name="description">`** on the homepage — worth adding for SEO.
-6. **Inline CSS per page** means shared styles (nav, fonts, colors) are duplicated across `index.html`, `services.html`, and `camera-sandbox.html`. If you change brand colors, update each page (or migrate shared rules into the existing `css/style.css` and link it everywhere).
+3. **No `<meta name="description">`** on the homepage — worth adding for SEO.
+4. **Inline CSS per page** means shared styles (nav, fonts, colors) are duplicated across `index.html`, `services.html`, and `camera-sandbox.html`. If you change brand colors, update each page (or migrate shared rules into the existing `css/style.css` and link it everywhere).
 
 ---
 
