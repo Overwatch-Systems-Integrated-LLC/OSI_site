@@ -77,83 +77,145 @@
         }
 
         /* ── NAV ── */
-        nav {
+        .site-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 max(5%, calc((100% - 1280px) / 2));
             height: 80px;
             background: rgba(9,13,18,0.85);
             backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid rgba(38,174,228,0.12);
         }
 
-        .nav-logo img {
-            height: 60px;
-            display: block;
-        }
-
-        .nav-links {
+        .header-inner {
+            height: 100%;
+            max-width: 1280px;
+            margin-inline: auto;
+            padding: 0 5%;
             display: flex;
             align-items: center;
-            gap: 1.75rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+            justify-content: space-between;
+            gap: 1.5rem;
         }
 
-            .nav-links a {
-                text-decoration: none;
-                color: var(--steel);
-                font-family: 'Rajdhani', sans-serif;
-                font-size: 0.95rem;
-                font-weight: 600;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                transition: color 0.2s;
-                position: relative;
-            }
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
 
-                .nav-links a::after {
-                    content: '';
-                    position: absolute;
-                    left: 0;
-                    bottom: -4px;
-                    width: 0;
-                    height: 1px;
-                    background: var(--cyan);
-                    transition: width 0.25s;
-                }
+        .site-logo-img {
+            height: 46px;
+            width: auto;
+            display: block;
+            flex-shrink: 0;
+        }
 
-                .nav-links a:hover {
-                    color: var(--cyan);
-                }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
 
-                    .nav-links a:hover::after {
-                        width: 100%;
-                    }
+        .logo-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.03em;
+            color: var(--white);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cyan);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .main-nav .nav-link {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--steel);
+            text-decoration: none;
+            padding: 0.5rem 0.85rem;
+            border-radius: 4px;
+            transition: color 0.2s ease, background 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .main-nav .nav-link:hover,
+        .main-nav .nav-link.active {
+            color: var(--white);
+            background: rgba(255,255,255,0.06);
+        }
 
         .nav-cta {
-            background: transparent;
-            border: 1px solid var(--cyan);
-            color: var(--cyan) !important;
-            padding: 0.45rem 1.2rem;
-            transition: background 0.2s, color 0.2s !important;
+            display: flex;
+            align-items: center;
+            margin-left: 0.75rem;
+            flex-shrink: 0;
         }
 
-            .nav-cta:hover {
-                background: var(--cyan) !important;
-                color: var(--dark) !important;
-            }
+        .btn-nav {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cyan);
+            text-decoration: none;
+            padding: 0.5rem 1.1rem;
+            border: 1px solid var(--cyan);
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
 
-            .nav-cta::after {
-                display: none !important;
-            }
+        .btn-nav:hover {
+            color: var(--dark);
+            background: var(--cyan);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0.5rem;
+            width: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: var(--cyan);
+            border-radius: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
         /* ── HERO ── */
         #home {
@@ -605,35 +667,42 @@
         }
 
         /* ── MOBILE NAV ── */
-        .nav-toggle {
+        .mobile-nav {
             display: none;
+            position: fixed;
+            inset: 80px 0 0 0;
+            background: rgba(9,13,18,0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 99;
+            padding: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
         }
 
-        @media (max-width: 920px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: fixed;
-                top: 72px;
-                left: 0;
-                right: 0;
-                background: var(--dark2);
-                padding: 2rem;
-                gap: 1.5rem;
-                border-bottom: 1px solid rgba(38,174,228,0.15);
-            }
+        .mobile-nav.open { transform: translateX(0); }
 
-                .nav-links.open {
-                    display: flex;
-                }
+        .mobile-nav-link {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--steel);
+            text-decoration: none;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(38,174,228,0.12);
+            transition: color 0.2s ease;
+        }
 
-            .nav-toggle {
-                display: block;
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--cyan);
-            }
+        .mobile-nav-link:hover { color: var(--cyan); }
+
+        @media (max-width: 1024px) {
+            .main-nav, .nav-cta { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .mobile-nav { display: flex; }
         }
 
         @media (max-width: 768px) {
@@ -874,21 +943,44 @@
 <body>
 
     <!-- NAV -->
-    <nav>
-        <div class="nav-logo">
-            <img src="images/IconOnly_Logo.png" alt="Overwatch Systems Integrated">
+    <header class="site-header" role="banner">
+        <div class="header-inner">
+            <a href="#home" class="site-logo" aria-label="Overwatch Systems Integrated">
+                <img src="images/IconOnly_Logo.png" alt="" class="site-logo-img" aria-hidden="true">
+                <div class="logo-text">
+                    <span class="logo-name">Overwatch Systems Integrated</span>
+                    <span class="logo-sub">Oxford, Alabama</span>
+                </div>
+            </a>
+
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="pages/services.html" class="nav-link">Services</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="pages/camera-sandbox.html" class="nav-link">Sandbox</a>
+                <a href="/blog/" class="nav-link">Blog</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-cta">
+                <a href="#contact" class="btn-nav">Free Assessment</a>
+            </div>
+
+            <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-        <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
-        </button>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="pages/services.html">Services</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="pages/camera-sandbox.html">Sandbox</a></li>
-            <li><a href="/blog/">Blog</a></li>
-            <li><a href="#contact" class="nav-cta">Contact Us</a></li>
-        </ul>
+    </header>
+
+    <!-- Mobile nav drawer -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="#home" class="mobile-nav-link">Home</a>
+        <a href="pages/services.html" class="mobile-nav-link">Services</a>
+        <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+        <a href="pages/camera-sandbox.html" class="mobile-nav-link">Sandbox</a>
+        <a href="/blog/" class="mobile-nav-link">Blog</a>
+        <a href="#contact" class="mobile-nav-link">Contact</a>
+        <a href="#contact" class="mobile-nav-link" style="color:var(--cyan)">Free Assessment</a>
     </nav>
 
     <!-- HERO -->
@@ -1176,8 +1268,19 @@
             btn.disabled = false;
         });
 
-        document.querySelector('.nav-toggle').addEventListener('click', () => {
-            document.querySelector('.nav-links').classList.toggle('open');
+        const mobileBtn = document.querySelector('.mobile-menu-btn');
+        const mobileNav = document.querySelector('.mobile-nav');
+        mobileBtn.addEventListener('click', () => {
+            const open = mobileBtn.classList.toggle('open');
+            mobileNav.classList.toggle('open', open);
+            mobileBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileBtn.classList.remove('open');
+                mobileNav.classList.remove('open');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+            });
         });
     </script>
 
