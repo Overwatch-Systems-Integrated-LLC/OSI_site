@@ -100,8 +100,11 @@
 
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            align-items: center;
+            gap: 1.75rem;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
             .nav-links a {
@@ -606,7 +609,7 @@
             display: none;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 920px) {
             .nav-links {
                 display: none;
                 flex-direction: column;
@@ -631,7 +634,9 @@
                 cursor: pointer;
                 color: var(--cyan);
             }
+        }
 
+        @media (max-width: 768px) {
             .services-grid {
                 grid-template-columns: 1fr 1fr;
             }
