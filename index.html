@@ -23,14 +23,27 @@
     <link rel="icon" type="image/png" sizes="64x64" href="images/favicon.png">
     <link rel="apple-touch-icon" href="images/favicon.png">
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Consent Mode v2 — deny storage until the visitor chooses (banner in js/consent.js)
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
   gtag('js', new Date());
-
   gtag('config', 'G-44PPPMTQKS');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -948,8 +961,8 @@
             <a href="#home" class="site-logo" aria-label="Overwatch Systems Integrated">
                 <img src="images/IconOnly_Logo.png" alt="" class="site-logo-img" aria-hidden="true">
                 <div class="logo-text">
-                    <span class="logo-name">Overwatch Systems Integrated</span>
-                    <span class="logo-sub">Oxford, Alabama</span>
+                    <span class="logo-name">Overwatch Systems</span>
+                    <span class="logo-sub">Integrated</span>
                 </div>
             </a>
 
@@ -1235,6 +1248,7 @@
             <a href="#contact">Contact</a>
         </nav>
         <div class="footer-copy">&copy; 2026 Overwatch Systems Integrated. All rights reserved.</div>
+        <div class="footer-copy" style="margin-top:.4rem"><a href="#" onclick="osiOpenConsent();return false;" style="color:inherit;text-decoration:underline">Cookie Settings</a></div>
     </footer>
 
     <script>
@@ -1284,5 +1298,6 @@
         });
     </script>
 
+    <script src="js/consent.js" defer></script>
 </body>
 </html>

@@ -23,14 +23,27 @@
   <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon.png">
   <link rel="apple-touch-icon" href="../images/favicon.png">
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Consent Mode v2 — deny storage until the visitor chooses (banner in js/consent.js)
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
   gtag('js', new Date());
-
   gtag('config', 'G-44PPPMTQKS');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -61,65 +74,90 @@
     ::-webkit-scrollbar-track { background: var(--dark2); }
     ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
 
-    /* ── NAV ── */
-    nav {
+    /* ── HEADER / NAV ── */
+    .site-header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 max(5%, calc((100% - 1280px) / 2));
       height: 80px;
       background: rgba(9,13,18,0.85);
       backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(38,174,228,0.12);
     }
-
-    .nav-logo img { height: 60px; display: block; }
-
-    .nav-links {
-      display: flex; gap: 2.5rem; list-style: none;
+    .header-inner {
+      height: 100%;
+      max-width: 1280px;
+      margin-inline: auto;
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem;
     }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--steel);
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-      position: relative;
+    .site-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none; flex-shrink: 0;
     }
-    .nav-links a::after {
-      content: '';
-      position: absolute; left: 0; bottom: -4px;
-      width: 0; height: 1px;
-      background: var(--cyan);
-      transition: width 0.25s;
+    .site-logo-img { height: 46px; width: auto; display: block; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo-name {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 0.9rem; letter-spacing: 0.03em;
+      color: var(--white); text-transform: uppercase; white-space: nowrap;
     }
-    .nav-links a:hover { color: var(--cyan); }
-    .nav-links a:hover::after { width: 100%; }
-    .nav-links a.active { color: var(--cyan); }
-    .nav-links a.active::after { width: 100%; }
+    .logo-sub {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cyan);
+    }
+    .main-nav { display: flex; align-items: center; gap: 0.25rem; }
+    .main-nav .nav-link {
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--steel); text-decoration: none;
+      padding: 0.5rem 0.85rem; border-radius: 4px;
+      transition: color 0.2s ease, background 0.2s ease; white-space: nowrap;
+    }
+    .main-nav .nav-link:hover, .main-nav .nav-link.active {
+      color: var(--white); background: rgba(255,255,255,0.06);
+    }
+    .nav-cta { display: flex; align-items: center; margin-left: 0.75rem; flex-shrink: 0; }
+    .btn-nav {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--cyan); text-decoration: none;
+      padding: 0.5rem 1.1rem; border: 1px solid var(--cyan); border-radius: 3px;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .btn-nav:hover { color: var(--dark); background: var(--cyan); }
+    .mobile-menu-btn {
+      display: none; flex-direction: column; gap: 5px;
+      padding: 0.5rem; width: 40px; background: none; border: none; cursor: pointer;
+    }
+    .mobile-menu-btn span {
+      display: block; height: 2px; width: 100%;
+      background: var(--cyan); border-radius: 1px; transition: all 0.2s ease;
+    }
+    .mobile-menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
+    .mobile-menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-    .nav-cta {
-      background: transparent;
-      border: 1px solid var(--cyan);
-      color: var(--cyan) !important;
-      padding: 0.45rem 1.2rem;
-      transition: background 0.2s, color 0.2s !important;
+    .mobile-nav {
+      display: none; position: fixed; inset: 80px 0 0 0;
+      background: rgba(9,13,18,0.98);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 99; padding: 1.5rem; flex-direction: column; gap: 0.5rem;
+      transform: translateX(100%); transition: transform 0.3s ease;
     }
-    .nav-cta:hover { background: var(--cyan) !important; color: var(--dark) !important; }
-    .nav-cta::after { display: none !important; }
-
-    .nav-toggle { display: none; }
-    @media (max-width: 768px) {
-      .nav-links { display: none; flex-direction: column; position: fixed;
-        top: 72px; left: 0; right: 0; background: var(--dark2);
-        padding: 2rem; gap: 1.5rem; border-bottom: 1px solid rgba(38,174,228,0.15); }
-      .nav-links.open { display: flex; }
-      .nav-toggle {
-        display: block; background: none; border: none; cursor: pointer;
-        color: var(--cyan);
-      }
+    .mobile-nav.open { transform: translateX(0); }
+    .mobile-nav-link {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 1.4rem; letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--steel); text-decoration: none;
+      padding: 0.75rem 0; border-bottom: 1px solid rgba(38,174,228,0.12);
+      transition: color 0.2s ease;
+    }
+    .mobile-nav-link:hover { color: var(--cyan); }
+    @media (max-width: 1024px) {
+      .main-nav, .nav-cta { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .mobile-nav { display: flex; }
     }
 
     /* ── PAGE HEADER ── */
@@ -423,21 +461,44 @@
 <body>
 
 <!-- NAV -->
-<nav>
-  <div class="nav-logo">
-    <img src="../images/IconOnly_Logo.png" alt="Overwatch Systems Integrated">
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="../index.html" class="site-logo" aria-label="Overwatch Systems Integrated">
+      <img src="../images/IconOnly_Logo.png" alt="" class="site-logo-img" aria-hidden="true">
+      <div class="logo-text">
+        <span class="logo-name">Overwatch Systems</span>
+        <span class="logo-sub">Integrated</span>
+      </div>
+    </a>
+
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="services.html" class="nav-link active">Services</a>
+      <a href="../index.html#how-it-works" class="nav-link">How It Works</a>
+      <a href="camera-sandbox.html" class="nav-link">Sandbox</a>
+      <a href="/blog/" class="nav-link">Blog</a>
+      <a href="../index.html#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="../index.html#contact" class="btn-nav">Free Assessment</a>
+    </div>
+
+    <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-  <ul class="nav-links">
-    <li><a href="../index.html">Home</a></li>
-    <li><a href="services.html" class="active">Services</a></li>
-    <li><a href="../index.html#how-it-works">How It Works</a></li>
-    <li><a href="camera-sandbox.html">Sandbox</a></li>
-    <li><a href="/blog/">Blog</a></li>
-    <li><a href="../index.html#contact" class="nav-cta">Contact Us</a></li>
-  </ul>
+</header>
+
+<!-- Mobile nav drawer -->
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a href="../index.html" class="mobile-nav-link">Home</a>
+  <a href="services.html" class="mobile-nav-link">Services</a>
+  <a href="../index.html#how-it-works" class="mobile-nav-link">How It Works</a>
+  <a href="camera-sandbox.html" class="mobile-nav-link">Sandbox</a>
+  <a href="/blog/" class="mobile-nav-link">Blog</a>
+  <a href="../index.html#contact" class="mobile-nav-link">Contact</a>
+  <a href="../index.html#contact" class="mobile-nav-link" style="color:var(--cyan)">Free Assessment</a>
 </nav>
 
 <!-- PAGE HEADER -->
@@ -680,13 +741,26 @@
     <img src="../images/Official_Logo.svg" alt="Overwatch Systems Integrated">
   </div>
   <div class="footer-copy">&copy; 2026 Overwatch Systems Integrated. All rights reserved.</div>
+  <div class="footer-copy" style="margin-top:.4rem"><a href="#" onclick="osiOpenConsent();return false;" style="color:inherit;text-decoration:underline">Cookie Settings</a></div>
 </footer>
 
 <script>
-  document.querySelector('.nav-toggle').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('open');
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const mobileNav = document.querySelector('.mobile-nav');
+  mobileBtn.addEventListener('click', () => {
+    const open = mobileBtn.classList.toggle('open');
+    mobileNav.classList.toggle('open', open);
+    mobileBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileBtn.classList.remove('open');
+      mobileNav.classList.remove('open');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+    });
   });
 </script>
 
+  <script src="../js/consent.js" defer></script>
 </body>
 </html>

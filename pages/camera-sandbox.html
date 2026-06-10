@@ -22,14 +22,27 @@
   <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon.png">
   <link rel="apple-touch-icon" href="../images/favicon.png">
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Consent Mode v2 — deny storage until the visitor chooses (banner in js/consent.js)
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
   gtag('js', new Date());
-
   gtag('config', 'G-44PPPMTQKS');
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -134,7 +147,18 @@
       backdrop-filter: blur(12px); gap: 1rem;
     }
     .sb-nav-left { display: flex; align-items: center; gap: 1rem; }
-    .sb-nav-logo { height: 44px; display: block; }
+    /* Canonical site header logo (matches index.html / services.html) */
+    .site-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; flex-shrink: 0; }
+    .site-logo-img { height: 46px; width: auto; display: block; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo-name {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 0.03em; color: var(--white); text-transform: uppercase; white-space: nowrap;
+    }
+    .logo-sub {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cyan);
+    }
     .sb-nav-divider {
       width: 1px; height: 30px;
       background: rgba(38,174,228,0.2);
@@ -672,7 +696,13 @@
   <!-- Nav with full OSI logo -->
   <nav class="sb-nav">
     <div class="sb-nav-left">
-      <img src="../images/Official_Logo.svg" alt="Overwatch Systems Integrated" class="sb-nav-logo">
+      <a href="../index.html" class="site-logo" aria-label="Overwatch Systems Integrated">
+        <img src="../images/IconOnly_Logo.png" alt="" class="site-logo-img" aria-hidden="true">
+        <div class="logo-text">
+          <span class="logo-name">Overwatch Systems</span>
+          <span class="logo-sub">Integrated</span>
+        </div>
+      </a>
       <div class="sb-nav-divider"></div>
       <span class="sb-nav-title">Camera Coverage Sandbox</span>
     </div>
@@ -1817,5 +1847,6 @@ boot();
 
 })();
 </script>
+  <script src="../js/consent.js" defer></script>
 </body>
 </html>
