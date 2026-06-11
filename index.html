@@ -352,6 +352,38 @@
             animation: fadeUp 0.8s 0.8s forwards;
         }
 
+        .hero-trust {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem 1.4rem;
+            margin-top: 1.85rem;
+            opacity: 0;
+            animation: fadeUp 0.8s 1s forwards;
+        }
+
+        .hero-trust span {
+            position: relative;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .hero-trust span:not(:first-child)::before {
+            content: '';
+            position: absolute;
+            left: -0.8rem;
+            top: 50%;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--cyan);
+            transform: translateY(-50%);
+        }
+
         .btn-primary {
             display: inline-flex;
             align-items: center;
@@ -939,6 +971,49 @@
             width: 120px;
             height: auto;
         }
+
+        /* ── CAMERA PLANNER (sandbox) lead-magnet section ── */
+        .sandbox-section-inner { max-width: 1000px; }
+        .sandbox-card {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+            border: 1px solid rgba(38,174,228,0.2); overflow: hidden;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+            transition: border-color 0.25s;
+            text-align: left;
+        }
+        .sandbox-card:hover { border-color: rgba(38,174,228,0.45); }
+        @media (max-width: 700px) { .sandbox-card { grid-template-columns: 1fr; } }
+        .sandbox-card-visual {
+            background: var(--dark2); min-height: 260px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 2rem; position: relative; overflow: hidden;
+        }
+        .sandbox-card-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(38,174,228,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(38,174,228,0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .sandbox-preview-wrap { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+        .cam-preview-row { display: flex; gap: 1.5rem; align-items: flex-end; }
+        .cam-preview-item { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+        .cam-preview-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        .cam-preview-label { font-family: 'Rajdhani', sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+        .sandbox-card-content { background: var(--dark3); padding: 2.5rem; display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; }
+        .sandbox-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(38,174,228,0.1); border: 1px solid rgba(38,174,228,0.25);
+            padding: 0.3rem 0.75rem; width: fit-content;
+        }
+        .sandbox-badge svg { flex-shrink: 0; }
+        .sandbox-badge-text { font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan); }
+        .sandbox-card-title { font-family: 'Rajdhani', sans-serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 700; color: var(--white); line-height: 1.1; }
+        .sandbox-card-title span { color: var(--cyan); }
+        .sandbox-card-desc { font-size: 0.9rem; color: var(--steel); line-height: 1.75; }
+        .sandbox-features { display: flex; flex-direction: column; gap: 0.45rem; }
+        .sandbox-feat { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: var(--steel); line-height: 1.4; }
+        .sandbox-feat::before { content: ''; display: block; flex-shrink: 0; width: 5px; height: 5px; border: 1px solid var(--cyan); margin-top: 5px; transform: rotate(45deg); }
     </style>
     <script type="application/ld+json">
     {
@@ -989,7 +1064,7 @@
             </nav>
 
             <div class="nav-cta">
-                <a href="#contact" class="btn-nav">Free Assessment</a>
+                <a href="#contact" class="btn-nav" data-cta="nav-assessment">Free Assessment</a>
             </div>
 
             <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
@@ -1006,7 +1081,7 @@
         <a href="pages/camera-sandbox.html" class="mobile-nav-link">Sandbox</a>
         <a href="/blog/" class="mobile-nav-link">Blog</a>
         <a href="#contact" class="mobile-nav-link">Contact</a>
-        <a href="#contact" class="mobile-nav-link" style="color:var(--cyan)">Free Assessment</a>
+        <a href="#contact" class="mobile-nav-link" style="color:var(--cyan)" data-cta="nav-assessment-mobile">Free Assessment</a>
     </nav>
 
     <!-- HERO -->
@@ -1022,14 +1097,20 @@
             <p class="hero-lead">Security, Surveillance, and Network Infrastructure for East Alabama</p>
             <p class="hero-sub">Overwatch Systems Integrated designs, installs, and supports IP camera systems and network infrastructure for commercial, industrial, and government facilities. From initial design to long-term maintenance, we manage every phase of the project.</p>
             <div class="hero-buttons">
-                <a href="#how-it-works" class="btn-primary">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /></svg>
-                    How It Works
-                </a>
-                <a href="#contact" class="btn-outline">
+                <a href="#contact" class="btn-primary" data-cta="hero-assessment">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                    Get a Quote
+                    Request Free Assessment
                 </a>
+                <a href="pages/camera-sandbox.html" class="btn-outline" data-cta="hero-sandbox">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M9 3v18M15 3v18M3 9h18M3 15h18" /></svg>
+                    Try the Camera Planner
+                </a>
+            </div>
+            <div class="hero-trust">
+                <span>Axis Authorized Partner</span>
+                <span>Netgear Partner</span>
+                <span>Oxford, Alabama</span>
+                <span>Free, No-Obligation Quotes</span>
             </div>
         </div>
     </section>
@@ -1167,6 +1248,63 @@
         </div>
     </section>
 
+    <!-- FREE PLANNING TOOL -->
+    <section id="planner">
+        <div class="section-label">Free Planning Tool</div>
+        <h2 class="section-title">Camera Coverage <span>Planner</span></h2>
+        <p class="section-sub">See your coverage before you commit. Upload a facility map or satellite view, drop in Axis cameras, and visualize field-of-view, overlap, and blind spots. Free, no install required.</p>
+        <div class="sandbox-section-inner" style="margin:2.5rem auto 0;">
+            <div class="sandbox-card">
+
+                <div class="sandbox-card-visual">
+                    <div class="sandbox-card-grid"></div>
+                    <div class="sandbox-preview-wrap">
+                        <div class="cam-preview-row">
+                            <div class="cam-preview-item">
+                                <div class="cam-preview-icon">
+                                    <svg width="36" height="36" viewBox="0 0 28 28" fill="none"><rect x="2" y="11" width="15" height="6" rx="1" stroke="#26aee4" stroke-width="1.5"/><path d="M17 12.5 L26 9.5 L26 18.5 Z" fill="#26aee4" opacity="0.45"/><circle cx="5.5" cy="14" r="1.5" fill="#26aee4"/></svg>
+                                </div>
+                                <div class="cam-preview-label">Bullet</div>
+                            </div>
+                            <div class="cam-preview-item">
+                                <div class="cam-preview-icon">
+                                    <svg width="36" height="36" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="15" r="8" stroke="#4dd890" stroke-width="1.5"/><circle cx="14" cy="15" r="3.5" fill="#4dd890" opacity="0.5"/></svg>
+                                </div>
+                                <div class="cam-preview-label">PTZ</div>
+                            </div>
+                            <div class="cam-preview-item">
+                                <div class="cam-preview-icon">
+                                    <svg width="36" height="36" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#e05c5c" stroke-width="1.5"/><circle cx="14" cy="14" r="7" stroke="#e05c5c" stroke-width="1" opacity="0.5"/><circle cx="14" cy="14" r="2.5" fill="#e05c5c"/></svg>
+                                </div>
+                                <div class="cam-preview-label">Fisheye</div>
+                            </div>
+                        </div>
+                        <p style="font-size:0.7rem;color:var(--muted);font-family:'Rajdhani',sans-serif;letter-spacing:0.1em;text-transform:uppercase;">Live coverage visualization</p>
+                    </div>
+                </div>
+
+                <div class="sandbox-card-content">
+                    <div class="sandbox-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#26aee4" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span class="sandbox-badge-text">Interactive Tool, No Install Required</span>
+                    </div>
+                    <div class="sandbox-card-title">Camera Coverage <span>Sandbox</span></div>
+                    <p class="sandbox-card-desc">Upload a Google Maps screenshot or facility floor plan, then drag and drop Axis cameras to visualize coverage zones, overlap areas, and blind spots before committing to a design.</p>
+                    <div class="sandbox-features">
+                        <div class="sandbox-feat">4 Axis camera models: Bullet, PTZ, Multidirectional &amp; Fisheye</div>
+                        <div class="sandbox-feat">Real-time FOV cones scaled to published Axis datasheet specs</div>
+                        <div class="sandbox-feat">Set real-world scale and measure distances in feet or meters</div>
+                        <div class="sandbox-feat">Export your layout as a PNG to share with your team</div>
+                    </div>
+                    <div>
+                        <a href="pages/camera-sandbox.html" class="btn-primary" data-cta="sandbox-section">Launch the Planner &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- CONTACT -->
     <section id="contact">
         <div class="section-label">Get In Touch</div>
@@ -1266,6 +1404,12 @@
     </footer>
 
     <script>
+        // Consent-safe analytics helper: gtag is gated by Consent Mode (js/consent.js),
+        // so events fire but only store after the visitor accepts analytics.
+        function track(name, params) {
+            if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+        }
+
         const form = document.getElementById('contact-form');
         const success = document.getElementById('form-success');
 
@@ -1283,8 +1427,11 @@
                     headers: { 'Accept': 'application/json' }
                 });
                 if (res.ok) {
+                    const serviceEl = form.querySelector('#service');
+                    const serviceVal = serviceEl ? serviceEl.value : '';
                     form.reset();
                     success.style.display = 'block';
+                    track('generate_lead', { form_id: 'contact', service: serviceVal });
                 } else {
                     alert('Something went wrong. Please try again.');
                 }
@@ -1308,6 +1455,13 @@
                 mobileBtn.classList.remove('open');
                 mobileNav.classList.remove('open');
                 mobileBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // CTA click tracking (hero + sandbox + Free Assessment buttons)
+        document.querySelectorAll('[data-cta]').forEach(el => {
+            el.addEventListener('click', () => {
+                track('cta_click', { cta: el.getAttribute('data-cta') });
             });
         });
     </script>
