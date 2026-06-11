@@ -280,6 +280,17 @@
     .tb-btn svg { flex-shrink: 0; }
     .tb-spacer { flex: 1; }
 
+    /* Unit toggle */
+    .tb-unit-toggle { display: inline-flex; border: 1px solid rgba(38,174,228,0.2); overflow: hidden; flex-shrink: 0; }
+    .tb-unit {
+      background: var(--dark2); border: none; color: var(--steel);
+      padding: 0.28rem 0.6rem; font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .tb-unit + .tb-unit { border-left: 1px solid rgba(38,174,228,0.2); }
+    .tb-unit.active { background: var(--cyan); color: var(--dark); }
+
     /* Clear dropdown */
     .tb-dropdown { position: relative; }
     .tb-menu {
@@ -628,6 +639,31 @@
 <!-- ══════════════════════════════════════════════════════════════════════
      EXPORT / CONSULT MODAL
      ══════════════════════════════════════════════════════════════════════ -->
+<!-- Calibration modal -->
+<div class="modal-overlay hidden" id="cal-modal">
+  <div class="modal-card" style="max-width:380px">
+    <div class="modal-header">
+      <div class="modal-title">Set <span>Scale</span></div>
+      <button class="modal-close" id="cal-close" type="button" title="Close">&times;</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--steel);line-height:1.6;margin:0 0 1.1rem;">
+      You drew a reference line on the map. Enter its real-world length and the scale will calibrate so all coverage cones and distance readouts match your facility.
+    </p>
+    <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:1.25rem;">
+      <span class="tb-label">Length:</span>
+      <input class="tb-input" id="cal-input" type="number" min="0.1" step="0.1" style="width:90px">
+      <select class="tb-input" id="cal-unit" style="width:64px">
+        <option value="ft">ft</option>
+        <option value="m">m</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:0.6rem;justify-content:flex-end;">
+      <button class="tb-btn" id="cal-cancel" type="button">Cancel</button>
+      <button class="tb-btn export" id="cal-apply" type="button">Apply Scale</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay hidden" id="export-modal">
   <div class="modal-card">
     <div class="modal-header">
@@ -725,10 +761,11 @@
       <div class="sidebar-how">
         <div class="how-title">How To Use</div>
         <div class="how-item"><span class="how-n">1.</span><span>Upload your facility map</span></div>
-        <div class="how-item"><span class="how-n">2.</span><span>Select a camera type above</span></div>
-        <div class="how-item"><span class="how-n">3.</span><span>Click the map to place cameras</span></div>
-        <div class="how-item"><span class="how-n">4.</span><span>Click a camera to select it</span></div>
+        <div class="how-item"><span class="how-n">2.</span><span>Set the scale: type a grid size, or use Set Scale to draw a known distance</span></div>
+        <div class="how-item"><span class="how-n">3.</span><span>Select a camera type above</span></div>
+        <div class="how-item"><span class="how-n">4.</span><span>Click the map to place cameras</span></div>
         <div class="how-item"><span class="how-n">5.</span><span>Drag to move, rotate with the handle</span></div>
+        <div class="how-item"><span class="how-n">6.</span><span>Draw a Line to measure any real distance</span></div>
       </div>
     </aside>
 
@@ -736,9 +773,25 @@
     <main class="sandbox-main">
       <div class="toolbar" id="toolbar">
         <div class="tb-group">
-          <span class="tb-label">Scale:</span>
-          <input class="tb-input" id="scale-input" type="number" value="4" min="0.5" max="100" step="0.5" title="Pixels per meter">
-          <span class="tb-label">px / m</span>
+          <span class="tb-label">Units:</span>
+          <div class="tb-unit-toggle" id="unit-toggle">
+            <button class="tb-unit active" data-unit="ft" type="button">ft</button>
+            <button class="tb-unit" data-unit="m" type="button">m</button>
+          </div>
+        </div>
+        <div class="tb-sep"></div>
+        <div class="tb-group">
+          <span class="tb-label">Grid =</span>
+          <input class="tb-input" id="grid-input" type="number" value="25" min="1" step="1" title="Real-world size of one grid square">
+          <span class="tb-label" id="grid-unit-label">ft / square</span>
+          <button class="tb-btn active" id="grid-toggle" type="button" title="Show or hide the measurement grid">Grid</button>
+        </div>
+        <div class="tb-sep"></div>
+        <div class="tb-group">
+          <button class="tb-btn" id="calibrate-btn" type="button" title="Set scale by drawing a known distance on your map">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M5 9v6M9 9v6M13 9v6M17 9v6M21 9v6"/></svg>
+            Set Scale
+          </button>
         </div>
         <div class="tb-sep"></div>
         <div class="tb-group">
@@ -858,6 +911,8 @@ const HANDLE_DIST  = 40;
 const HANDLE_R     = 11;
 const SHAPE_HIT    = 8;
 const RAD          = Math.PI / 180;
+const FT_PER_M     = 3.28084;
+const GRID_PX      = 40;          // on-screen size of one grid square (px)
 
 // ── CAMERA DEFINITIONS ────────────────────────────────────────────────────────
 const DEFS = [
@@ -889,7 +944,10 @@ const state = {
   cameras: [],
   selectedId: null,
   bgImage: null,
-  scale: 4,
+  scale: GRID_PX * FT_PER_M / 25,   // px per meter; default 1 grid square = 25 ft
+  units: 'ft',                      // 'ft' | 'm'
+  showGrid: true,
+  calibrating: false,
   nextId: 1,
   mode: 'idle',
   dragOffset: { x: 0, y: 0 },
@@ -923,7 +981,14 @@ const propType     = document.getElementById('prop-type');
 const propSpecs    = document.getElementById('prop-specs');
 const rotSlider    = document.getElementById('rot-slider');
 const rotVal       = document.getElementById('rot-val');
-const scaleInput   = document.getElementById('scale-input');
+const gridInput    = document.getElementById('grid-input');
+const gridUnitLbl  = document.getElementById('grid-unit-label');
+const unitToggle   = document.getElementById('unit-toggle');
+const gridToggle   = document.getElementById('grid-toggle');
+const calBtn       = document.getElementById('calibrate-btn');
+const calModal     = document.getElementById('cal-modal');
+const calInput     = document.getElementById('cal-input');
+const calUnitSel   = document.getElementById('cal-unit');
 const exportModal  = document.getElementById('export-modal');
 const tutWrap      = document.getElementById('tutorial-wrap');
 const tutRing      = document.getElementById('tut-ring');
@@ -1194,8 +1259,11 @@ function redraw() {
     ctx.drawImage(state.bgImage, (W - iw * s) / 2, (H - ih * s) / 2, iw * s, ih * s);
   } else {
     uploadHint.classList.remove('hidden');
-    drawGrid(W, H);
+    ctx.fillStyle = '#0e1520';
+    ctx.fillRect(0, 0, W, H);
   }
+
+  if (state.showGrid) drawGrid(W, H);
 
   state.cameras.forEach(c => drawFOV(c));
   drawShapes();
@@ -1206,17 +1274,75 @@ function redraw() {
     if (sel) drawHandle(sel);
   }
 
+  drawScaleBar(W, H);
   camCount.textContent = state.cameras.length;
 }
 
 function drawGrid(W, H) {
-  ctx.fillStyle = '#0e1520';
-  ctx.fillRect(0, 0, W, H);
-  ctx.strokeStyle = 'rgba(38,174,228,0.07)';
+  ctx.strokeStyle = state.bgImage ? 'rgba(38,174,228,0.12)' : 'rgba(38,174,228,0.07)';
   ctx.lineWidth = 1;
-  const g = 40;
+  const g = GRID_PX;
   for (let x = 0.5; x < W; x += g) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
   for (let y = 0.5; y < H; y += g) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+}
+
+// ── MEASUREMENT HELPERS ─────────────────────────────────────────────────────────
+function pxPerUnit() { return state.units === 'ft' ? state.scale / FT_PER_M : state.scale; }
+function pxToUnits(px) { return px / pxPerUnit(); }
+function fmtLen(px) {
+  const v = pxToUnits(px);
+  const d = v >= 100 ? 0 : (v >= 10 ? 1 : 2);
+  return v.toFixed(d) + ' ' + state.units;
+}
+function shapeMeasure(s) {
+  if (s.kind === 'line')   return fmtLen(dist2(s.x1, s.y1, s.x2, s.y2));
+  if (s.kind === 'box')    return fmtLen(Math.abs(s.x2 - s.x1)) + ' × ' + fmtLen(Math.abs(s.y2 - s.y1));
+  if (s.kind === 'circle') return 'r ' + fmtLen(dist2(s.x1, s.y1, s.x2, s.y2));
+  return '';
+}
+function drawMeasureLabel(text, x, y) {
+  if (!text) return;
+  ctx.save();
+  ctx.font = '600 11px Inter, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const w = ctx.measureText(text).width + 10;
+  ctx.fillStyle = 'rgba(9,13,18,0.78)';
+  ctx.fillRect(x - w / 2, y - 9, w, 18);
+  ctx.fillStyle = '#cfe3f2';
+  ctx.fillText(text, x, y + 0.5);
+  ctx.restore();
+}
+// Nearest "nice" round number <= x (1 / 2 / 5 x 10^n)
+function niceNumber(x) {
+  if (!(x > 0)) return 1;
+  const exp = Math.floor(Math.log10(x));
+  const f = x / Math.pow(10, exp);
+  const nf = f >= 5 ? 5 : (f >= 2 ? 2 : 1);
+  return nf * Math.pow(10, exp);
+}
+function drawScaleBar(W, H) {
+  const ppu = pxPerUnit();
+  if (!isFinite(ppu) || ppu <= 0) return;
+  const niceUnits = niceNumber(110 / ppu);
+  const barPx = niceUnits * ppu;
+  const x0 = 18, y0 = H - 20;
+  const label = (niceUnits >= 1 ? niceUnits : niceUnits.toFixed(1)) + ' ' + state.units;
+
+  ctx.save();
+  ctx.fillStyle = 'rgba(9,13,18,0.6)';
+  ctx.fillRect(x0 - 8, y0 - 24, barPx + 78, 36);
+  ctx.strokeStyle = '#cfe3f2';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0); ctx.lineTo(x0 + barPx, y0);
+  ctx.moveTo(x0, y0 - 5); ctx.lineTo(x0, y0 + 5);
+  ctx.moveTo(x0 + barPx, y0 - 5); ctx.lineTo(x0 + barPx, y0 + 5);
+  ctx.stroke();
+  ctx.fillStyle = '#cfe3f2';
+  ctx.font = '600 11px Inter, sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, x0 + barPx + 8, y0 - 1);
+  ctx.restore();
 }
 
 function drawFOV(cam) {
@@ -1361,6 +1487,10 @@ function drawShapes() {
     drawShape({ kind: state.drawTool, x1: state.pending.x1, y1: state.pending.y1,
                 x2: state.pending.x2, y2: state.pending.y2 }, false, true);
   }
+  if (state.pending && state.calibrating) {
+    drawShape({ kind: 'line', x1: state.pending.x1, y1: state.pending.y1,
+                x2: state.pending.x2, y2: state.pending.y2 }, false, true);
+  }
 }
 
 function drawShape(s, selected, preview) {
@@ -1387,6 +1517,13 @@ function drawShape(s, selected, preview) {
     pts.forEach(([px, py]) => { ctx.beginPath(); ctx.arc(px, py, 3.5, 0, Math.PI * 2); ctx.fill(); });
   }
   ctx.restore();
+
+  // Real-world measurement label
+  let lx, ly;
+  if (s.kind === 'line')      { lx = (s.x1 + s.x2) / 2; ly = (s.y1 + s.y2) / 2 - 11; }
+  else if (s.kind === 'box')  { lx = (s.x1 + s.x2) / 2; ly = Math.min(s.y1, s.y2) - 11; }
+  else                        { lx = s.x1; ly = s.y1 - dist2(s.x1, s.y1, s.x2, s.y2) - 11; }
+  drawMeasureLabel(shapeMeasure(s), lx, ly);
 }
 
 // Distance from point to a line segment
@@ -1458,6 +1595,23 @@ function onDown(e) {
   e.preventDefault();
   const { x, y } = getXY(e);
 
+  // ── CALIBRATION: two-click known-distance reference ──
+  if (state.calibrating) {
+    if (!state.pending) {
+      state.pending = { x1: x, y1: y, x2: x, y2: y };
+      state.mode = 'drawing';
+    } else {
+      state.pending.x2 = x; state.pending.y2 = y;
+      if (dist2(state.pending.x1, state.pending.y1, x, y) > 8) {
+        openCalModal();
+      } else {
+        state.pending = null; state.mode = 'idle';
+      }
+    }
+    redraw();
+    return;
+  }
+
   // ── DRAW MODE: two-click shape placement ──
   if (state.drawTool) {
     if (!state.pending) {
@@ -1528,6 +1682,13 @@ function onMove(e) {
   e.preventDefault();
   const { x, y } = getXY(e);
 
+  // Calibration preview (rubber-band to cursor between the two clicks)
+  if (state.calibrating) {
+    if (state.pending) { state.pending.x2 = x; state.pending.y2 = y; redraw(); }
+    canvas.style.cursor = 'crosshair';
+    return;
+  }
+
   // Draw-mode preview (rubber-band to cursor between the two clicks)
   if (state.drawTool) {
     if (state.pending) { state.pending.x2 = x; state.pending.y2 = y; redraw(); }
@@ -1567,6 +1728,7 @@ function onUp() { state.mode = 'idle'; }
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
+    if (state.calibrating) { cancelCal(); return; }
     if (state.pending) { state.pending = null; state.mode = 'idle'; updateDrawToast(); redraw(); return; }
     if (state.drawTool) { setDrawTool(null); return; }
     state.selectedId = null; state.selectedShapeId = null; updateProperties(); redraw();
@@ -1586,7 +1748,7 @@ function updateProperties() {
     const s = state.shapes.find(sh => sh.id === state.selectedShapeId);
     if (s) {
       propEmpty.style.display = 'none'; propCam.style.display = 'none'; propShape.style.display = 'block';
-      document.getElementById('prop-shape-title').textContent = s.kind.charAt(0).toUpperCase() + s.kind.slice(1);
+      document.getElementById('prop-shape-title').textContent = s.kind.charAt(0).toUpperCase() + s.kind.slice(1) + ': ' + shapeMeasure(s);
       return;
     }
   }
@@ -1645,6 +1807,8 @@ function setDrawTool(tool) {
   state.mode = 'idle';
   Object.entries(drawButtons).forEach(([k, btn]) => btn.classList.toggle('active', k === tool));
   if (tool) {
+    state.calibrating = false;
+    calBtn.classList.remove('active');
     state.selectedId = null;
     state.selectedShapeId = null;
     updateProperties();
@@ -1691,10 +1855,93 @@ function loadImage(src) {
   img.src = src;
 }
 
-scaleInput.addEventListener('change', () => {
-  const v = parseFloat(scaleInput.value);
-  if (v > 0) { state.scale = v; redraw(); }
+// ── SCALE / UNITS / GRID CONTROLS ───────────────────────────────────────────────
+// Reflect the current scale as "units per grid square" in the toolbar input.
+function syncGridInput() {
+  const unitsPerSquare = GRID_PX / pxPerUnit();
+  gridInput.value = unitsPerSquare >= 10 ? Math.round(unitsPerSquare) : unitsPerSquare.toFixed(1);
+  gridUnitLbl.textContent = state.units + ' / square';
+}
+// Set scale directly from the grid-size input (1 grid square = N units).
+function setGridFromInput() {
+  const v = parseFloat(gridInput.value);
+  if (!v || v <= 0) { syncGridInput(); return; }
+  const ppu = GRID_PX / v;                       // pixels per current unit
+  state.scale = state.units === 'ft' ? ppu * FT_PER_M : ppu;
+  redraw();
+}
+gridInput.addEventListener('change', setGridFromInput);
+
+unitToggle.querySelectorAll('.tb-unit').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (state.units === btn.dataset.unit) return;
+    state.units = btn.dataset.unit;
+    unitToggle.querySelectorAll('.tb-unit').forEach(b => b.classList.toggle('active', b === btn));
+    if (calModal && !calModal.classList.contains('hidden')) calUnitSel.value = state.units;
+    syncGridInput();
+    if (state.selectedShapeId != null) updateProperties();
+    redraw();
+  });
 });
+
+gridToggle.addEventListener('click', () => {
+  state.showGrid = !state.showGrid;
+  gridToggle.classList.toggle('active', state.showGrid);
+  redraw();
+});
+
+// ── CALIBRATION ("Set Scale" by drawing a known distance) ─────────────────────────
+function setCalibrate(on) {
+  state.calibrating = on;
+  state.pending = null;
+  state.mode = 'idle';
+  calBtn.classList.toggle('active', on);
+  if (on) {
+    setDrawTool(null);
+    state.calibrating = true;                     // setDrawTool(null) leaves this true
+    state.selectedId = null;
+    state.selectedShapeId = null;
+    updateProperties();
+    canvas.style.cursor = 'crosshair';
+    drawToast.innerHTML = '<b>Set Scale</b>: click two points a known distance apart on your map. &nbsp;<b>Esc</b> to cancel.';
+    drawToast.classList.add('show');
+  } else {
+    drawToast.classList.remove('show');
+  }
+  redraw();
+}
+function openCalModal() {
+  calUnitSel.value = state.units;
+  calInput.value = '';
+  calModal.classList.remove('hidden');
+  setTimeout(() => calInput.focus(), 50);
+}
+function applyCalibration() {
+  const len = parseFloat(calInput.value);
+  if (!len || len <= 0) { calInput.focus(); return; }
+  if (state.pending) {
+    const pxLen = dist2(state.pending.x1, state.pending.y1, state.pending.x2, state.pending.y2);
+    const meters = calUnitSel.value === 'ft' ? len / FT_PER_M : len;
+    if (meters > 0 && pxLen > 0) state.scale = pxLen / meters;
+  }
+  calModal.classList.add('hidden');
+  state.pending = null;
+  setCalibrate(false);
+  syncGridInput();
+  redraw();
+}
+function cancelCal() {
+  calModal.classList.add('hidden');
+  state.pending = null;
+  setCalibrate(false);
+  redraw();
+}
+calBtn.addEventListener('click', () => setCalibrate(!state.calibrating));
+document.getElementById('cal-apply').addEventListener('click', applyCalibration);
+document.getElementById('cal-cancel').addEventListener('click', cancelCal);
+document.getElementById('cal-close').addEventListener('click', cancelCal);
+calInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') applyCalibration(); });
+calModal.addEventListener('click', (e) => { if (e.target === calModal) cancelCal(); });
 
 const clearDropdown = document.getElementById('clear-dropdown');
 document.getElementById('clear-btn').addEventListener('click', (e) => {
@@ -1843,6 +2090,7 @@ function rgba(hex, a) {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 buildPalette();
+syncGridInput();
 boot();
 
 })();
