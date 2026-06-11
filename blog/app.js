@@ -428,9 +428,17 @@
       e.preventDefault();
       const emailInput = form.querySelector('input[type="email"]');
       if (!emailInput || !emailInput.value.trim()) return;
+      const email = emailInput.value.trim();
 
       const successEl = form.parentElement.querySelector('.newsletter-success');
-      console.log('[OSI Blog] Newsletter signup:', emailInput.value.trim());
+
+      // Capture the subscriber via Formspree (same endpoint as the rest of the site).
+      // Fire-and-forget: the reader sees success regardless of network result.
+      fetch('https://formspree.io/f/mzdjepoo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email: email, _subject: 'Blog Newsletter Signup', source: 'OSI Blog' })
+      }).catch(function () {});
 
       if (hasGSAP && successEl) {
         gsap.to(form, {
