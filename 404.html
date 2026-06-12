@@ -1,411 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Play | Open source Project by UIdeck</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found (404) | Overwatch Systems Integrated</title>
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan: #26aee4;
+      --white: #eaf2f8;
+      --dark: #090d12;
+      --dark2: #0e1520;
+      --dark3: #141e2e;
+      --steel: #b8c8d8;
+      --muted: #5a7a96;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at 50% 0%, var(--dark2) 0%, var(--dark) 70%);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 20px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      text-decoration: none;
+    }
+    .logo img { height: 44px; width: auto; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1; text-align: left; }
+    .logo-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.25rem; letter-spacing: 0.04em; color: var(--white); }
+    .logo-sub { font-family: 'Rajdhani', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cyan); }
+    .code {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(5rem, 18vw, 9rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      color: var(--cyan);
+      text-shadow: 0 0 36px rgba(38, 174, 228, 0.35);
+    }
+    h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      letter-spacing: 0.02em;
+      margin: 12px 0 14px;
+      color: var(--white);
+    }
+    p.lead {
+      font-size: 1.05rem;
+      color: var(--steel);
+      max-width: 520px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+    .btn {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      padding: 13px 26px;
+      border-radius: 6px;
+      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn-primary { background: var(--cyan); color: var(--dark); }
+    .btn-primary:hover { transform: translateY(-2px); background: #3cbef0; }
+    .btn-outline { border: 1px solid var(--muted); color: var(--white); }
+    .btn-outline:hover { transform: translateY(-2px); border-color: var(--cyan); color: var(--cyan); }
+    .contact {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .contact a { color: var(--steel); text-decoration: none; }
+    .contact a:hover { color: var(--cyan); }
+  </style>
+</head>
+<body>
+  <a href="/" class="logo" aria-label="Overwatch Systems Integrated home">
+    <img src="/images/IconOnly_Logo.png" alt="" aria-hidden="true">
+    <span class="logo-text">
+      <span class="logo-name">Overwatch Systems</span>
+      <span class="logo-sub">Integrated</span>
+    </span>
+  </a>
 
-    <!--====== Favicon Icon ======-->
-    <link
-      rel="shortcut icon"
-      href="assets/images/favicon.svg"
-      type="image/svg"
-    />
+  <div class="code" aria-hidden="true">404</div>
+  <h1>This page is off the grid.</h1>
+  <p class="lead">The page you are looking for moved or no longer exists. Use the links below to find what you need, or reach out and we will point you in the right direction.</p>
 
-    <!-- ===== All CSS files ===== -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/animate.css" />
-    <link rel="stylesheet" href="assets/css/lineicons.css" />
-    <link rel="stylesheet" href="assets/css/ud-styles.css" />
-  </head>
-  <body>
-    <!-- ====== Header Start ====== -->
-    <header class="ud-header">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <nav class="navbar navbar-expand-lg">
-              <a class="navbar-brand" href="index.html">
-                <span class="fw-bold text-white startup-logo">Startup Template</span>
-              </a>
-              <button class="navbar-toggler">
-                <span class="toggler-icon"> </span>
-                <span class="toggler-icon"> </span>
-                <span class="toggler-icon"> </span>
-              </button>
+  <div class="links">
+    <a href="/" class="btn btn-primary">Back to Home</a>
+    <a href="/pages/services.html" class="btn btn-outline">Services</a>
+    <a href="/blog/" class="btn btn-outline">Blog</a>
+    <a href="/#contact" class="btn btn-outline">Request a Free Assessment</a>
+  </div>
 
-              <div class="navbar-collapse">
-                <ul id="nav" class="navbar-nav mx-auto">
-                  <li class="nav-item">
-                    <a class="ud-menu-scroll" href="#home">Home</a>
-                  </li>
-
-                  <li class="nav-item">
-                    <a class="ud-menu-scroll" href="#about">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="ud-menu-scroll" href="#pricing">Pricing</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="ud-menu-scroll" href="#team">Team</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="ud-menu-scroll" href="#contact">Contact</a>
-                  </li>
-                  <li class="nav-item nav-item-has-children">
-                    <a href="javascript:void(0)"> Pages </a>
-                    <ul class="ud-submenu">
-                      <li class="ud-submenu-item">
-                        <a href="about.html" class="ud-submenu-link">
-                          About Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="pricing.html" class="ud-submenu-link">
-                          Pricing Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="contact.html" class="ud-submenu-link">
-                          Contact Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="blog.html" class="ud-submenu-link">
-                          Blog Grid Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="blog-details.html" class="ud-submenu-link">
-                          Blog Details Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="login.html" class="ud-submenu-link">
-                          Sign In Page
-                        </a>
-                      </li>
-                      <li class="ud-submenu-item">
-                        <a href="404.html" class="ud-submenu-link">404 Page</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="navbar-btn d-none d-sm-inline-block">
-                <a href="login.html" class="ud-main-btn ud-login-btn">
-                  Sign In
-                </a>
-                <a class="ud-main-btn ud-white-btn" href="javascript:void(0)">
-                  Sign Up
-                </a>
-              </div>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </header>
-    <!-- ====== Header End ====== -->
-
-    <!-- ====== Banner Start ====== -->
-    <section class="ud-page-banner">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="ud-banner-content">
-              <h1>404 Page</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ====== Banner End ====== -->
-
-    <!-- ====== Error 404 Start ====== -->
-    <section class="ud-404">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="ud-404-wrapper">
-              <div class="ud-404-content">
-                <h2 class="ud-404-title">404 - We couldn't find that page.</h2>
-                <h5 class="ud-404-subtitle">
-                  Maybe you can find what you need here?
-                </h5>
-                <ul class="ud-404-links">
-                  <li>
-                    <a href="javascript:void(0)">Home</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Support</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Latest News</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ====== Error 404 End ====== -->
-
-    <!-- ====== Footer Start ====== -->
-    <footer class="ud-footer wow fadeInUp" data-wow-delay=".15s">
-      <div class="shape shape-1">
-        <img src="assets/images/footer/shape-1.svg" alt="shape" />
-      </div>
-      <div class="shape shape-2">
-        <img src="assets/images/footer/shape-2.svg" alt="shape" />
-      </div>
-      <div class="shape shape-3">
-        <img src="assets/images/footer/shape-3.svg" alt="shape" />
-      </div>
-      <div class="ud-footer-widgets">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-3 col-lg-4 col-md-6">
-              <div class="ud-widget">
-                <a href="index.html" class="ud-footer-logo">
-                  <span class="fw-bold text-white startup-logo">Startup Template</span>
-                </a>
-                <p class="ud-widget-desc">
-                  We create digital experiences for brands and companies by
-                  using technology.
-                </p>
-                <ul class="ud-widget-socials">
-                  <li>
-                    <a href="https://twitter.com/MusharofChy">
-                      <i class="lni lni-facebook-filled"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://twitter.com/MusharofChy">
-                      <i class="lni lni-twitter-filled"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://twitter.com/MusharofChy">
-                      <i class="lni lni-instagram-filled"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://twitter.com/MusharofChy">
-                      <i class="lni lni-linkedin-original"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
-              <div class="ud-widget">
-                <h5 class="ud-widget-title">About Us</h5>
-                <ul class="ud-widget-links">
-                  <li>
-                    <a href="javascript:void(0)">Home</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Features</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">About</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Testimonial</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
-              <div class="ud-widget">
-                <h5 class="ud-widget-title">Features</h5>
-                <ul class="ud-widget-links">
-                  <li>
-                    <a href="javascript:void(0)">How it works</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Privacy policy</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Terms of service</a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)">Refund policy</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6">
-              <div class="ud-widget">
-                <h5 class="ud-widget-title">Our Products</h5>
-                <ul class="ud-widget-links">
-                  <li>
-                    <a
-                      href="https://lipsumai.com/"
-                      target="_blank"
-                      >Lorem Ipsum With AI Generator
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://lineicons.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                      >Lineicons
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://ecommercehtml.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                      >Ecommerce HTML</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="https://ayroui.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                      >Ayro UI</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      href="https://graygrids.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                      >Plain Admin</a
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 col-md-8 col-sm-10">
-              <div class="ud-widget">
-                <h5 class="ud-widget-title">Partners</h5>
-                <ul class="ud-widget-brands">
-                  <li>
-                    <a
-                      href="https://ayroui.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/ayroui.svg"
-                        alt="ayroui"
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://ecommercehtml.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/ecommerce-html.svg"
-                        alt="ecommerce-html"
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://graygrids.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/graygrids.svg"
-                        alt="graygrids"
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://lineicons.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/lineicons.svg"
-                        alt="lineicons"
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://uideck.com/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/uideck.svg"
-                        alt="uideck"
-                      />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://tailwindtemplates.co/"
-                      rel="nofollow noopner"
-                      target="_blank"
-                    >
-                      <img
-                        src="assets/images/footer/brands/tailwindtemplates.svg"
-                        alt="tailwindtemplates"
-                      />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="ud-footer-bottom">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8">
-              <ul class="ud-footer-bottom-left">
-                <li>
-                  <a href="javascript:void(0)">Privacy policy</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Support policy</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">Terms of service</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4">
-              <p class="ud-footer-bottom-right">
-                Designed and Developed by
-                <a href="https://hau.xyz" rel="nofollow">haudev</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- ====== Footer End ====== -->
-
-    <!-- ====== Back To Top Start ====== -->
-    <a href="javascript:void(0)" class="back-to-top">
-      <i class="lni lni-chevron-up"> </i>
-    </a>
-    <!-- ====== Back To Top End ====== -->
-
-    <!-- ====== All Javascript Files ====== -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7587631210958149"
-     crossorigin="anonymous"></script>
-  </body>
+  <p class="contact">
+    Overwatch Systems Integrated &middot; Oxford, AL &middot;
+    <a href="tel:+12562400681">(256) 240-0681</a> &middot;
+    <a href="mailto:sales@overwatchsi.com">sales@overwatchsi.com</a>
+  </p>
+</body>
 </html>
