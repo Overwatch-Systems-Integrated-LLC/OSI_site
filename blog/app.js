@@ -440,6 +440,11 @@
         body: JSON.stringify({ email: email, _subject: 'Blog Newsletter Signup', source: 'OSI Blog' })
       }).catch(function () {});
 
+      // Conversion event (consent-gated by Consent Mode v2; no-op if gtag absent).
+      if (window.gtag) {
+        window.gtag('event', 'generate_lead', { method: 'newsletter', source: 'blog' });
+      }
+
       if (hasGSAP && successEl) {
         gsap.to(form, {
           duration: 0.25, opacity: 0, y: -8, ease: 'power2.in',

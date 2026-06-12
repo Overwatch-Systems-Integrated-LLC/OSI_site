@@ -3,6 +3,27 @@
 <head>
   <meta charset='UTF-8' />
   <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <!-- Google tag (gtag.js) -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
+  gtag('js', new Date());
+  gtag('config', 'G-44PPPMTQKS');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <title>Blue Origin's Alabama Expansion and What It Signals for Facility Security | OSI Blog</title>
   <meta name='description' content='Blue Origin is adding 100 jobs to its Huntsville operations, pushing its Alabama workforce past 1,600 across three facilities. For security integrators and facility managers in Alabama's growing aerospace sector, that kind of expansion signals more than new jobs.' />
   <meta name='author' content='Barry Fuller' />
@@ -15,6 +36,10 @@
   <meta property='og:image' content='https://www.madeinalabama.com/wp-content/webp-express/webp-images/uploads/2026/05/HSV_People_10-crop2.jpg.webp' />
   <meta property='og:article:published_time' content='2026-06-07T00:00:00.000Z' />
   <meta property='og:article:section' content='Defense Industry' />
+  <meta name='twitter:card' content='summary_large_image' />
+  <meta name='twitter:title' content="Blue Origin's Alabama Expansion and What It Signals for Facility Security" />
+  <meta name='twitter:description' content='Blue Origin is adding 100 jobs in Huntsville, pushing its Alabama workforce past 1,600 across three facilities. What that expansion signals for facility security in the aerospace sector.' />
+  <meta name='twitter:image' content='https://www.madeinalabama.com/wp-content/webp-express/webp-images/uploads/2026/05/HSV_People_10-crop2.jpg.webp' />
   <script type='application/ld+json'>
   {
     "@context": "https://schema.org",
@@ -29,6 +54,17 @@
     "publisher": { "@type": "Organization", "name": "Overwatch Systems Integrated", "url": "https://www.overwatchsi.com" },
     "keywords": ["Blue","Origin","Huntsville","Alabama","aerospace","defense","security","NDAA","facility","surveillance","access","control"],
     "articleSection": "Defense Industry"
+  }
+  </script>
+  <script type='application/ld+json'>
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Blog", "item": "https://www.overwatchsi.com/blog/" },
+      { "@type": "ListItem", "position": 2, "name": "Defense Industry", "item": "https://www.overwatchsi.com/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Blue Origin's Alabama Expansion and What It Signals for Facility Security", "item": "https://www.overwatchsi.com/blog/blue-origin-huntsville-expansion-facility-security-2026/" }
+    ]
   }
   </script>
   <link rel='stylesheet' href='../style.css' />
@@ -222,5 +258,6 @@
 <script src='https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js'></script>
 <script src='../app.js'></script>
+<script src='../../js/consent.js' defer></script>
 </body>
 </html>

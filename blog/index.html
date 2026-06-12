@@ -3,6 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  // Consent Mode v2 - deny storage until the visitor chooses (banner in js/consent.js)
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
+  gtag('js', new Date());
+  gtag('config', 'G-44PPPMTQKS');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <title>OSI Blog — Industrial Security & Surveillance Intelligence | Overwatch Systems Integrated</title>
   <meta name="description" content="Industrial security insights, video surveillance best practices, AI analytics, and network infrastructure guidance from Overwatch Systems Integrated — Oxford, AL." />
   <meta name="robots" content="index, follow" />
@@ -14,6 +36,13 @@
   <meta property="og:title"       content="OSI Blog — Industrial Security & Surveillance Intelligence" />
   <meta property="og:description" content="Field-tested insights on industrial CCTV, AI analytics, network infrastructure, and access control from East Alabama's trusted systems integrator." />
   <meta property="og:site_name"   content="Overwatch Systems Integrated" />
+  <meta property="og:image"       content="https://www.overwatchsi.com/images/og-image.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="OSI Blog - Industrial Security & Surveillance Intelligence" />
+  <meta name="twitter:description" content="Field-tested insights on industrial CCTV, AI analytics, network infrastructure, and access control from East Alabama's trusted systems integrator." />
+  <meta name="twitter:image"       content="https://www.overwatchsi.com/images/og-image.png" />
 
   <!-- Schema: Blog -->
   <script type="application/ld+json">
@@ -441,5 +470,6 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="app.js"></script>
+<script src="../js/consent.js" defer></script>
 </body>
 </html>
