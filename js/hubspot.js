@@ -21,9 +21,9 @@
   //   sandbox     fields: email, firstname, lastname, company
   // (A form GUID looks like "a1b2c3d4-1234-5678-9abc-de0123456789".)
   var FORMS = {
-    contact: 'REPLACE_WITH_CONTACT_FORM_GUID',
-    newsletter: 'REPLACE_WITH_NEWSLETTER_FORM_GUID',
-    sandbox: 'REPLACE_WITH_SANDBOX_FORM_GUID'
+    contact: '3d6d2b5f-0f88-4787-8f9f-48585ae3280f',
+    newsletter: '684c24b4-b7f5-4971-a683-eda20b0e254b',
+    sandbox: 'e16288f0-029d-4a42-90e2-ea11d199e1e7'
   };
 
   function endpoint(formKey) {
