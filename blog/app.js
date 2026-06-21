@@ -432,13 +432,11 @@
 
       const successEl = form.parentElement.querySelector('.newsletter-success');
 
-      // Capture the subscriber via Formspree (same endpoint as the rest of the site).
+      // Capture the subscriber in HubSpot (Forms Submission API via js/hubspot.js).
       // Fire-and-forget: the reader sees success regardless of network result.
-      fetch('https://formspree.io/f/mzdjepoo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: email, _subject: 'Blog Newsletter Signup', source: 'OSI Blog' })
-      }).catch(function () {});
+      if (window.OSIHubSpot) {
+        window.OSIHubSpot.submit('newsletter', { email: email }).catch(function () {});
+      }
 
       // Conversion event (consent-gated by Consent Mode v2; no-op if gtag absent).
       if (window.gtag) {

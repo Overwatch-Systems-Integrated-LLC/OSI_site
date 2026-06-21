@@ -926,7 +926,7 @@
 'use strict';
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const FORMSPREE    = 'https://formspree.io/f/mzdjepoo';
+// Leads are sent to HubSpot via js/hubspot.js (window.OSIHubSpot).
 const STORAGE_KEY  = 'osi_sandbox_v1';
 const TUT_KEY      = 'osi_sandbox_toured_v1';
 const HIT_R        = 14;
@@ -1046,11 +1046,10 @@ gateForm.addEventListener('submit', async (e) => {
   gateSubmit.textContent = 'Submitting…';
 
   try {
-    await fetch(FORMSPREE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ _subject: 'Camera Sandbox Registration', name, email, company, source: 'OSI Camera Coverage Sandbox' })
-    });
+    if (window.OSIHubSpot) {
+      const _n = window.OSIHubSpot.splitName(name);
+      await window.OSIHubSpot.submit('sandbox', { email, firstname: _n.firstname, lastname: _n.lastname, company });
+    }
   } catch (_) {}
 
   const userData = { name, email, company };
@@ -2050,17 +2049,15 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
   btn.textContent = 'Sending…';
 
   try {
-    await fetch(FORMSPREE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        _subject: 'Camera Coverage Consultation Request',
-        name, email, phone, message,
-        cameras_placed: state.cameras.length,
-        camera_types: state.cameras.map(c => c.type).join(', '),
-        source: 'Camera Sandbox – Export & Consult'
-      })
-    });
+    if (window.OSIHubSpot) {
+      const _n = window.OSIHubSpot.splitName(name);
+      const _ctx = '\n\n[Camera Coverage Sandbox: ' + state.cameras.length + ' cameras placed'
+        + (state.cameras.length ? ' (' + state.cameras.map(c => c.type).join(', ') + ')' : '') + ']';
+      await window.OSIHubSpot.submit('contact', {
+        email, firstname: _n.firstname, lastname: _n.lastname, phone,
+        message: (message || 'Consultation requested from the Camera Coverage Sandbox.') + _ctx
+      });
+    }
   } catch (_) {}
 
   // Trigger PNG download automatically
@@ -2119,5 +2116,7 @@ boot();
 })();
 </script>
   <script src="../js/consent.js" defer></script>
+  <script src="/js/hubspot.js" defer></script>
+  <script src="/js/assistant.js" defer></script>
 </body>
 </html>

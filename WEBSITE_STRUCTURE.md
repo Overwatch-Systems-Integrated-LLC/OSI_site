@@ -20,6 +20,10 @@ Working knowledge for the OSI marketing website. Keep this updated when the stru
 ├── .gitignore            Ignores .DS_Store, node_modules, .vs/
 ├── css/
 │   └── style.css         Partner-badge styles — CURRENTLY ORPHANED (not linked by any page; see KNOWN ISSUES)
+├── js/
+│   ├── consent.js        Cookie consent / Consent Mode v2 (self-injecting; on every page)
+│   ├── assistant.js      AI assistant widget — right-side chat pane (self-injecting; on every page)
+│   └── hubspot.js        HubSpot Forms API helper (portal id + form GUIDs + submit())
 ├── docs/
 │   └── OSI_One_Pager.docx  Sales one-pager (not linked from the site; reference asset)
 ├── images/               All site images + the partner badge sources
@@ -78,7 +82,7 @@ Single-page layout. All CSS is in **one inline `<style>` block** (no external st
 5. **CONTACT** (`#contact`)
    - Email: **sales@overwatchsi.com** (`mailto:`)
    - Phone: **(256) 240-0681** (`tel:+12562400681`)
-   - Form posts to **Formspree**: `https://formspree.io/f/mzdjepoo` (`method="POST"`). Fields: name, email, phone, message. To change where submissions go, update the Formspree form ID.
+   - Form submits to **HubSpot** via `js/hubspot.js` (`window.OSIHubSpot.submit('contact', …)`). Fields map to email, firstname/lastname (split from "Full Name"), phone, and message (the "Service Needed" dropdown is prepended to the message). To change where submissions go, update the form GUID in `js/hubspot.js`. See §9.
 6. **PARTNERS** (`.partners-section`) — 3 badges (see §5).
 7. **FOOTER** — logo + standard footer.
 
@@ -139,7 +143,7 @@ The homepage Partners section shows three linked badges:
 - **Edit copy/sections:** edit the relevant `*.html` directly; CSS is inline in each page's `<style>` block.
 - **Add an image:** drop it in `images/`, reference as `images/x` (root) or `../images/x` (from `pages/`).
 - **Add a sub-page:** put it in `pages/`, and use the §2 path rules (remember `../` for root assets and homepage anchors).
-- **Change where the contact form goes:** update the Formspree form ID in `index.html` (`action="https://formspree.io/f/…"`).
+- **Change where the contact form goes:** update the relevant form GUID in `js/hubspot.js` (`FORMS` object). All four lead forms route through this helper now (see §9).
 - **Swap the CYD badge art:** replace `images/cyd_partner.svg` (and re-export `cyd_partner.png` if you need the raster).
 
 ---
@@ -160,6 +164,19 @@ There is no staging environment — `main` is production. Verify links after str
 2. **`css/style.css` is orphaned.** No HTML file links it; `index.html` defines its own `.partner-badge` styles inline. Either wire it in or delete it to avoid confusion. (Note its `.partner-badge svg { height:220px }` / `iframe` rules reflect an older badge approach.)
 3. **No `<meta name="description">`** on the homepage — worth adding for SEO.
 4. **Inline CSS per page** means shared styles (nav, fonts, colors) are duplicated across `index.html`, `services.html`, and `camera-sandbox.html`. If you change brand colors, update each page (or migrate shared rules into the existing `css/style.css` and link it everywhere).
+
+---
+
+## 9. AI assistant + HubSpot lead capture (added 2026-06-21)
+
+**AI assistant** (`js/assistant.js`): a self-injecting "Ask OSI" launcher (bottom-right) that opens a right-side chat pane with a multi-line input. It represents **OSI only** (never references Surveillance Design Studio). The chat "brain" is a separate **Cloudflare Worker** (Claude proxy) — repo `osi-assistant-worker` — that holds the Anthropic key and the OSI system prompt, because the static site can't hold the key. Set the deployed Worker URL in the `WORKER_URL` constant near the top of `js/assistant.js` (it auto-targets `http://localhost:8787` on localhost for dev).
+
+**HubSpot lead capture** (`js/hubspot.js`): all four lead forms post to HubSpot's public Forms Submission API (no secret key needed; portal id `245760841` + one form GUID per form). Fill the three GUIDs in the `FORMS` object:
+- `contact` — homepage contact form (`index.html`) **and** the camera-sandbox "Export & Consult" request (sandbox context is appended to the message).
+- `newsletter` — blog newsletter signup (`blog/app.js`).
+- `sandbox` — camera-sandbox registration gate (`pages/camera-sandbox.html`).
+
+Pages that load `js/hubspot.js`: `index.html`, `pages/camera-sandbox.html`, and all blog pages. `js/assistant.js` loads on every page. Formspree is fully removed.
 
 ---
 

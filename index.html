@@ -1336,7 +1336,7 @@
                 </div>
             </div>
 
-            <form class="contact-form" id="contact-form" action="https://formspree.io/f/mzdjepoo" method="POST">
+            <form class="contact-form" id="contact-form">
                 <div class="form-group">
                     <label class="form-label" for="name">Full Name</label>
                     <input class="form-input" type="text" id="name" name="name" placeholder="John Smith" required>
@@ -1424,28 +1424,29 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const data = new FormData(form);
             const btn = form.querySelector('.form-submit');
             btn.textContent = 'Sending…';
             btn.disabled = true;
 
+            const serviceEl = form.querySelector('#service');
+            const serviceVal = serviceEl ? serviceEl.value : '';
+            const fullName = (form.querySelector('#name').value || '').trim();
+            const userMsg = (form.querySelector('#message').value || '').trim();
+            const { firstname, lastname } = window.OSIHubSpot.splitName(fullName);
+
             try {
-                const res = await fetch(form.action, {
-                    method: 'POST',
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
+                await window.OSIHubSpot.submit('contact', {
+                    email: (form.querySelector('#email').value || '').trim(),
+                    firstname: firstname,
+                    lastname: lastname,
+                    phone: (form.querySelector('#phone').value || '').trim(),
+                    message: (serviceVal ? ('Service needed: ' + serviceVal + '\n\n') : '') + userMsg
                 });
-                if (res.ok) {
-                    const serviceEl = form.querySelector('#service');
-                    const serviceVal = serviceEl ? serviceEl.value : '';
-                    form.reset();
-                    success.style.display = 'block';
-                    track('generate_lead', { form_id: 'contact', service: serviceVal });
-                } else {
-                    alert('Something went wrong. Please try again.');
-                }
+                form.reset();
+                success.style.display = 'block';
+                track('generate_lead', { form_id: 'contact', service: serviceVal });
             } catch (err) {
-                alert('Network error. Please check your connection and try again.');
+                alert('Something went wrong. Please try again, or email sales@overwatchsi.com.');
             }
 
             btn.textContent = 'Send Message →';
@@ -1476,5 +1477,7 @@
     </script>
 
     <script src="js/consent.js" defer></script>
+    <script src="/js/hubspot.js" defer></script>
+    <script src="/js/assistant.js" defer></script>
 </body>
 </html>
