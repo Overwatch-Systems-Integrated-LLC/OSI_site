@@ -169,14 +169,14 @@ There is no staging environment — `main` is production. Verify links after str
 
 ## 9. AI assistant + HubSpot lead capture (added 2026-06-21)
 
-**AI assistant** (`js/assistant.js`): a self-injecting "Ask OSI" launcher (bottom-right) that opens a right-side chat pane with a multi-line input. It represents **OSI only** (never references Surveillance Design Studio). The chat "brain" is a separate **Cloudflare Worker** (Claude proxy) — repo `osi-assistant-worker` — that holds the Anthropic key and the OSI system prompt, because the static site can't hold the key. Set the deployed Worker URL in the `WORKER_URL` constant near the top of `js/assistant.js` (it auto-targets `http://localhost:8787` on localhost for dev).
+**AI assistant** (`js/assistant.js`): a self-injecting "Ask OSI" launcher (bottom-right) that opens a right-side chat pane with a multi-line input. It represents **OSI only** (never references Surveillance Design Studio). The chat "brain" is a separate **Cloudflare Worker** (Claude proxy) — local source repo `C:\Users\barry\source\repos\osi-assistant-worker` (not on GitHub; deployed via `wrangler deploy`) — that holds the Anthropic key and the OSI system prompt, because the static site can't hold the key. **Deployed and live** at `https://osi-assistant.overwatchsi.workers.dev` (set in the `WORKER_URL` constant near the top of `js/assistant.js`; it auto-targets `http://localhost:8787` on localhost for dev). To change the model or prompt, edit the Worker and redeploy.
 
-**HubSpot lead capture** (`js/hubspot.js`): all four lead forms post to HubSpot's public Forms Submission API (no secret key needed; portal id `245760841` + one form GUID per form). Fill the three GUIDs in the `FORMS` object:
-- `contact` — homepage contact form (`index.html`) **and** the camera-sandbox "Export & Consult" request (sandbox context is appended to the message).
-- `newsletter` — blog newsletter signup (`blog/app.js`).
-- `sandbox` — camera-sandbox registration gate (`pages/camera-sandbox.html`).
+**HubSpot lead capture** (`js/hubspot.js`): all four lead forms post to HubSpot's public Forms Submission API (no secret key needed; portal id `245760841` + one form GUID per form). The three GUIDs are **populated** in the `FORMS` object:
+- `contact` (`3d6d2b5f-0f88-4787-8f9f-48585ae3280f`) — homepage contact form (`index.html`) **and** the camera-sandbox "Export & Consult" request (sandbox context is appended to the message).
+- `newsletter` (`684c24b4-b7f5-4971-a683-eda20b0e254b`) — blog newsletter signup (`blog/app.js`).
+- `sandbox` (`e16288f0-029d-4a42-90e2-ea11d199e1e7`) — camera-sandbox registration gate (`pages/camera-sandbox.html`).
 
-Pages that load `js/hubspot.js`: `index.html`, `pages/camera-sandbox.html`, and all blog pages. `js/assistant.js` loads on every page. Formspree is fully removed.
+Pages that load `js/hubspot.js`: `index.html`, `pages/camera-sandbox.html`, and all blog pages. `js/assistant.js` loads on every page. Formspree is fully removed. To change where a form's submissions go, update its GUID here.
 
 ---
 
