@@ -16,7 +16,7 @@
   var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   var WORKER_URL = isLocal
     ? 'http://localhost:8787'
-    : 'https://osi-assistant.REPLACE-SUBDOMAIN.workers.dev';
+    : 'https://osi-assistant.overwatchsi.workers.dev';
 
   var CONTACT_HREF = '/#contact';
   var GREETING =
