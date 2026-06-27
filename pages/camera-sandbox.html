@@ -592,7 +592,7 @@
       <div class="modal-title">Download Your <span>Camera Plan</span></div>
       <button class="modal-close" id="modal-close" title="Close">&times;</button>
     </div>
-    <p style="font-size:0.82rem;color:var(--steel);line-height:1.6;margin-bottom:1.25rem;">Your plan downloads instantly. We may follow up to offer a free design consultation.</p>
+    <p style="font-size:0.82rem;color:var(--steel);line-height:1.6;margin-bottom:1.25rem;">Enter your work email and we'll send your camera plan straight to your inbox. We may also follow up to offer a free design consultation.</p>
     <div class="consult-form" id="export-form-wrap">
       <div class="consult-row">
         <div class="cf-field">
@@ -613,13 +613,10 @@
         <textarea class="cf-textarea" id="cf-message" placeholder="Coverage requirements or questions (optional)…"></textarea>
       </div>
       <div style="color:#e05c5c;font-size:0.78rem;display:none" id="export-error">Please enter your name and a valid email address.</div>
-      <button class="cf-submit" id="cf-submit">Download Camera Plan &rarr;</button>
+      <button class="cf-submit" id="cf-submit">Send My Plan &rarr;</button>
       <p class="cf-note">We will not sell or share your information.</p>
     </div>
-    <div class="cf-success" id="cf-success">
-      ✓ &nbsp; Your plan is downloading now.<br>
-      <span style="font-size:0.8rem;font-weight:400;color:var(--steel)">We'll be in touch to offer a free design review.</span>
-    </div>
+    <div class="cf-success" id="cf-success"></div>
   </div>
 </div>
 
@@ -1826,7 +1823,7 @@ document.getElementById('export-btn').addEventListener('click', () => {
   document.getElementById('export-error').style.display = 'none';
   const btn = document.getElementById('cf-submit');
   btn.disabled = false;
-  btn.textContent = 'Download Camera Plan →';
+  btn.textContent = 'Send My Plan →';
 
   // Pre-fill from previously saved export contact data
   if (state.exportData) {
@@ -1857,17 +1854,17 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
   }
   errEl.style.display = 'none';
   btn.disabled = true;
-  btn.textContent = 'Downloading…';
+  btn.textContent = 'Sending to your email…';
 
-  // Download immediately — don't wait for HubSpot
-  triggerDownload();
+  // Build the plan image — goes to n8n, not a browser download
+  const imageDataUrl = buildExportDataUrl();
 
   // Save contact info for pre-fill on subsequent exports
   const exportData = { name, email, company };
   state.exportData = exportData;
   try { localStorage.setItem(EXPORT_KEY, JSON.stringify(exportData)); } catch (_) {}
 
-  // Fire HubSpot contact creation async — does not block the download
+  // Fire HubSpot contact creation async
   try {
     if (window.OSIHubSpot) {
       const _n   = window.OSIHubSpot.splitName(name);
@@ -1881,22 +1878,27 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
     }
   } catch (_) {}
 
-  // WF11: trigger follow-up email via n8n — fire and forget, no await
+  // WF11: deliver plan to the submitted email — this is the gate
   fetch('https://n8n-production-aedf.up.railway.app/webhook/osi-sandbox-export', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       name, email, company,
       cameraCount: state.cameras.length,
-      cameraTypes: state.cameras.map(function(c) { return c.type; }).join(', ')
+      cameraTypes: state.cameras.map(function(c) { return c.type; }).join(', '),
+      imageDataUrl: imageDataUrl
     })
   }).catch(function() {});
 
+  const successEl = document.getElementById('cf-success');
+  successEl.innerHTML = '&#x2713; &nbsp; Your camera plan is on its way.<br>'
+    + '<span style="font-size:0.8rem;font-weight:400;color:var(--steel)">We sent it to '
+    + '<b style="color:var(--cyan)">' + email + '</b>. Check your inbox.</span>';
   document.getElementById('export-form-wrap').style.display = 'none';
-  document.getElementById('cf-success').style.display = 'block';
+  successEl.style.display = 'block';
 });
 
-function triggerDownload() {
+function buildExportDataUrl() {
   const W = canvas.width, H = canvas.height, FH = 44;
   const exp = document.createElement('canvas');
   exp.width = W; exp.height = H + FH;
@@ -1923,10 +1925,7 @@ function triggerDownload() {
     W - 16, H + FH / 2
   );
 
-  const a = document.createElement('a');
-  a.download = `OSI_Camera_Plan_${new Date().toISOString().slice(0,10)}.png`;
-  a.href = exp.toDataURL('image/png');
-  a.click();
+  return exp.toDataURL('image/png');
 }
 
 // ── UTIL ──────────────────────────────────────────────────────────────────────
