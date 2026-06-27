@@ -94,72 +94,8 @@
     ::-webkit-scrollbar-track { background: var(--dark2); }
     ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
 
-    /* ── GATE ── */
-    #gate {
-      position: fixed; inset: 0; z-index: 9000;
-      background: rgba(9,13,18,0.97);
-      display: flex; align-items: center; justify-content: center;
-      backdrop-filter: blur(8px);
-    }
-    .gate-card {
-      background: var(--dark2);
-      border: 1px solid rgba(38,174,228,0.25);
-      padding: 2.5rem 2.5rem 2rem;
-      max-width: 460px; width: 90%;
-      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    }
-    .gate-logo { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.75rem; }
-    .gate-logo img { height: 38px; }
-    .gate-logo-text {
-      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); line-height: 1.2;
-    }
-    .gate-logo-text small {
-      display: block; font-weight: 400; font-size: 0.75rem;
-      color: var(--muted); letter-spacing: 0.05em;
-    }
-    .gate-eyebrow {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.18em; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.4rem;
-    }
-    .gate-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 1.7rem; font-weight: 700;
-      letter-spacing: 0.04em; text-transform: uppercase;
-      color: var(--white); line-height: 1.15; margin-bottom: 0.75rem;
-    }
-    .gate-title span { color: var(--cyan); }
-    .gate-sub { color: var(--steel); font-size: 0.85rem; line-height: 1.65; margin-bottom: 1.75rem; }
-    .gate-form { display: flex; flex-direction: column; gap: 1rem; }
-    .gate-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .gate-field { display: flex; flex-direction: column; gap: 0.35rem; }
-    .gate-field label {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
-    }
-    .gate-field input {
-      background: var(--dark3); border: 1px solid rgba(38,174,228,0.18);
-      color: var(--white); padding: 0.6rem 0.85rem;
-      font-family: 'Inter', sans-serif; font-size: 0.9rem;
-      outline: none; transition: border-color 0.2s;
-    }
-    .gate-field input:focus { border-color: var(--cyan); }
-    .gate-field input::placeholder { color: var(--muted); }
-    .gate-error { color: #e05c5c; font-size: 0.78rem; display: none; margin-top: -0.4rem; }
-    .gate-submit {
-      margin-top: 0.5rem; background: var(--cyan); color: var(--dark);
-      border: none; cursor: pointer; font-family: 'Rajdhani', sans-serif;
-      font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.85rem 1.5rem;
-      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-      transition: opacity 0.2s;
-    }
-    .gate-submit:hover { opacity: 0.88; }
-    .gate-submit:disabled { opacity: 0.45; cursor: not-allowed; }
-    .gate-privacy { font-size: 0.72rem; color: var(--muted); margin-top: 1rem; line-height: 1.55; }
-
     /* ── APP ── */
-    #app { display: none; flex-direction: column; height: 100vh; }
-    #app.visible { display: flex; }
+    #app { display: flex; flex-direction: column; height: 100vh; }
 
     /* ── NAV ── */
     .sb-nav {
@@ -606,43 +542,6 @@
 <body>
 
 <!-- ══════════════════════════════════════════════════════════════════════
-     REGISTRATION GATE
-     ══════════════════════════════════════════════════════════════════════ -->
-<div id="gate">
-  <div class="gate-card">
-    <div class="gate-logo">
-      <img src="../images/IconOnly_Logo.png" alt="OSI">
-      <div class="gate-logo-text">
-        Overwatch Systems
-        <small>Integrated</small>
-      </div>
-    </div>
-    <div class="gate-eyebrow">Free Planning Tool</div>
-    <div class="gate-title">Camera Coverage <span>Sandbox</span></div>
-    <p class="gate-sub">Place Axis cameras on your facility map and instantly visualize field-of-view coverage, overlap zones, and blind spots — no software to install.</p>
-    <form class="gate-form" id="gate-form" novalidate>
-      <div class="gate-row">
-        <div class="gate-field">
-          <label for="g-name">Full Name *</label>
-          <input id="g-name" name="name" type="text" placeholder="Jane Smith" required autocomplete="name">
-        </div>
-        <div class="gate-field">
-          <label for="g-company">Company</label>
-          <input id="g-company" name="company" type="text" placeholder="ACME Industries" autocomplete="organization">
-        </div>
-      </div>
-      <div class="gate-field">
-        <label for="g-email">Email Address *</label>
-        <input id="g-email" name="email" type="email" placeholder="jane@example.com" required autocomplete="email">
-      </div>
-      <div class="gate-error" id="gate-error">Please enter your name and a valid email address.</div>
-      <button class="gate-submit" type="submit" id="gate-submit">Access Tool &rarr;</button>
-    </form>
-    <p class="gate-privacy">Your information is shared only with Overwatch Systems Integrated and will not be sold or distributed to third parties. <a href="../index.html#contact" style="color:var(--cyan)">Contact us</a> with any questions.</p>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════════════════════
      TUTORIAL OVERLAY
      ══════════════════════════════════════════════════════════════════════ -->
 <div id="tutorial-wrap" class="hidden">
@@ -690,59 +589,36 @@
 <div class="modal-overlay hidden" id="export-modal">
   <div class="modal-card">
     <div class="modal-header">
-      <div class="modal-title">Export <span>Camera Plan</span></div>
+      <div class="modal-title">Download Your <span>Camera Plan</span></div>
       <button class="modal-close" id="modal-close" title="Close">&times;</button>
     </div>
-
-    <div class="export-options">
-      <div class="export-opt" id="opt-download">
-        <svg class="export-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        <div class="export-opt-title">Download PNG</div>
-        <div class="export-opt-desc">Save the camera layout to your device for your own records.</div>
+    <p style="font-size:0.82rem;color:var(--steel);line-height:1.6;margin-bottom:1.25rem;">Your plan downloads instantly. We may follow up to offer a free design consultation.</p>
+    <div class="consult-form" id="export-form-wrap">
+      <div class="consult-row">
+        <div class="cf-field">
+          <label class="cf-label">Name *</label>
+          <input class="cf-input" id="cf-name" type="text" placeholder="Jane Smith" required autocomplete="name">
+        </div>
+        <div class="cf-field">
+          <label class="cf-label">Company</label>
+          <input class="cf-input" id="cf-company" type="text" placeholder="ACME Industries" autocomplete="organization">
+        </div>
       </div>
-      <div class="export-opt" id="opt-consult">
-        <svg class="export-opt-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.21H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 7.29 7.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-        </svg>
-        <div class="export-opt-title">Request Consult</div>
-        <div class="export-opt-desc">Send your plan to OSI and request a free design consultation.</div>
+      <div class="cf-field">
+        <label class="cf-label">Work Email *</label>
+        <input class="cf-input" id="cf-email" type="email" placeholder="jane@example.com" required autocomplete="email">
       </div>
+      <div class="cf-field">
+        <label class="cf-label">Project Notes</label>
+        <textarea class="cf-textarea" id="cf-message" placeholder="Coverage requirements or questions (optional)…"></textarea>
+      </div>
+      <div style="color:#e05c5c;font-size:0.78rem;display:none" id="export-error">Please enter your name and a valid email address.</div>
+      <button class="cf-submit" id="cf-submit">Download Camera Plan &rarr;</button>
+      <p class="cf-note">We will not sell or share your information.</p>
     </div>
-
-    <!-- Consultation Form (hidden initially) -->
-    <div id="consult-section" style="display:none">
-      <hr class="modal-divider">
-      <div class="modal-title" style="font-size:1rem;margin-bottom:1rem;">Request a <span>Consultation</span></div>
-      <div class="consult-form" id="consult-form-wrap">
-        <div class="consult-row">
-          <div class="cf-field">
-            <label class="cf-label">Name *</label>
-            <input class="cf-input" id="cf-name" type="text" placeholder="Jane Smith" required>
-          </div>
-          <div class="cf-field">
-            <label class="cf-label">Phone</label>
-            <input class="cf-input" id="cf-phone" type="tel" placeholder="(555) 000-0000">
-          </div>
-        </div>
-        <div class="cf-field">
-          <label class="cf-label">Email *</label>
-          <input class="cf-input" id="cf-email" type="email" placeholder="jane@example.com" required>
-        </div>
-        <div class="cf-field">
-          <label class="cf-label">Facility / Project Notes</label>
-          <textarea class="cf-textarea" id="cf-message" placeholder="Tell us about your facility, any specific coverage requirements, or questions you have…"></textarea>
-        </div>
-        <button class="cf-submit" id="cf-submit">Send Plan &amp; Request Consultation &rarr;</button>
-        <p class="cf-note">Your plan details will be included automatically. We will also trigger a PNG download for your records.</p>
-      </div>
-      <div class="cf-success" id="cf-success">
-        ✓ &nbsp; Your plan has been sent to OSI. We'll be in touch shortly.<br>
-        <span style="font-size:0.8rem;font-weight:400;color:var(--steel)">Your PNG has also been saved to your downloads.</span>
-      </div>
+    <div class="cf-success" id="cf-success">
+      ✓ &nbsp; Your plan is downloading now.<br>
+      <span style="font-size:0.8rem;font-weight:400;color:var(--steel)">We'll be in touch to offer a free design review.</span>
     </div>
   </div>
 </div>
@@ -766,7 +642,6 @@
       <span class="sb-nav-title">Camera Coverage Sandbox</span>
     </div>
     <div class="sb-nav-right">
-      <div class="sb-nav-user">Logged in as: <b id="nav-user"></b></div>
       <a href="/blog/" class="sb-nav-back">Blog</a>
       <a href="../index.html" class="sb-nav-back">&larr; Back to OSI</a>
     </div>
@@ -927,7 +802,7 @@
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 // Leads are sent to HubSpot via js/hubspot.js (window.OSIHubSpot).
-const STORAGE_KEY  = 'osi_sandbox_v1';
+const EXPORT_KEY   = 'osi_sandbox_export_v1'; // stores contact info for pre-fill
 const TUT_KEY      = 'osi_sandbox_toured_v1';
 const HIT_R        = 14;
 const HANDLE_DIST  = 40;
@@ -974,7 +849,7 @@ const state = {
   nextId: 1,
   mode: 'idle',
   dragOffset: { x: 0, y: 0 },
-  userData: null,
+  exportData: null,  // contact info saved after first export for pre-fill
   drawTool: null,        // null | 'line' | 'box' | 'circle'
   shapes: [],            // { id, kind, x1, y1, x2, y2 }
   pending: null,         // in-progress shape { x1, y1, x2, y2 }
@@ -982,12 +857,6 @@ const state = {
 };
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
-const gateEl       = document.getElementById('gate');
-const appEl        = document.getElementById('app');
-const gateForm     = document.getElementById('gate-form');
-const gateSubmit   = document.getElementById('gate-submit');
-const gateError    = document.getElementById('gate-error');
-const navUser      = document.getElementById('nav-user');
 const camListEl    = document.getElementById('camera-list');
 const canvas       = document.getElementById('sandbox-canvas');
 const ctx          = canvas.getContext('2d');
@@ -1020,57 +889,6 @@ const tutLabel     = document.getElementById('tut-label');
 const tutText      = document.getElementById('tut-text');
 const tutArrow     = document.getElementById('tut-arrow');
 
-// ── REGISTRATION ──────────────────────────────────────────────────────────────
-function boot() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      const data = JSON.parse(stored);
-      state.userData = data;
-      openApp(data.name);
-      return;
-    } catch (_) {}
-  }
-}
-
-gateForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const name    = document.getElementById('g-name').value.trim();
-  const email   = document.getElementById('g-email').value.trim();
-  const company = document.getElementById('g-company').value.trim();
-  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    gateError.style.display = 'block'; return;
-  }
-  gateError.style.display = 'none';
-  gateSubmit.disabled = true;
-  gateSubmit.textContent = 'Submitting…';
-
-  try {
-    if (window.OSIHubSpot) {
-      const _n = window.OSIHubSpot.splitName(name);
-      await window.OSIHubSpot.submit('sandbox', { email, firstname: _n.firstname, lastname: _n.lastname, company });
-    }
-  } catch (_) {}
-
-  const userData = { name, email, company };
-  state.userData = userData;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
-  openApp(name);
-});
-
-function openApp(userName) {
-  gateEl.style.display = 'none';
-  appEl.classList.add('visible');
-  navUser.textContent = userName.split(' ')[0];
-  resizeCanvas();
-  buildPalette();
-  redraw();
-
-  // Start tutorial for first-time visitors
-  if (!localStorage.getItem(TUT_KEY)) {
-    setTimeout(startTutorial, 600);
-  }
-}
 
 // ── TUTORIAL ──────────────────────────────────────────────────────────────────
 const TUT_STEPS = [
@@ -2003,19 +1821,21 @@ function doClear(what) {
 
 // ── EXPORT MODAL ──────────────────────────────────────────────────────────────
 document.getElementById('export-btn').addEventListener('click', () => {
-  // Reset consult section
-  document.getElementById('consult-section').style.display = 'none';
-  document.getElementById('consult-form-wrap').style.display = 'flex';
+  document.getElementById('export-form-wrap').style.display = 'flex';
   document.getElementById('cf-success').style.display = 'none';
-  document.getElementById('cf-submit').disabled = false;
-  document.getElementById('cf-submit').textContent = 'Send Plan & Request Consultation →';
+  document.getElementById('export-error').style.display = 'none';
+  const btn = document.getElementById('cf-submit');
+  btn.disabled = false;
+  btn.textContent = 'Download Camera Plan →';
 
-  // Pre-fill from registration data
-  if (state.userData) {
-    const nameEl  = document.getElementById('cf-name');
-    const emailEl = document.getElementById('cf-email');
-    if (!nameEl.value  && state.userData.name)  nameEl.value  = state.userData.name;
-    if (!emailEl.value && state.userData.email) emailEl.value = state.userData.email;
+  // Pre-fill from previously saved export contact data
+  if (state.exportData) {
+    const nameEl    = document.getElementById('cf-name');
+    const emailEl   = document.getElementById('cf-email');
+    const companyEl = document.getElementById('cf-company');
+    if (!nameEl.value    && state.exportData.name)    nameEl.value    = state.exportData.name;
+    if (!emailEl.value   && state.exportData.email)   emailEl.value   = state.exportData.email;
+    if (!companyEl.value && state.exportData.company) companyEl.value = state.exportData.company;
   }
 
   exportModal.classList.remove('hidden');
@@ -2024,46 +1844,55 @@ document.getElementById('export-btn').addEventListener('click', () => {
 document.getElementById('modal-close').addEventListener('click', () => exportModal.classList.add('hidden'));
 exportModal.addEventListener('click', (e) => { if (e.target === exportModal) exportModal.classList.add('hidden'); });
 
-document.getElementById('opt-download').addEventListener('click', () => {
-  triggerDownload();
-  exportModal.classList.add('hidden');
-});
-
-document.getElementById('opt-consult').addEventListener('click', () => {
-  document.getElementById('consult-section').style.display = 'block';
-  document.getElementById('opt-consult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-});
-
 document.getElementById('cf-submit').addEventListener('click', async () => {
   const name    = document.getElementById('cf-name').value.trim();
   const email   = document.getElementById('cf-email').value.trim();
-  const phone   = document.getElementById('cf-phone').value.trim();
+  const company = document.getElementById('cf-company').value.trim();
   const message = document.getElementById('cf-message').value.trim();
   const btn     = document.getElementById('cf-submit');
+  const errEl   = document.getElementById('export-error');
 
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert('Please enter your name and a valid email address.'); return;
+    errEl.style.display = 'block'; return;
   }
-
+  errEl.style.display = 'none';
   btn.disabled = true;
-  btn.textContent = 'Sending…';
+  btn.textContent = 'Downloading…';
 
+  // Download immediately — don't wait for HubSpot
+  triggerDownload();
+
+  // Save contact info for pre-fill on subsequent exports
+  const exportData = { name, email, company };
+  state.exportData = exportData;
+  try { localStorage.setItem(EXPORT_KEY, JSON.stringify(exportData)); } catch (_) {}
+
+  // Fire HubSpot contact creation async — does not block the download
   try {
     if (window.OSIHubSpot) {
-      const _n = window.OSIHubSpot.splitName(name);
+      const _n   = window.OSIHubSpot.splitName(name);
       const _ctx = '\n\n[Camera Coverage Sandbox: ' + state.cameras.length + ' cameras placed'
         + (state.cameras.length ? ' (' + state.cameras.map(c => c.type).join(', ') + ')' : '') + ']';
       await window.OSIHubSpot.submit('contact', {
-        email, firstname: _n.firstname, lastname: _n.lastname, phone,
-        message: (message || 'Consultation requested from the Camera Coverage Sandbox.') + _ctx
+        email, firstname: _n.firstname, lastname: _n.lastname, company,
+        message: (message ? message + '\n\n' : '') +
+          'Exported a camera plan from the Camera Coverage Sandbox.' + _ctx
       });
     }
   } catch (_) {}
 
-  // Trigger PNG download automatically
-  triggerDownload();
+  // WF11: trigger follow-up email via n8n — fire and forget, no await
+  fetch('https://n8n-production-aedf.up.railway.app/webhook/osi-sandbox-export', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name, email, company,
+      cameraCount: state.cameras.length,
+      cameraTypes: state.cameras.map(function(c) { return c.type; }).join(', ')
+    })
+  }).catch(function() {});
 
-  document.getElementById('consult-form-wrap').style.display = 'none';
+  document.getElementById('export-form-wrap').style.display = 'none';
   document.getElementById('cf-success').style.display = 'block';
 });
 
@@ -2111,7 +1940,15 @@ function rgba(hex, a) {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 buildPalette();
 syncGridInput();
-boot();
+resizeCanvas();
+redraw();
+// Load saved export contact info for pre-fill
+try {
+  const _saved = localStorage.getItem(EXPORT_KEY);
+  if (_saved) state.exportData = JSON.parse(_saved);
+} catch (_) {}
+// Start tutorial for first-time visitors
+if (!localStorage.getItem(TUT_KEY)) { setTimeout(startTutorial, 600); }
 
 })();
 </script>
