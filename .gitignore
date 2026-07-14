@@ -1,3 +1,11 @@
 .DS_Store
 node_modules
 .vs/
+
+# CTO internal docs — not for publication on GitHub Pages
+BUILD.md
+TASKLIST.md
+TROUBLESHOOTING.md
+
+# graphify knowledge graph (local artifact, not published)
+graphify-out/

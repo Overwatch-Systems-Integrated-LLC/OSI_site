@@ -144,6 +144,48 @@
     .main-nav .nav-link:hover, .main-nav .nav-link.active {
       color: var(--white); background: rgba(255,255,255,0.06);
     }
+    /* Tools dropdown (CSS-only: hover + keyboard focus-within) */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.8rem;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--steel);
+      background: none; border: none; cursor: pointer; white-space: nowrap;
+      padding: 0.5rem 0.85rem; border-radius: 4px;
+      transition: color 0.2s ease, background 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    .nav-dropdown:hover .nav-dropdown-toggle,
+    .nav-dropdown:focus-within .nav-dropdown-toggle,
+    .nav-dropdown-toggle.active { color: var(--white); background: rgba(255,255,255,0.06); }
+    .nav-caret { font-size: 0.55rem; transition: transform 0.2s ease; }
+    .nav-dropdown:hover .nav-caret,
+    .nav-dropdown:focus-within .nav-caret { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: 100%; left: 0; min-width: 240px;
+      background: var(--dark2); border: 1px solid rgba(38,174,228,0.2);
+      border-radius: 6px; padding: 0.4rem; margin-top: 0.35rem;
+      display: flex; flex-direction: column; gap: 0.15rem;
+      opacity: 0; visibility: hidden; transform: translateY(-6px);
+      transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45); z-index: 20;
+    }
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .nav-dropdown-item {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.78rem;
+      letter-spacing: 0.02em; color: var(--steel); text-decoration: none;
+      padding: 0.55rem 0.7rem; border-radius: 4px; white-space: nowrap;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown-item:hover { color: var(--white); background: rgba(38,174,228,0.1); }
+    .mobile-nav-group {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--cyan);
+      padding: 0.75rem 0 0.15rem;
+    }
+    .mobile-nav-sub { padding-left: 1rem; }
     .nav-cta { display: flex; align-items: center; margin-left: 0.75rem; flex-shrink: 0; }
     .btn-nav {
       font-family: 'Inter', sans-serif; font-weight: 700;
@@ -502,7 +544,13 @@
       <a href="../index.html" class="nav-link">Home</a>
       <a href="services.html" class="nav-link active">Services</a>
       <a href="../index.html#how-it-works" class="nav-link">How It Works</a>
-      <a href="camera-sandbox.html" class="nav-link">Sandbox</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">Tools <span class="nav-caret" aria-hidden="true">&#9662;</span></button>
+        <div class="nav-dropdown-menu" role="menu">
+          <a href="camera-sandbox.html" class="nav-dropdown-item" role="menuitem">Camera Coverage Sandbox</a>
+          <a href="pixels-on-target.html" class="nav-dropdown-item" role="menuitem">Pixels On Target</a>
+        </div>
+      </div>
       <a href="/blog/" class="nav-link">Blog</a>
       <a href="../index.html#contact" class="nav-link">Contact</a>
     </nav>
@@ -522,7 +570,9 @@
   <a href="../index.html" class="mobile-nav-link">Home</a>
   <a href="services.html" class="mobile-nav-link">Services</a>
   <a href="../index.html#how-it-works" class="mobile-nav-link">How It Works</a>
-  <a href="camera-sandbox.html" class="mobile-nav-link">Sandbox</a>
+  <div class="mobile-nav-group">Tools</div>
+  <a href="camera-sandbox.html" class="mobile-nav-link mobile-nav-sub">Camera Coverage Sandbox</a>
+  <a href="pixels-on-target.html" class="mobile-nav-link mobile-nav-sub">Pixels On Target</a>
   <a href="/blog/" class="mobile-nav-link">Blog</a>
   <a href="../index.html#contact" class="mobile-nav-link">Contact</a>
   <a href="../index.html#contact" class="mobile-nav-link" style="color:var(--cyan)">Free Assessment</a>

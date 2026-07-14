@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pixels On Target — Overwatch Systems Integrated</title>
+  <meta name="description" content="Free tool: pick an Axis camera, set the distance, and see whether it can actually identify a person or read a face at that range. Pixels-per-foot and DORI levels, from Overwatch Systems Integrated." />
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Overwatch Systems Integrated" />
+  <meta property="og:title" content="Pixels On Target — Overwatch Systems Integrated" />
+  <meta property="og:description" content="Pick an Axis camera, drag the distance, and watch a face fall apart past Detect, Recognize, and Identify. It is not the megapixels, it is the pixels that land on the target." />
+  <meta property="og:url" content="https://www.overwatchsi.com/pages/pixels-on-target.html" />
+  <link rel="canonical" href="https://www.overwatchsi.com/pages/pixels-on-target.html" />
+  <meta property="og:image" content="https://www.overwatchsi.com/images/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pixels On Target — Overwatch Systems Integrated" />
+  <meta name="twitter:description" content="Pick an Axis camera, drag the distance, and watch a face fall apart past Detect, Recognize, and Identify. It is the pixels that land on the target." />
+  <meta name="twitter:image" content="https://www.overwatchsi.com/images/og-image.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="../images/favicon.png">
+  <link rel="apple-touch-icon" href="../images/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.overwatchsi.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Pixels On Target", "item": "https://www.overwatchsi.com/pages/pixels-on-target.html" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Pixels On Target",
+    "url": "https://www.overwatchsi.com/pages/pixels-on-target.html",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web browser",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "Free identification-range tool from Overwatch Systems Integrated. Pick an Axis camera, set the distance and lens, and see the pixels-per-foot on target against the EN 62676-4 DORI levels.",
+    "publisher": { "@type": "Organization", "name": "Overwatch Systems Integrated", "url": "https://www.overwatchsi.com" }
+  }
+  </script>
+  <!-- Google tag (gtag.js) -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  // Consent Mode v2 — deny storage until the visitor chooses (banner in js/consent.js)
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500
+  });
+  try {
+    var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+    if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+  } catch (e) {}
+  gtag('js', new Date());
+  gtag('config', 'G-44PPPMTQKS');
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090d12;
+    --panel: #0e1520;
+    --panel-2: #141e2e;
+    --line: #223047;
+    --text: #eaf2f8;
+    --muted: #93a6bb;
+    --accent: #26aee4;
+    --track: #223047;
+    --ok: #35d07f;
+    --no: #e5615b;
+    --head: 'Rajdhani', 'Oswald', 'Arial Narrow', sans-serif;
+    --body: 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--body); font-weight: 400; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SITE NAV (matches pages/camera-sandbox.html .sb-nav) ── */
+  .sb-nav {
+    position: sticky; top: 0; z-index: 10;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.25rem; height: 64px;
+    background: rgba(9,13,18,0.95);
+    border-bottom: 1px solid rgba(38,174,228,0.15);
+    backdrop-filter: blur(12px); gap: 1rem;
+  }
+  .sb-nav-left { display: flex; align-items: center; gap: 1rem; }
+  .site-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; flex-shrink: 0; }
+  .site-logo-img { height: 46px; width: auto; display: block; flex-shrink: 0; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo-name {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
+    letter-spacing: 0.03em; color: var(--text); text-transform: uppercase; white-space: nowrap;
+  }
+  .logo-sub {
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .sb-nav-divider { width: 1px; height: 30px; background: rgba(38,174,228,0.2); }
+  .sb-nav-title {
+    font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  }
+  .sb-nav-right { display: flex; align-items: center; gap: 1.25rem; }
+  .sb-nav-back {
+    font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; white-space: nowrap;
+    transition: color 0.2s;
+  }
+  .sb-nav-back:hover { color: var(--text); }
+  @media (max-width: 640px) {
+    .sb-nav-divider, .sb-nav-title { display: none; }
+    .sb-nav-right { gap: 0.9rem; }
+  }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 2.25rem 1.25rem 3rem; }
+  h1 {
+    font-family: var(--head); font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.01em; line-height: 1.05; font-size: clamp(1.9rem, 5vw, 3rem);
+    margin: 0 0 0.4rem;
+  }
+  h1 .accent { color: var(--accent); }
+  .lede { color: var(--muted); font-size: 1.05rem; max-width: 60ch; margin: 0 0 2rem; }
+  .explainer { color: var(--muted); font-size: 0.95rem; max-width: 68ch; }
+  .explainer p { margin: 0 0 0.9rem; }
+  .explainer strong { color: var(--text); font-weight: 600; }
+
+  .tool {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.5rem; margin: 0 0 2rem;
+  }
+  @media (max-width: 640px) { .tool { grid-template-columns: 1fr; } }
+
+  .control { margin: 0 0 1.15rem; }
+  .control:last-child { margin-bottom: 0; }
+  label { display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--head); font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+  label .val { font-family: var(--body); color: var(--accent); font-weight: 600;
+    letter-spacing: 0; font-size: 0.95rem; text-transform: none; }
+
+  select {
+    width: 100%; appearance: none; -webkit-appearance: none;
+    background: var(--panel-2)
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%2326aee4' stroke-width='2' fill='none' stroke-linecap='round'/></svg>")
+      no-repeat right 0.9rem center;
+    color: var(--text); font-family: var(--body); font-size: 1rem; font-weight: 600;
+    border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 2.2rem 0.7rem 0.9rem;
+    cursor: pointer;
+  }
+  select:focus { outline: none; border-color: var(--accent); }
+
+  input[type="range"] {
+    width: 100%; height: 6px; appearance: none; -webkit-appearance: none;
+    border-radius: 999px; background: var(--track); outline: none; cursor: pointer;
+  }
+  input[type="range"]:disabled { opacity: 0.4; cursor: not-allowed; }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent); margin-top: -1px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%; background: var(--accent);
+    border: 3px solid var(--bg); box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .preview-col { display: flex; flex-direction: column; justify-content: center; }
+  .canvas-frame { position: relative; border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; background: #000; width: 100%; max-width: 320px;
+    margin-left: auto; margin-right: auto; }
+  #preview { width: 100%; aspect-ratio: 4/5; display: block; image-rendering: pixelated; }
+  .canvas-cap { color: var(--muted); font-size: 0.78rem; margin-top: 0.5rem; text-align: center; }
+
+  .readout { margin-top: 1.15rem; }
+  .ppf { font-family: var(--head); font-weight: 700; line-height: 1; }
+  .ppf #ppfValue { font-size: 2.6rem; color: var(--accent); }
+  .ppf .unit { font-size: 0.9rem; color: var(--muted); font-family: var(--body);
+    font-weight: 400; margin-left: 0.4rem; }
+  .level-line { color: var(--muted); font-size: 0.85rem; text-transform: uppercase;
+    letter-spacing: 0.06em; font-family: var(--head); font-weight: 600; margin: 0.6rem 0 0.7rem; }
+  .badge { color: var(--text); }
+  .chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .chip { font-family: var(--head); font-weight: 600; letter-spacing: 0.05em;
+    text-transform: uppercase; font-size: 0.8rem; padding: 0.35rem 0.7rem;
+    border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ok { color: var(--ok); border-color: rgba(53, 208, 127, 0.4);
+    background: rgba(53, 208, 127, 0.08); }
+  .chip.no { color: var(--no); border-color: rgba(229, 97, 91, 0.35);
+    background: rgba(229, 97, 91, 0.06); }
+
+  .flagbanner { background: rgba(229, 97, 91, 0.1); border: 1px solid var(--no);
+    color: var(--text); padding: 0.5rem 0.85rem; border-radius: 8px;
+    font-size: 0.85rem; margin-bottom: 1.25rem; }
+
+  .crosslink { margin: 0 0 2rem; padding: 0.95rem 1.1rem;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    color: var(--muted); font-size: 0.9rem; }
+  .crosslink a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .crosslink a:hover { text-decoration: underline; }
+
+  .disclaimer { color: var(--muted); font-size: 0.8rem; margin-top: 1.5rem; max-width: 68ch; }
+
+  .site-footer { border-top: 1px solid var(--line); background: var(--bg);
+    color: var(--muted); font-size: 0.85rem; }
+  .site-footer .wrap { padding: 1.5rem 1.25rem; display: flex;
+    justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .site-footer .fm { font-family: var(--head); font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text); }
+</style>
+</head>
+<body>
+  <!-- Site nav (matches pages/camera-sandbox.html) -->
+  <nav class="sb-nav">
+    <div class="sb-nav-left">
+      <a href="../index.html" class="site-logo" aria-label="Overwatch Systems Integrated">
+        <img src="../images/IconOnly_Logo.png" alt="" class="site-logo-img" aria-hidden="true">
+        <div class="logo-text">
+          <span class="logo-name">Overwatch Systems</span>
+          <span class="logo-sub">Integrated</span>
+        </div>
+      </a>
+      <div class="sb-nav-divider"></div>
+      <span class="sb-nav-title">Pixels On Target</span>
+    </div>
+    <div class="sb-nav-right">
+      <a href="camera-sandbox.html" class="sb-nav-back">Coverage Sandbox</a>
+      <a href="/blog/" class="sb-nav-back">Blog</a>
+      <a href="../index.html" class="sb-nav-back">&larr; Back to OSI</a>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <h1>What Will Your Cameras<br /><span class="accent">Actually See?</span></h1>
+    <p class="lede">Pick a camera, set the distance, and watch what it can actually
+      resolve. The numbers use pixels-per-foot on target against the EN 62676-4 DORI
+      levels: Detect, Observe, Recognize, Identify.</p>
+
+    <div id="flag" class="flagbanner" hidden>Provisional specs. Not for publication.</div>
+
+    <div class="tool">
+      <div class="controls-col">
+        <div class="control">
+          <label for="camera">Camera</label>
+          <select id="camera"></select>
+        </div>
+        <div class="control">
+          <label for="lens">Lens (focal length)<span class="val"><span id="lensVal"></span> mm</span></label>
+          <input type="range" id="lens" min="0" max="100" value="0" step="0.1" />
+        </div>
+        <div class="control">
+          <label for="distance">Distance to subject<span class="val"><span id="distVal"></span> ft</span></label>
+          <input type="range" id="distance" min="5" max="150" value="25" step="1" />
+        </div>
+
+        <div class="readout">
+          <div class="ppf"><span id="ppfValue">--</span><span class="unit">px/ft on target</span></div>
+          <div class="level-line">Best usable level: <span id="levelBadge" class="badge">--</span></div>
+          <div id="chips" class="chips"></div>
+        </div>
+      </div>
+
+      <div class="preview-col">
+        <div class="canvas-frame">
+          <canvas id="preview" width="384" height="480"></canvas>
+        </div>
+        <div class="canvas-cap">What the selected camera actually resolves at this range.</div>
+      </div>
+    </div>
+
+    <div class="crosslink">
+      This tool answers <strong>can you identify a face at that range</strong>. Planning
+      where cameras reach across a site? Use the
+      <a href="camera-sandbox.html">Camera Coverage Sandbox</a> to map field-of-view,
+      overlap, and blind spots.
+    </div>
+
+    <section class="explainer">
+      <p>Most sites get this wrong. A camera does not "zoom in" on a face from across a
+         parking lot. It has a fixed number of horizontal pixels, and those pixels get
+         spread across whatever the lens sees. The farther away the subject, the fewer
+         pixels land on them, measured as <strong>pixels per foot on target</strong>.</p>
+      <p>The security industry uses four levels, defined in EN 62676-4 and known as DORI.
+         Detect means you can tell something is there. Observe and Recognize sit in the
+         middle. Identify, the level you need to name a stranger from footage, takes
+         roughly ten times the pixel density of Detect. <strong>A four megapixel camera at
+         the wrong distance still fails Identify.</strong> That is the failure this tool
+         makes visible.</p>
+    </section>
+
+    <p class="disclaimer">Engineering estimate. Real-world identification also depends on
+      lighting, IR, subject motion, video compression, and lens quality.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span class="fm">Overwatch Systems Integrated</span>
+      <span>Surveillance infrastructure. Oxford, AL.</span>
+    </div>
+  </footer>
+
+  <!-- Site scripts (consent banner, HubSpot, AI assistant) — match camera-sandbox.html -->
+  <script src="../js/consent.js" defer></script>
+  <script src="/js/hubspot.js" defer></script>
+  <script src="/js/assistant.js" defer></script>
+
+  <!-- Tool scripts -->
+  <script src="../js/camera-visibility/engine.js"></script>
+  <script src="../js/camera-visibility/cameras.js"></script>
+  <script src="../js/camera-visibility/render.js"></script>
+  <script src="../js/camera-visibility/app.js"></script>
+</body>
+</html>
