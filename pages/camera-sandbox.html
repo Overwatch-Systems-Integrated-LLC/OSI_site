@@ -677,6 +677,14 @@
         </div>
         <div class="tb-sep"></div>
         <div class="tb-group">
+          <span class="tb-label">Coverage:</span>
+          <div class="tb-unit-toggle" id="coverage-toggle">
+            <button class="tb-unit active" data-coverage="detect" type="button" title="DORI Detect (25 px/m) — the full area the camera usefully covers">Detect</button>
+            <button class="tb-unit" data-coverage="recognize" type="button" title="DORI Recognize (125 px/m) — range at which a known person can be identified">Recognize</button>
+          </div>
+        </div>
+        <div class="tb-sep"></div>
+        <div class="tb-group">
           <span class="tb-label">Grid =</span>
           <input class="tb-input" id="grid-input" type="number" value="25" min="1" step="1" title="Real-world size of one grid square">
           <span class="tb-label" id="grid-unit-label">ft / square</span>
@@ -794,6 +802,7 @@
 <!-- ══════════════════════════════════════════════════════════════════════
      JAVASCRIPT
      ══════════════════════════════════════════════════════════════════════ -->
+<script src="/js/camera-visibility/cameras.js"></script>
 <script>
 (function () {
 'use strict';
@@ -810,33 +819,57 @@ const RAD          = Math.PI / 180;
 const FT_PER_M     = 3.28084;
 const GRID_PX      = 40;          // on-screen size of one grid square (px)
 
-// ── CAMERA DEFINITIONS ────────────────────────────────────────────────────────
-const DEFS = [
-  {
-    id: 'bullet', model: 'Axis P1375-E', type: 'Fixed Bullet',
-    fovDeg: 84, rangeM: 40, cones: 1, color: '#26aee4',
-    specs: [['Resolution','4K (8MP)'],['H-FOV','84°'],['Range','~40 m'],['IR Range','50 m']]
-  },
-  {
-    id: 'ptz', model: 'Axis Q6135-LE', type: 'PTZ Dome',
-    fovDeg: 62, rangeM: 200, cones: 1, color: '#4dd890',
-    specs: [['Resolution','1080p (2MP)'],['H-FOV','62° (wide)'],['Range','~200 m'],['Zoom','32× optical']]
-  },
-  {
-    id: 'multi', model: 'Axis P4705-PLVE', type: 'Multidirectional',
-    fovDeg: 84, rangeM: 30, cones: 4, color: '#f5a623',
-    specs: [['Sensors','4 × 4K'],['Each FOV','84°'],['Range','~30 m'],['Total','360°']]
-  },
-  {
-    id: 'fisheye', model: 'Axis M3058-PLVE', type: '360° Fisheye',
-    fovDeg: 360, rangeM: 15, cones: 0, color: '#e05c5c',
-    specs: [['Resolution','12 MP'],['Coverage','360°'],['Range','~15 m'],['Mount','Ceiling / Wall']]
-  }
-];
+// ── CAMERA DEFINITIONS (from verified window.CameraData.CAMERAS) ───────────────
+// The sandbox renders from the verified camera list in js/camera-visibility/cameras.js.
+// Coverage-cone length is DORI-derived (same pixels-per-meter physics as Pixels On Target):
+//   Detect = 25 px/m, Recognize = 125 px/m. Wide FOV (>=150 deg) uses an arc-length
+//   density fallback so tan() stays valid for the 183 deg panoramics.
+const COVERAGE_PXM = { detect: 25, recognize: 125 };
+function doriRangeM(hPx, hfovDeg, pxPerM) {
+  if (hfovDeg >= 150) return hPx / (pxPerM * (hfovDeg * RAD));   // arc-length fallback (tan invalid >=180)
+  return hPx / (pxPerM * 2 * Math.tan((hfovDeg * RAD) / 2));
+}
+function camForm(c) {
+  if (c.id === 'p3748plve') return 'multi';         // 4-sensor multidirectional
+  if (c.lens === 'ptz') return 'ptz';
+  if (c.hfovWideDeg >= 150) return 'panoramic';     // 183 deg single-sensor panoramics
+  return 'directional';
+}
+const FORM_COLOR = { directional: '#26aee4', ptz: '#4dd890', multi: '#f5a623', panoramic: '#b07cf0' };
+const FORM_ICON  = { directional: 'bullet',  ptz: 'ptz',     multi: 'multi',   panoramic: 'fisheye' };
+function buildDefs() {
+  const src = (window.CameraData && Array.isArray(window.CameraData.CAMERAS)) ? window.CameraData.CAMERAS : [];
+  const pxPerM = COVERAGE_PXM[state.coverageMode] || COVERAGE_PXM.detect;
+  return src.map(function (c) {
+    const form   = camForm(c);
+    const rangeM = Math.max(1, Math.round(doriRangeM(c.horizontalPixels, c.hfovWideDeg, pxPerM)));
+    const foc    = c.focalMinMm === c.focalMaxMm ? (c.focalMinMm + 'mm')
+                                                 : (c.focalMinMm + '-' + c.focalMaxMm + 'mm');
+    const hfov   = c.lens === 'fixed' ? (c.hfovWideDeg + '°')
+                                      : (c.hfovWideDeg + '° wide / ' + c.hfovTeleDeg + '° tele');
+    const type   = form === 'ptz'       ? 'PTZ'
+                 : form === 'multi'      ? 'Multidirectional (4-sensor)'
+                 : form === 'panoramic'  ? ('Panoramic ' + c.hfovWideDeg + '°')
+                 : (c.lens === 'fixed' ? 'Fixed lens' : 'Varifocal');
+    return {
+      id: c.id, model: c.name, type: type,
+      iconKey: FORM_ICON[form], color: FORM_COLOR[form],
+      fovDeg: c.hfovWideDeg,
+      cones: form === 'multi' ? 4 : 1,
+      rangeM: rangeM,
+      specs: [['Resolution', c.horizontalPixels + 'px wide'],
+              ['H-FOV', hfov],
+              ['Range', '~' + rangeM + ' m (' + state.coverageMode + ')'],
+              ['Focal', foc]]
+    };
+  });
+}
+let DEFS = [];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 const state = {
-  activeType: 'bullet',
+  activeType: null,
+  coverageMode: 'detect',   // 'detect' (25 px/m) | 'recognize' (125 px/m) — DORI coverage basis
   cameras: [],
   selectedId: null,
   bgImage: null,
@@ -853,6 +886,10 @@ const state = {
   pending: null,         // in-progress shape { x1, y1, x2, y2 }
   selectedShapeId: null
 };
+
+// Build render defs from the verified camera list (window.CameraData), honoring coverage mode.
+DEFS = buildDefs();
+state.activeType = DEFS[0] ? DEFS[0].id : null;
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
 const camListEl    = document.getElementById('camera-list');
@@ -1021,7 +1058,7 @@ function buildPalette() {
     card.className = 'camera-card' + (def.id === state.activeType ? ' active' : '');
     card.innerHTML = `
       <div class="cam-card-top">
-        <div class="cam-icon-wrap">${iconSVG(def.id, def.color)}</div>
+        <div class="cam-icon-wrap">${iconSVG(def.iconKey, def.color)}</div>
         <div>
           <div class="cam-model">${def.model}</div>
           <div class="cam-type-label">
@@ -1617,6 +1654,20 @@ rotSlider.addEventListener('input', () => {
   redraw();
 });
 
+// Coverage-mode toggle (Detect vs Recognize) — rebuilds defs so ranges + palette update live.
+document.getElementById('coverage-toggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-coverage]');
+  if (!btn) return;
+  const mode = btn.getAttribute('data-coverage');
+  if (mode === state.coverageMode) return;
+  state.coverageMode = mode;
+  document.querySelectorAll('#coverage-toggle .tb-unit').forEach(b => b.classList.toggle('active', b === btn));
+  DEFS = buildDefs();
+  buildPalette();
+  updateProperties();
+  redraw();
+});
+
 document.getElementById('delete-btn').addEventListener('click', deleteSelected);
 function deleteSelected() {
   state.cameras = state.cameras.filter(c => c.id !== state.selectedId);
@@ -1870,7 +1921,7 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
     if (window.OSIHubSpot) {
       const _n   = window.OSIHubSpot.splitName(name);
       const _ctx = '\n\n[Camera Coverage Sandbox: ' + state.cameras.length + ' cameras placed'
-        + (state.cameras.length ? ' (' + state.cameras.map(c => c.type).join(', ') + ')' : '') + ']';
+        + (state.cameras.length ? ' (' + state.cameras.map(c => { const d = DEFS.find(x => x.id === c.type); return d ? d.model : c.type; }).join(', ') + ')' : '') + ']';
       await window.OSIHubSpot.submit('contact', {
         email, firstname: _n.firstname, lastname: _n.lastname, company,
         message: (message ? message + '\n\n' : '') +
@@ -1886,7 +1937,7 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
     body: JSON.stringify({
       name, email, company,
       cameraCount: state.cameras.length,
-      cameraTypes: state.cameras.map(function(c) { return c.type; }).join(', '),
+      cameraTypes: state.cameras.map(function(c) { var d = DEFS.find(function(x){return x.id===c.type;}); return d ? d.model : c.type; }).join(', '),
       imageDataUrl: imageDataUrl
     })
   }).catch(function() {});
