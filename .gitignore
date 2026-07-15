@@ -2,6 +2,10 @@
 node_modules
 .vs/
 
+# Astro build output + generated types
+dist/
+.astro/
+
 # CTO internal docs — not for publication on GitHub Pages
 BUILD.md
 TASKLIST.md

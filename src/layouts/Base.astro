@@ -1,0 +1,69 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/images/og-image.png', Astro.site).href;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Overwatch Systems Integrated" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png" />
+  <link rel="apple-touch-icon" href="/images/favicon.png" />
+
+  <!-- Google tag + Consent Mode v2 (preserved from the current site; banner in /js/consent.js) -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+      analytics_storage: 'denied', functionality_storage: 'granted', security_storage: 'granted',
+      wait_for_update: 500
+    });
+    try {
+      var _osiC = JSON.parse(localStorage.getItem('osi_consent') || 'null');
+      if (_osiC && _osiC.analytics) { gtag('consent', 'update', { analytics_storage: 'granted' }); }
+    } catch (e) {}
+    gtag('js', new Date());
+    gtag('config', 'G-44PPPMTQKS');
+  </script>
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
+
+  <!-- Fonts: Archivo Expanded (display) + IBM Plex Sans (body) + IBM Plex Mono (data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <slot />
+
+  <!-- Preserved site JS: consent banner, HubSpot forms helper, AI assistant widget -->
+  <script is:inline src="/js/consent.js" defer></script>
+  <script is:inline src="/js/hubspot.js" defer></script>
+  <script is:inline src="/js/assistant.js" defer></script>
+</body>
+</html>

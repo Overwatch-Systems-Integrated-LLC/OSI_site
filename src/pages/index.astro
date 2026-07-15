@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CoverageWedge from '../components/CoverageWedge.astro';
+
+const title = 'Overwatch Systems Integrated — Industrial Video Surveillance, Engineered';
+const description = 'Overwatch Systems Integrated designs, installs, and maintains industrial video surveillance and the networks that carry it, for facilities in Northeast Alabama. Local presence. Industrial expertise.';
+---
+<Base title={title} description={description}>
+  <Nav />
+
+  <!-- HERO -->
+  <header class="container">
+    <div class="hero">
+      <div>
+        <span class="eyebrow">Northeast Alabama · Industrial Surveillance</span>
+        <h1>The camera was recording.<br />The footage still <span class="mk">didn't hold up.</span></h1>
+        <p class="sub">We engineer industrial video surveillance and the networks that carry it — sized for coverage, documented to standard, and maintained.</p>
+        <p class="tag">Local presence. Industrial expertise.</p>
+        <div class="cta">
+          <a class="btn btn--primary" href="#contact">Get a free coverage design →</a>
+          <a class="btn" href="#tools">Open the tools</a>
+        </div>
+      </div>
+      <CoverageWedge />
+    </div>
+  </header>
+
+  <!-- PROBLEM STRIP -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <div><span class="eyebrow">Who feels it</span><h2 style="margin-top:var(--sp-3)">Three seats at the table, three failures</h2></div>
+        <span class="sheet-no">SEC-01 / ROLES</span>
+      </div>
+      <div class="roles">
+        <div class="role"><div class="k">Plant Manager</div><div class="q">"We had cameras. We still couldn't prove what happened."</div><p>Coverage gaps and unusable frames turn an incident into a guess.</p></div>
+        <div class="role"><div class="k">EHS / Safety</div><div class="q">"The one angle I needed was the one we didn't have."</div><p>Hazardous zones under-covered because no one engineered the sightlines.</p></div>
+        <div class="role"><div class="k">Security / IT Lead</div><div class="q">"The camera VLAN was the way in."</div><p>Default logins and flat networks make the camera system the attack surface.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE DO -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <div><span class="eyebrow">What we do</span><h2 style="margin-top:var(--sp-3)">Surveillance as infrastructure</h2></div>
+        <span class="sheet-no">SEC-02 / SCOPE</span>
+      </div>
+      <p class="measure" style="color:var(--text-muted);margin-bottom:var(--sp-6)">Sized to scale, audit-ready, maintained — not boxes on a wall. Each system is engineered for coverage and documented to a standard.</p>
+      <div class="grid-3">
+        <a class="card" href="/pages/services.html#security-systems" style="text-decoration:none"><div class="top"><span class="k mono">SVC-01</span><span class="k mono">CAMERAS</span></div><div class="body"><h3>Security camera systems</h3><p>Engineered coverage — field of view, overlap, and blind spots designed before hardware.</p></div></a>
+        <a class="card" href="/pages/services.html#network-infrastructure" style="text-decoration:none"><div class="top"><span class="k mono">SVC-02</span><span class="k mono">NETWORK</span></div><div class="body"><h3>Network infrastructure</h3><p>VLANs, switching, and capacity that carry evidence-grade video without dropping frames.</p></div></a>
+        <a class="card" href="/pages/services.html#maintenance" style="text-decoration:none"><div class="top"><span class="k mono">SVC-03</span><span class="k mono">LIFECYCLE</span></div><div class="body"><h3>Maintenance & lifecycle</h3><p>Ongoing ownership so the system still works the day the footage actually matters.</p></div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF / DOCS -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <div><span class="eyebrow">Proof</span><h2 style="margin-top:var(--sp-3)">The differentiator is the documentation</h2></div>
+        <span class="sheet-no">SEC-03 / DOCS</span>
+      </div>
+      <div class="grid-2">
+        <div class="callout" style="grid-column:1 / -1">
+          <div class="strip"><span class="mono">DELIVERABLE — AS-BUILT PACKET</span><span class="mono">BICSI 005/007</span></div>
+          <div class="in">
+            <h3>A packet an auditor, a court, and an incident responder can each rely on.</h3>
+            <p>Every camera, cable, port and switch labeled. Retention and chain-of-custody configured so footage survives an FRE 901 challenge. VLAN segmentation, firmware inventory, and the hardening record documented. No national vendor ships this as a standard line item.</p>
+          </div>
+        </div>
+        <div class="tile"><div class="n">3<small>×</small></div><div class="l">Documentation layers — as-built · evidence · security baseline</div></div>
+        <div class="tile"><div class="n">FRE&nbsp;901</div><div class="l">Chain-of-custody-ready retention &amp; access records</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS BAND -->
+  <section class="section" id="tools">
+    <div class="container">
+      <div class="sec-head">
+        <div><span class="eyebrow">Tools</span><h2 style="margin-top:var(--sp-3)">Two free tools, both real proof</h2></div>
+        <span class="sheet-no">SEC-04 / TOOLS</span>
+      </div>
+      <div class="grid-2">
+        <div class="tool"><div class="th"><span class="mono">TOOL-01</span><span class="mono">INTERACTIVE</span></div><div class="tb"><h3>Camera Coverage Sandbox</h3><p>Drop a facility map, place Axis cameras, and see field of view, overlap, and blind spots before anyone quotes hardware.</p><a class="btn btn--navy" href="/pages/camera-sandbox.html">Open sandbox →</a></div></div>
+        <div class="tool"><div class="th"><span class="mono">TOOL-02</span><span class="mono">CALCULATOR</span></div><div class="tb"><h3>Pixels on Target</h3><p>Enter distance and lens; get pixels-per-foot against DORI thresholds, so "will it identify a face at 40 ft" stops being a guess.</p><a class="btn btn--navy" href="/pages/pixels-on-target.html">Open calculator →</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="sec-head">
+        <div><span class="eyebrow">Start here</span><h2 style="margin-top:var(--sp-3)">Get a free coverage design</h2></div>
+        <span class="sheet-no">SEC-05 / CONTACT</span>
+      </div>
+      <div class="grid-2">
+        <p class="measure" style="color:var(--text-muted)">Tell us the facility and what you are trying to protect. We will come back with an engineered coverage design — no obligation. Prefer to talk? Call <a href="tel:+12562400681">(256) 240-0681</a> or email <a href="mailto:sales@overwatchsi.com">sales@overwatchsi.com</a>.</p>
+        <form id="contact-form" novalidate>
+          <div class="field-grid">
+            <label>Full name<input name="fullname" type="text" required autocomplete="name" /></label>
+            <label>Work email<input name="email" type="email" required autocomplete="email" /></label>
+            <label>Phone<input name="phone" type="tel" autocomplete="tel" /></label>
+            <label>What do you need?
+              <select name="service">
+                <option>Coverage design / assessment</option>
+                <option>Camera system</option>
+                <option>Network infrastructure</option>
+                <option>Maintenance / service</option>
+                <option>Something else</option>
+              </select>
+            </label>
+            <label class="full">Message<textarea name="message" rows="4"></textarea></label>
+          </div>
+          <div class="row">
+            <button class="btn btn--primary" type="submit">Send request →</button>
+            <span id="contact-status" class="status" role="status"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style>
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+    .field-grid label { display: flex; flex-direction: column; gap: var(--sp-2); font-family: var(--font-mono); font-size: var(--fs-100); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+    .field-grid label.full { grid-column: 1 / -1; }
+    .field-grid input, .field-grid select, .field-grid textarea { font-family: var(--font-sans); font-size: var(--fs-300); text-transform: none; letter-spacing: 0; color: var(--text); background: var(--surface); border: var(--bw-hair) solid var(--border); padding: var(--sp-3); border-radius: var(--radius); }
+    .row { display: flex; align-items: center; gap: var(--sp-4); margin-top: var(--sp-5); }
+    .status { font-family: var(--font-mono); font-size: var(--fs-200); color: var(--brand); }
+    @media (max-width: 620px) { .field-grid { grid-template-columns: 1fr; } }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var form = document.getElementById('contact-form');
+      var status = document.getElementById('contact-status');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!window.OSIHubSpot) { status.textContent = 'Form unavailable — please email sales@overwatchsi.com.'; return; }
+        var fd = new FormData(form);
+        var name = window.OSIHubSpot.splitName(fd.get('fullname'));
+        var msg = '[' + (fd.get('service') || '') + '] ' + (fd.get('message') || '');
+        status.textContent = 'Sending…';
+        window.OSIHubSpot.submit('contact', {
+          email: fd.get('email'), firstname: name.firstname, lastname: name.lastname,
+          phone: fd.get('phone'), message: msg
+        }).then(function () {
+          form.reset(); status.textContent = 'Thanks — we will be in touch shortly.';
+        }).catch(function () {
+          status.textContent = 'Something went wrong. Please email sales@overwatchsi.com.';
+        });
+      });
+    })();
+  </script>
+</Base>
