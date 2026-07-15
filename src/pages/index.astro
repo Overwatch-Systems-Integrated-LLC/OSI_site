@@ -6,6 +6,39 @@ import CoverageWedge from '../components/CoverageWedge.astro';
 
 const title = 'Overwatch Systems Integrated — Industrial Video Surveillance, Engineered';
 const description = 'Overwatch Systems Integrated designs, installs, and maintains industrial video surveillance and the networks that carry it, for facilities in Northeast Alabama. Local presence. Industrial expertise.';
+
+// Structured data (Phase C): restore the live homepage's LocalBusiness + WebSite
+// nodes dropped in the Astro rebuild (preserve-and-extend, plan §6). LocalBusiness
+// is the canonical #business entity; WebSite references it as publisher. Data is
+// the verified live-site data (NAP city+state only, no street address).
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://www.overwatchsi.com/#business',
+  name: 'Overwatch Systems Integrated',
+  url: 'https://www.overwatchsi.com/',
+  image: 'https://www.overwatchsi.com/images/og-image.png',
+  logo: 'https://www.overwatchsi.com/images/Official_Logo.svg',
+  telephone: '+1-256-240-0681',
+  email: 'sales@overwatchsi.com',
+  description: 'Industrial video surveillance systems and the network infrastructure that supports them, for industrial and commercial facilities in Northeast Alabama.',
+  slogan: 'Local presence. Industrial expertise.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Oxford', addressRegion: 'AL', addressCountry: 'US',
+  },
+  areaServed: [
+    'Calhoun County, AL', 'Etowah County, AL', 'DeKalb County, AL',
+    'Cleburne County, AL', 'Jefferson County, AL', 'Northeast Alabama',
+  ],
+};
+const webSiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Overwatch Systems Integrated',
+  url: 'https://www.overwatchsi.com/',
+  publisher: { '@id': 'https://www.overwatchsi.com/#business' },
+};
 ---
 <Base title={title} description={description}>
   <Nav />
@@ -131,6 +164,9 @@ const description = 'Overwatch Systems Integrated designs, installs, and maintai
   </section>
 
   <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(webSiteSchema)} is:inline />
 
   <script is:inline>
     (function () {
