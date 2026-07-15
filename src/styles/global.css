@@ -51,9 +51,8 @@ img, svg { max-width: 100%; display: block; }
 .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: saturate(1.1) blur(8px); border-bottom: var(--bw-hair) solid var(--border); }
 .nav .inner { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-5); padding-block: var(--sp-3); }
 .nav .brand { display: flex; align-items: center; gap: var(--sp-3); text-decoration: none; color: var(--text); }
-.nav .brand img { height: 32px; width: auto; }
-.nav .brand .bn { font-family: var(--font-display); font-weight: var(--fw-display); font-size: var(--fs-300); letter-spacing: -.01em; line-height: 1; }
-.nav .brand .bs { font-family: var(--font-mono); font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--brand); }
+.nav .brand .mark { height: 40px; width: auto; }
+.nav .brand .wordmark { height: 24px; width: auto; display: block; }
 .nav .links { display: flex; align-items: center; gap: var(--sp-6); }
 .nav .links a { font-family: var(--font-sans); font-weight: var(--fw-medium); font-size: var(--fs-200); color: var(--text); text-decoration: none; }
 .nav .links a:hover { color: var(--brand); }
