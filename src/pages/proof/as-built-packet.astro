@@ -1,0 +1,117 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const title = 'The As-Built Packet — Overwatch Systems Integrated';
+const description = 'Every OSI system ships with an As-Built Packet: a BICSI 005/007-conformant as-built, FRE 901-ready evidence integrity, and a documented security baseline. Documentation an auditor, a court, and an incident responder can each rely on.';
+
+// BreadcrumbList (AEO preserve-and-extend, plan §6)
+const breadcrumbSchema = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.overwatchsi.com/' },
+    { '@type': 'ListItem', position: 2, name: 'As-Built Packet', item: 'https://www.overwatchsi.com/proof/as-built-packet/' },
+  ],
+};
+---
+<Base title={title} description={description}>
+  <Nav />
+
+  <!-- HERO -->
+  <header class="container">
+    <div class="proof-hero">
+      <span class="eyebrow">PROOF-01 / AS-BUILT PACKET</span>
+      <h1>The install ends.<br />The questions <span class="mk">don't.</span></h1>
+      <p class="sub">Every OSI system ships with the As-Built Packet: documentation an auditor, a court, and an incident responder can each rely on. Most national vendors do not hand you this at all. Here is what is in it.</p>
+      <div class="cta"><a class="btn btn--primary" href="/#contact">Request a sample packet →</a></div>
+    </div>
+  </header>
+
+  <!-- THREE LAYERS -->
+  <section class="section band band--panel">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">What's in the packet</span>
+        <h2>Three documentation layers</h2>
+      </div>
+      <div class="layers">
+        <article class="layer">
+          <span class="k">Layer 1 / As-built</span>
+          <h3>As-built and network diagram</h3>
+          <p>A BICSI 005/007-conformant as-built with the full network diagram. Every camera, cable, port, and switch is labeled, and the drawing matches the field. When you add, move, or troubleshoot a device two years from now, the documentation still tells the truth.</p>
+        </article>
+        <article class="layer">
+          <span class="k">Layer 2 / Evidence integrity</span>
+          <h3>Evidence integrity</h3>
+          <p>Retention and chain-of-custody configured so footage survives an FRE 901 challenge. Access is logged, timestamps are defensible, and the record shows who touched what and when. The clip holds up when it has to.</p>
+        </article>
+        <article class="layer">
+          <span class="k">Layer 3 / Security baseline</span>
+          <h3>Security baseline</h3>
+          <p>VLAN segmentation, a firmware inventory, and the hardening record, documented. The camera network stops being the easy way in, and you hold written proof of how it was locked down.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU RECEIVE -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">Deliverables</span>
+        <h2>What you receive</h2>
+      </div>
+      <ul class="receive">
+        <li><span class="ln">01</span>As-built drawing set, BICSI 005/007-conformant</li>
+        <li><span class="ln">02</span>Network diagram with every device, port, and switch labeled</li>
+        <li><span class="ln">03</span>Camera schedule: model, location, field of view, mounting height</li>
+        <li><span class="ln">04</span>Retention and access-control configuration record</li>
+        <li><span class="ln">05</span>Chain-of-custody and export procedure, FRE 901-ready</li>
+        <li><span class="ln">06</span>VLAN and network-segmentation map</li>
+        <li><span class="ln">07</span>Firmware inventory and hardening checklist</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA (control-room dark band) -->
+  <section class="section band band--dark" data-theme="dark">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">See it first</span>
+        <h2>See exactly what lands in your hands</h2>
+      </div>
+      <div class="cta-row">
+        <p class="proof-lead">Ask for a redacted sample and see exactly what lands in your hands before you buy.</p>
+        <a class="btn btn--primary" href="/#contact">Request a sample packet →</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
+
+  <style>
+    .proof-hero { padding-block: var(--sp-9) var(--sp-8); max-width: 60ch; }
+    .proof-hero h1 { font-size: clamp(2.5rem, 1.6rem + 3.4vw, 4rem); font-weight: var(--fw-heavy); line-height: var(--lh-tight); margin: var(--sp-4) 0 var(--sp-5); }
+    .proof-hero h1 .mk { color: var(--brand); background-image: linear-gradient(to top, color-mix(in srgb, var(--accent) 45%, transparent) 26%, transparent 26%); }
+    .proof-hero .sub { font-size: var(--fs-400); color: var(--text-muted); max-width: 56ch; margin-bottom: var(--sp-6); }
+    .proof-hero .cta { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
+
+    .layers { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-7); }
+    @media (max-width: 860px) { .layers { grid-template-columns: 1fr; gap: var(--sp-6); } }
+    .layer { padding-top: var(--sp-4); border-top: 2px solid var(--border-strong); }
+    .layer .k { font-family: var(--font-mono); font-size: var(--fs-100); letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+    .layer h3 { font-size: var(--fs-500); margin: var(--sp-3) 0 var(--sp-3); }
+    .layer p { font-size: var(--fs-300); color: var(--text-muted); }
+
+    .receive { list-style: none; max-width: 68ch; border-top: var(--bw-hair) solid var(--border); }
+    .receive li { display: flex; align-items: baseline; gap: var(--sp-4); padding: var(--sp-4) 0; border-bottom: var(--bw-hair) solid var(--border); font-size: var(--fs-400); color: var(--text); }
+    .receive .ln { font-family: var(--font-mono); font-size: var(--fs-100); font-weight: var(--fw-medium); letter-spacing: .1em; color: var(--accent); flex: none; padding-top: .2em; }
+
+    .cta-row { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-6); align-items: center; }
+    @media (max-width: 780px) { .cta-row { grid-template-columns: 1fr; } }
+    .proof-lead { font-family: var(--font-display); font-weight: var(--fw-display); font-size: var(--fs-500); line-height: var(--lh-snug); max-width: 34ch; padding-left: var(--sp-5); border-left: 3px solid var(--accent); }
+  </style>
+</Base>
