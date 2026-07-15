@@ -12,7 +12,6 @@
 
   // ── Worker endpoint ─────────────────────────────────────────────────────────
   // Local dev hits a `wrangler dev` instance; production hits the deployed Worker.
-  // TODO(deploy): replace the production URL with the real *.workers.dev address.
   var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   var WORKER_URL = isLocal
     ? 'http://localhost:8787'
@@ -37,8 +36,8 @@
   function injectStyles() {
     if (document.getElementById('osi-assist-styles')) return;
     var css = [
-      ':root{--oa-navy:#18487a;--oa-cyan:#26aee4;--oa-dark:#090d12;--oa-dark2:#0e1520;--oa-dark3:#141e2e;--oa-steel:#b8c8d8;--oa-muted:#5a7a96;--oa-white:#eaf2f8;}',
-      '.osi-assist-fab,.osi-assist-panel,.osi-assist-panel *{box-sizing:border-box;font-family:Inter,system-ui,sans-serif;}',
+      ':root{--oa-navy:#18487a;--oa-cyan:#4F8CC4;--oa-dark:#090d12;--oa-dark2:#0e1520;--oa-dark3:#141e2e;--oa-steel:#b8c8d8;--oa-muted:#5a7a96;--oa-white:#eaf2f8;}',
+      '.osi-assist-fab,.osi-assist-panel,.osi-assist-panel *{box-sizing:border-box;font-family:'IBM Plex Sans',system-ui,sans-serif;}',
       /* launcher */
       '.osi-assist-fab{position:fixed;right:22px;bottom:22px;z-index:8500;display:flex;align-items:center;gap:.55rem;padding:.7rem 1.05rem;border:1px solid var(--oa-cyan);border-radius:999px;background:var(--oa-navy);color:var(--oa-white);font-weight:600;font-size:.82rem;letter-spacing:.03em;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.45);transition:transform .18s ease,background .18s ease;}',
       '.osi-assist-fab:hover{transform:translateY(-2px);background:#1d5793;}',
@@ -53,7 +52,7 @@
       /* header */
       '.osi-assist-head{display:flex;align-items:center;gap:.7rem;padding:1rem 1.1rem;background:var(--oa-dark);border-bottom:1px solid rgba(38,174,228,.18);}',
       '.osi-assist-dot{width:9px;height:9px;border-radius:50%;background:#4dd890;box-shadow:0 0 8px #4dd890;flex-shrink:0;}',
-      '.osi-assist-title{font-family:Rajdhani,sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--oa-white);line-height:1.1;}',
+      '.osi-assist-title{font-family:'Archivo Expanded','Archivo',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;color:var(--oa-white);line-height:1.1;}',
       '.osi-assist-sub{font-size:.7rem;color:var(--oa-muted);letter-spacing:.02em;}',
       '.osi-assist-close{margin-left:auto;background:none;border:none;color:var(--oa-steel);font-size:1.5rem;line-height:1;cursor:pointer;padding:.1rem .35rem;border-radius:4px;transition:color .15s,background .15s;}',
       '.osi-assist-close:hover{color:var(--oa-white);background:rgba(255,255,255,.08);}',
