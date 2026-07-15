@@ -9,117 +9,102 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
   <link rel="apple-touch-icon" href="/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* 404 — OSI "As-Built" identity (light documentation theme). Mirrors design/tokens.css. */
     :root {
-      --cyan: #26aee4;
-      --white: #eaf2f8;
-      --dark: #090d12;
-      --dark2: #0e1520;
-      --dark3: #141e2e;
-      --steel: #b8c8d8;
-      --muted: #5a7a96;
+      --osi-paper:#F3F5F8; --osi-panel:#E8ECF1; --osi-surface:#FBFCFD;
+      --osi-ink:#0F1722; --osi-ink-2:#33414F;
+      --osi-navy:#18487A; --osi-navy-deep:#0C2947;
+      --osi-line:#C4D0DC; --osi-line-2:#D9E1E9;
+      --osi-accent:#E8A317; --osi-accent-press:#CE8E0C; --osi-accent-ink:#0F1722;
+      --bg:var(--osi-paper); --text:var(--osi-ink); --text-muted:var(--osi-ink-2);
+      --brand:var(--osi-navy); --border:var(--osi-line); --border-2:var(--osi-line-2);
+      --border-strong:var(--osi-ink); --accent:var(--osi-accent); --accent-press:var(--osi-accent-press);
+      --font-display:'Archivo Expanded','Archivo',system-ui,sans-serif;
+      --font-sans:'IBM Plex Sans',system-ui,sans-serif;
+      --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+      --bw-hair:1px; --bw-strong:1.5px;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :where(a,button):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     html, body { height: 100%; }
     body {
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at 50% 0%, var(--dark2) 0%, var(--dark) 70%);
-      color: var(--white);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 32px 20px;
+      font-family: var(--font-sans); background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px; position: relative; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 40px;
-      text-decoration: none;
+    body::before {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(var(--border-2) 1px, transparent 1px), linear-gradient(90deg, var(--border-2) 1px, transparent 1px);
+      background-size: 44px 44px;
+      -webkit-mask-image: radial-gradient(120% 80% at 50% 25%, #000 20%, transparent 72%);
+              mask-image: radial-gradient(120% 80% at 50% 25%, #000 20%, transparent 72%);
+      opacity: .5;
     }
-    .logo img { height: 44px; width: auto; }
-    .logo-text { display: flex; flex-direction: column; line-height: 1; text-align: left; }
-    .logo-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.25rem; letter-spacing: 0.04em; color: var(--white); }
-    .logo-sub { font-family: 'Rajdhani', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cyan); }
-    .logo img.logo-wordmark { height: 28px; }
+    .wrap { position: relative; z-index: 1; max-width: 620px; }
+    .logo { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 48px; text-decoration: none; }
+    .logo .mark { height: 44px; width: auto; display: block; }
+    .logo .wordmark { height: 26px; width: auto; display: block; }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--brand); display: inline-flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--accent); }
     .code {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: clamp(5rem, 18vw, 9rem);
-      line-height: 1;
-      letter-spacing: 0.05em;
-      color: var(--cyan);
-      text-shadow: 0 0 36px rgba(38, 174, 228, 0.35);
+      font-family: var(--font-display); font-weight: 800; font-size: clamp(4.5rem, 16vw, 8rem);
+      line-height: 1; letter-spacing: -0.02em; color: var(--text);
+      display: inline-block; padding-bottom: 8px;
+      background-image: linear-gradient(to top, color-mix(in srgb, var(--accent) 45%, transparent) 14%, transparent 14%);
     }
     h1 {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 600;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      letter-spacing: 0.02em;
-      margin: 12px 0 14px;
-      color: var(--white);
+      font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+      font-size: clamp(1.5rem, 4vw, 2.25rem); margin: 20px 0 14px; color: var(--text);
     }
-    p.lead {
-      font-size: 1.05rem;
-      color: var(--steel);
-      max-width: 520px;
-      margin: 0 auto 36px;
-      line-height: 1.6;
-    }
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      justify-content: center;
-    }
+    p.lead { font-size: 1.05rem; color: var(--text-muted); max-width: 48ch; margin: 0 auto 36px; line-height: 1.6; }
+    .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
     .btn {
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      letter-spacing: 0.04em;
-      text-decoration: none;
-      padding: 13px 26px;
-      border-radius: 6px;
-      transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      font-family: var(--font-display); font-weight: 600; font-size: 1rem; letter-spacing: .01em;
+      text-decoration: none; padding: 12px 22px; border: var(--bw-strong) solid var(--border-strong);
+      color: var(--text); background: transparent; display: inline-flex; align-items: center; gap: 8px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .btn-primary { background: var(--cyan); color: var(--dark); }
-    .btn-primary:hover { transform: translateY(-2px); background: #3cbef0; }
-    .btn-outline { border: 1px solid var(--muted); color: var(--white); }
-    .btn-outline:hover { transform: translateY(-2px); border-color: var(--cyan); color: var(--cyan); }
-    .contact {
-      margin-top: 40px;
-      font-size: 0.95rem;
-      color: var(--muted);
-    }
-    .contact a { color: var(--steel); text-decoration: none; }
-    .contact a:hover { color: var(--cyan); }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .btn--primary:hover { background: var(--accent-press); border-color: var(--accent-press); }
+    .btn--ghost { border-color: var(--border); }
+    .btn--ghost:hover { border-color: var(--brand); color: var(--brand); }
+    .contact { margin-top: 44px; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: .04em; color: var(--text-muted); }
+    .contact a { color: var(--brand); text-decoration: none; }
+    .contact a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <a href="/" class="logo" aria-label="Overwatch Systems Integrated home">
-    <img src="/images/IconOnly_Logo.png" alt="" aria-hidden="true">
-    <img src="/images/wordmark-light.png" alt="Overwatch Systems Integrated" class="logo-wordmark">
-  </a>
+  <div class="wrap">
+    <a href="/" class="logo" aria-label="Overwatch Systems Integrated home">
+      <img class="mark" src="/images/IconOnly_Logo.png" alt="" aria-hidden="true">
+      <img class="wordmark" src="/images/wordmark.png" alt="Overwatch Systems Integrated">
+    </a>
 
-  <div class="code" aria-hidden="true">404</div>
-  <h1>This page is off the grid.</h1>
-  <p class="lead">The page you are looking for moved or no longer exists. Use the links below to find what you need, or reach out and we will point you in the right direction.</p>
+    <div class="eyebrow">HTTP 404 / Page not found</div>
+    <div class="code" aria-hidden="true">404</div>
+    <h1>This page is off the grid.</h1>
+    <p class="lead">The page you are looking for moved or no longer exists. Use the links below to find what you need, or reach out and we will point you in the right direction.</p>
 
-  <div class="links">
-    <a href="/" class="btn btn-primary">Back to Home</a>
-    <a href="/pages/services.html" class="btn btn-outline">Services</a>
-    <a href="/blog/" class="btn btn-outline">Blog</a>
-    <a href="/#contact" class="btn btn-outline">Request a Free Assessment</a>
+    <div class="links">
+      <a href="/" class="btn btn--primary">Back to home →</a>
+      <a href="/pages/services.html" class="btn btn--ghost">Services</a>
+      <a href="/blog/" class="btn btn--ghost">Resources</a>
+      <a href="/#contact" class="btn btn--ghost">Request a free assessment</a>
+    </div>
+
+    <p class="contact">
+      Overwatch Systems Integrated &middot; Oxford, AL &middot;
+      <a href="tel:+12562400681">(256) 240-0681</a> &middot;
+      <a href="mailto:sales@overwatchsi.com">sales@overwatchsi.com</a>
+    </p>
   </div>
-
-  <p class="contact">
-    Overwatch Systems Integrated &middot; Oxford, AL &middot;
-    <a href="tel:+12562400681">(256) 240-0681</a> &middot;
-    <a href="mailto:sales@overwatchsi.com">sales@overwatchsi.com</a>
-  </p>
 </body>
 </html>
