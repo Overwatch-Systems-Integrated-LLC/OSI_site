@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSI Design System — Phase A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* Styleguide chrome — every value below is a role token from tokens.css */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:var(--fs-300);line-height:var(--lh-normal);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--container);margin:0 auto;padding:0 var(--sp-6)}
+  h1,h2,h3{font-family:var(--font-display);letter-spacing:var(--ls-display);color:var(--text)}
+  .mono{font-family:var(--font-mono)}
+  section{padding:var(--sp-7) 0;border-top:var(--bw-hair) solid var(--border)}
+  .eyebrow{font-family:var(--font-mono);font-size:var(--fs-100);font-weight:var(--fw-medium);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--brand);display:inline-flex;align-items:center;gap:var(--sp-3)}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--accent)}
+  .sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:var(--sp-5);margin-bottom:var(--sp-5);flex-wrap:wrap}
+  .sec-h h2{font-size:var(--fs-600);font-weight:var(--fw-display)}
+  .sheet{font-family:var(--font-mono);font-size:var(--fs-100);color:var(--text-muted);letter-spacing:.1em}
+  .tok{font-family:var(--font-mono);font-size:var(--fs-100);color:var(--text-muted)}
+
+  /* title block */
+  .titleblock{border:var(--bw-strong) solid var(--border-strong);background:var(--surface);margin-top:var(--sp-6)}
+  .tbrow{display:grid;grid-template-columns:2.4fr 1fr 1fr 1fr}
+  .tbc{padding:var(--sp-3) var(--sp-4);border-right:var(--bw-hair) solid var(--border)}
+  .tbc:last-child{border-right:none}
+  .tbk{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted)}
+  .tbv{font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-300);margin-top:2px}
+  .tbtitle .tbv{font-size:var(--fs-500)}
+
+  /* type scale */
+  .row{display:flex;align-items:baseline;gap:var(--sp-5);padding:var(--sp-3) 0;border-bottom:var(--bw-hair) solid var(--border-2)}
+  .row .lbl{width:190px;flex:none}
+  .type-samp{color:var(--text)}
+
+  /* color roles */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--sp-4)}
+  .sw{border:var(--bw-hair) solid var(--border);background:var(--surface)}
+  .sw .chip{height:64px}
+  .sw .m{padding:var(--sp-2) var(--sp-3);border-top:var(--bw-hair) solid var(--border)}
+  .sw .nm{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--fs-200)}
+  .sw .hx{font-family:var(--font-mono);font-size:11px;color:var(--text-muted)}
+  .sw .cr{font-family:var(--font-mono);font-size:10px;margin-top:2px;color:var(--brand)}
+
+  /* spacing */
+  .sprow{display:flex;align-items:center;gap:var(--sp-4);padding:var(--sp-2) 0}
+  .spbar{height:16px;background:var(--brand)}
+  .sprow .tok{width:220px}
+
+  /* components */
+  .kit{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-5)}
+  .btn{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--fs-300);border:var(--bw-strong) solid var(--border-strong);padding:var(--sp-3) var(--sp-5);display:inline-flex;align-items:center;gap:var(--sp-3);cursor:pointer;text-decoration:none;background:transparent;color:var(--text);transition:transform var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease)}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .btn.primary:hover{background:var(--accent-press);border-color:var(--accent-press)}
+  .btn.navy{background:var(--brand);border-color:var(--brand);color:#fff}
+  .field{display:flex;flex-direction:column;gap:var(--sp-2);max-width:340px}
+  .field label{font-family:var(--font-mono);font-size:var(--fs-100);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+  .field input{font-family:var(--font-sans);font-size:var(--fs-300);color:var(--text);background:var(--surface);border:var(--bw-hair) solid var(--border);padding:var(--sp-3);border-radius:var(--radius)}
+  .card{border:var(--bw-hair) solid var(--border);background:var(--surface)}
+  .card .top{padding:var(--sp-3) var(--sp-4);border-bottom:var(--bw-hair) solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .card .top .tbk{color:var(--brand)}
+  .card .b{padding:var(--sp-4)}
+  .card h3{font-size:var(--fs-500);font-weight:var(--fw-display);margin-bottom:var(--sp-2)}
+  .card p{color:var(--text-muted);font-size:var(--fs-200)}
+  .callout{border:var(--bw-strong) solid var(--border-strong);background:var(--surface)}
+  .callout .strip{display:flex;justify-content:space-between;background:var(--border-strong);color:var(--bg);padding:var(--sp-2) var(--sp-4)}
+  .callout .strip .mono{font-size:11px;letter-spacing:.16em}
+  .callout .in{padding:var(--sp-4)}
+  .callout h3{font-size:var(--fs-500);font-weight:var(--fw-display);margin-bottom:var(--sp-2)}
+  .callout p{color:var(--text-muted);font-size:var(--fs-200)}
+  .tile{border:var(--bw-hair) solid var(--border);background:var(--surface);padding:var(--sp-4)}
+  .tile .n{font-family:var(--font-display);font-weight:var(--fw-heavy);font-size:var(--fs-800);line-height:1;letter-spacing:var(--ls-display);color:var(--brand)}
+  .tile .n small{font-size:var(--fs-400);color:var(--accent)}
+  .tile .l{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-top:var(--sp-3)}
+
+  /* dark demo panel */
+  .darkpanel{padding:var(--sp-6);border:var(--bw-hair) solid var(--border)}
+  .note{font-family:var(--font-mono);font-size:var(--fs-100);color:var(--text-muted);margin-top:var(--sp-3)}
+  @media(max-width:760px){.kit{grid-template-columns:1fr}.tbrow{grid-template-columns:1fr 1fr}.row .lbl{width:120px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="titleblock">
+    <div class="tbrow">
+      <div class="tbc tbtitle"><div class="tbk">Document</div><div class="tbv">OSI DESIGN SYSTEM — "AS-BUILT"</div></div>
+      <div class="tbc"><div class="tbk">Phase</div><div class="tbv">A · Tokens</div></div>
+      <div class="tbc"><div class="tbk">Source</div><div class="tbv">design/tokens.css</div></div>
+      <div class="tbc"><div class="tbk">Date</div><div class="tbv">2026-07-14</div></div>
+    </div>
+    <div class="tbrow" style="grid-template-columns:1fr;border-top:var(--bw-hair) solid var(--border)">
+      <div class="tbc"><div class="tbk">Note</div><div style="font-size:var(--fs-200);color:var(--text-muted);margin-top:3px">Every value on this page is a role token from <span class="mono">tokens.css</span>. Nothing is hard-coded. The dark panel at the bottom is the same components under <span class="mono">data-theme="dark"</span> — one system, two modes.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TYPE -->
+<section><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Type scale</span><h2 style="margin-top:var(--sp-3)">Archivo · IBM Plex Sans · IBM Plex Mono</h2></div><span class="sheet">A / TYPE · base 16px · ~1.25</span></div>
+  <div class="row"><div class="lbl tok">--fs-display</div><div class="type-samp" style="font-family:var(--font-display);font-weight:var(--fw-heavy);font-size:var(--fs-display);line-height:var(--lh-tight);letter-spacing:var(--ls-display)">Coverage, engineered</div></div>
+  <div class="row"><div class="lbl tok">--fs-700 / display</div><div class="type-samp" style="font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-700)">Heading level 1 — 36px</div></div>
+  <div class="row"><div class="lbl tok">--fs-600 / display</div><div class="type-samp" style="font-family:var(--font-display);font-weight:var(--fw-display);font-size:var(--fs-600)">Heading level 2 — 28px</div></div>
+  <div class="row"><div class="lbl tok">--fs-500 / display</div><div class="type-samp" style="font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:var(--fs-500)">Heading level 3 — 22px</div></div>
+  <div class="row"><div class="lbl tok">--fs-400 / sans</div><div class="type-samp" style="font-size:var(--fs-400)">Lead paragraph — 18px IBM Plex Sans</div></div>
+  <div class="row"><div class="lbl tok">--fs-300 / sans</div><div class="type-samp" style="font-size:var(--fs-300)">Body text — 16px, the minimum body size. IBM Plex Sans carries every paragraph.</div></div>
+  <div class="row"><div class="lbl tok">--fs-200 / sans</div><div class="type-samp" style="font-size:var(--fs-200);color:var(--text-muted)">Small / muted — 14px</div></div>
+  <div class="row"><div class="lbl tok">--fs-100 / mono</div><div class="type-samp mono" style="font-size:var(--fs-100);letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--brand)">Eyebrow / field code — 12px mono</div></div>
+</div></section>
+
+<!-- COLOR -->
+<section><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Color roles</span><h2 style="margin-top:var(--sp-3)">Semantic, contrast-checked</h2></div><span class="sheet">A / COLOR · WCAG AA floor</span></div>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:var(--bg)"></div><div class="m"><div class="nm">--bg (paper)</div><div class="hx">#F3F5F8</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--bg-panel)"></div><div class="m"><div class="nm">--bg-panel</div><div class="hx">#E8ECF1</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--text)"></div><div class="m"><div class="nm">--text (ink)</div><div class="hx">#0F1722</div><div class="cr">16.5:1 on paper · AAA</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--text-muted)"></div><div class="m"><div class="nm">--text-muted</div><div class="hx">#33414F</div><div class="cr">9.6:1 · AAA</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--brand)"></div><div class="m"><div class="nm">--brand (navy)</div><div class="hx">#18487A</div><div class="cr">8.6:1 · AAA</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="m"><div class="nm">--accent (amber)</div><div class="hx">#E8A317</div><div class="cr" style="color:var(--text-muted)">signal only · not text</div></div></div>
+  </div>
+</div></section>
+
+<!-- SPACING -->
+<section><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Spacing</span><h2 style="margin-top:var(--sp-3)">8px grid</h2></div><span class="sheet">A / SPACE</span></div>
+  <div class="sprow"><div class="tok">--sp-1 · 4px</div><div class="spbar" style="width:4px"></div></div>
+  <div class="sprow"><div class="tok">--sp-2 · 8px</div><div class="spbar" style="width:8px"></div></div>
+  <div class="sprow"><div class="tok">--sp-3 · 12px</div><div class="spbar" style="width:12px"></div></div>
+  <div class="sprow"><div class="tok">--sp-4 · 16px</div><div class="spbar" style="width:16px"></div></div>
+  <div class="sprow"><div class="tok">--sp-5 · 24px</div><div class="spbar" style="width:24px"></div></div>
+  <div class="sprow"><div class="tok">--sp-6 · 32px</div><div class="spbar" style="width:32px"></div></div>
+  <div class="sprow"><div class="tok">--sp-7 · 48px</div><div class="spbar" style="width:48px"></div></div>
+  <div class="sprow"><div class="tok">--sp-8 · 64px</div><div class="spbar" style="width:64px"></div></div>
+</div></section>
+
+<!-- COMPONENTS -->
+<section><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Components</span><h2 style="margin-top:var(--sp-3)">Built from role tokens</h2></div><span class="sheet">A / KIT</span></div>
+  <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;align-items:center;margin-bottom:var(--sp-6)">
+    <a class="btn primary">Get a free coverage design →</a>
+    <a class="btn">Open the tools</a>
+    <a class="btn navy">Open sandbox →</a>
+    <div class="field"><label for="e">Work email</label><input id="e" type="email" placeholder="you@facility.com"></div>
+  </div>
+  <div class="kit">
+    <div class="card"><div class="top"><span class="tbk mono">SERVICE-03</span><span class="tbk mono">NETWORK</span></div><div class="b"><h3>Network infrastructure</h3><p>The VLANs, switching, and capacity that carry evidence-grade video without dropping frames.</p></div></div>
+    <div class="callout"><div class="strip"><span class="mono">DELIVERABLE — AS-BUILT PACKET</span><span class="mono">BICSI 005/007</span></div><div class="in"><h3>Documentation as a deliverable.</h3><p>Every camera, cable, port and switch labeled; chain-of-custody-ready; hardening recorded.</p></div></div>
+    <div class="tile"><div class="n">3<small>×</small></div><div class="l">Documentation layers</div></div>
+    <div class="tile"><div class="n">FRE&nbsp;901</div><div class="l">Chain-of-custody ready</div></div>
+  </div>
+</div></section>
+
+<!-- DARK -->
+<section><div class="wrap">
+  <div class="sec-h"><div><span class="eyebrow">Dark · control-room</span><h2 style="margin-top:var(--sp-3)">Same tokens, data-theme="dark"</h2></div><span class="sheet">A / DARK</span></div>
+  <div class="darkpanel" data-theme="dark" style="background:var(--bg);color:var(--text)">
+    <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;align-items:center;margin-bottom:var(--sp-5)">
+      <a class="btn primary">Launch →</a>
+      <a class="btn">Design tokens</a>
+      <a class="btn navy">Open calculator →</a>
+      <div class="field"><label for="e2">Distance (ft)</label><input id="e2" type="text" placeholder="40"></div>
+    </div>
+    <div class="kit">
+      <div class="card"><div class="top"><span class="tbk mono">TOOL-01</span><span class="tbk mono">LIVE</span></div><div class="b"><h3>Camera Coverage Sandbox</h3><p>The reading site is light; the interactive tools run in this calm dark control-room field.</p></div></div>
+      <div class="tile"><div class="n">250<small>px/m</small></div><div class="l">Identify threshold</div></div>
+    </div>
+    <p class="note">Body 16.4:1 · muted 8.5:1 · navy 5.2:1 · amber-as-text 8.5:1 — all AA or better on dark.</p>
+  </div>
+</div></section>
+
+<div class="wrap" style="padding:var(--sp-6) var(--sp-6) var(--sp-8)"><p class="note">END — design/tokens.css + design/CONTRAST.md. Phase B (Astro) imports tokens.css into the base layout.</p></div>
+</body>
+</html>

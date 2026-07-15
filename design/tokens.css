@@ -1,0 +1,145 @@
+/* ============================================================================
+   OSI Design Tokens — "As-Built" documentation-grade system
+   Single source of truth for the OSI_site reface (plan v1.2, Direction B).
+   Phase A. Framework-neutral CSS custom properties; Phase B (Astro) imports
+   this into the base layout so every page and tool inherits one house style.
+
+   Two themes, one system:
+     :root                     -> light "documentation" (default site identity)
+     [data-theme="dark"]       -> dark "control-room" (interactive tool canvases)
+
+   Accent (Signal Amber) is a SIGNAL only: marks, underlines, one primary
+   button, small labels. Never body text on paper (fails contrast). All reading
+   text (ink, navy) passes WCAG 2.2 AA — see design/CONTRAST.md.
+   ========================================================================== */
+
+:root {
+  /* ---- raw palette (light) ---- */
+  --osi-paper:      #F3F5F8;
+  --osi-panel:      #E8ECF1;
+  --osi-surface:    #FBFCFD;
+  --osi-ink:        #0F1722;
+  --osi-ink-2:      #33414F;
+  --osi-navy:       #18487A;
+  --osi-navy-mid:   #1C5A93;
+  --osi-navy-deep:  #0C2947;
+  --osi-line:       #C4D0DC;
+  --osi-line-2:     #D9E1E9;
+  --osi-accent:     #E8A317;
+  --osi-accent-press:#CE8E0C;
+  --osi-accent-ink: #0F1722;   /* text that sits ON amber */
+
+  /* ---- semantic roles (components use these, not raw palette) ---- */
+  --bg:            var(--osi-paper);
+  --bg-panel:      var(--osi-panel);
+  --surface:       var(--osi-surface);
+  --text:          var(--osi-ink);
+  --text-muted:    var(--osi-ink-2);
+  --brand:         var(--osi-navy);
+  --brand-strong:  var(--osi-navy-deep);
+  --border:        var(--osi-line);
+  --border-2:      var(--osi-line-2);
+  --border-strong: var(--osi-ink);
+  --accent:        var(--osi-accent);
+  --accent-press:  var(--osi-accent-press);
+  --accent-ink:    var(--osi-accent-ink);
+  --focus:         var(--osi-accent);
+
+  /* ---- type families ---- */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-sans:    'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  /* ---- type scale (base 16px, ~1.25 step) ---- */
+  --fs-100: 0.75rem;    /* 12 - caption / eyebrow / data */
+  --fs-200: 0.875rem;   /* 14 - small / labels */
+  --fs-300: 1rem;       /* 16 - body (min body size) */
+  --fs-400: 1.125rem;   /* 18 - lead / large body */
+  --fs-500: 1.375rem;   /* 22 - h3 */
+  --fs-600: 1.75rem;    /* 28 - h2 */
+  --fs-700: 2.25rem;    /* 36 - h1 */
+  --fs-800: 3rem;       /* 48 - display (static) */
+  --fs-display: clamp(2.5rem, 1.6rem + 3.4vw, 4rem); /* fluid hero */
+
+  /* ---- line height / weight / tracking ---- */
+  --lh-tight: 1.05;
+  --lh-snug:  1.25;
+  --lh-normal:1.6;
+  --fw-body:     400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-display:  700;
+  --fw-heavy:    800;
+  --ls-display: -0.02em;
+  --ls-eyebrow:  0.18em;   /* mono eyebrows / field codes */
+  --ls-mono:     0.06em;
+
+  /* ---- spacing (8px base) ---- */
+  --sp-1: 0.25rem;  /* 4  */
+  --sp-2: 0.5rem;   /* 8  */
+  --sp-3: 0.75rem;  /* 12 */
+  --sp-4: 1rem;     /* 16 */
+  --sp-5: 1.5rem;   /* 24 */
+  --sp-6: 2rem;     /* 32 */
+  --sp-7: 3rem;     /* 48 */
+  --sp-8: 4rem;     /* 64 */
+  --sp-9: 6rem;     /* 96 */
+
+  /* ---- borders / radius (documentation-grade = near-sharp) ---- */
+  --bw-hair:   1px;
+  --bw-strong: 1.5px;
+  --radius:    0;      /* drawing aesthetic: square corners */
+  --radius-sm: 2px;    /* only where a soft edge is truly needed */
+
+  /* ---- elevation (used sparingly; the system leans on rules, not shadow) ---- */
+  --shadow-1: 0 1px 0 rgba(15,23,34,0.04);
+
+  /* ---- focus (visible, amber ring) ---- */
+  --focus-width: 2px;
+  --focus-offset: 2px;
+
+  /* ---- motion (functional only) ---- */
+  --dur-fast: 120ms;
+  --dur:      200ms;
+  --ease:     cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  /* ---- layout ---- */
+  --measure: 68ch;      /* max reading width */
+  --container: 1180px;
+}
+
+/* ---- dark "control-room" theme: remap roles, keep the same system ---- */
+[data-theme="dark"] {
+  --osi-paper:   #0B1420;
+  --osi-panel:   #10202F;
+  --osi-surface: #16293B;
+  --osi-ink:     #EAF2F8;
+  --osi-ink-2:   #9DB2C4;
+  --osi-navy:    #4F8CC4;    /* lifted so --brand carries small text on dark too (5.18:1 AA) */
+  --osi-line:    #28425C;
+  --osi-line-2:  #20364B;
+
+  --bg:            var(--osi-paper);
+  --bg-panel:      var(--osi-panel);
+  --surface:       var(--osi-surface);
+  --text:          var(--osi-ink);
+  --text-muted:    var(--osi-ink-2);
+  --brand:         var(--osi-navy);
+  --border:        var(--osi-line);
+  --border-2:      var(--osi-line-2);
+  --border-strong: var(--osi-line);   /* on dark, the strong rule is the light line, not ink */
+  /* accent stays Signal Amber in both themes */
+}
+
+/* ---- reduced motion: honor the OS setting ---- */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur: 0ms; }
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---- one shared focus style for every interactive element ---- */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-sm);
+}
