@@ -67,27 +67,31 @@
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; }
 
+    /* Re-themed to the OSI "As-Built" identity (control-room dark). Mirrors design/tokens.css. */
     :root {
       --navy:  #18487a;
-      --cyan:  #26aee4;
-      --dark:  #090d12;
-      --dark2: #0e1520;
-      --dark3: #141e2e;
+      --cyan:  #E8A317;   /* accent is now Signal Amber */
+      --dark:  #0B1420;
+      --dark2: #10202F;
+      --dark3: #16293B;
       --steel: #b8c8d8;
-      --muted: #5a7a96;
-      --white: #eaf2f8;
+      --muted: #9DB2C4;
+      --white: #EAF2F8;
+      --head: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', system-ui, sans-serif;
     }
 
     body {
       background: var(--dark);
       color: var(--white);
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
+      font-family: var(--body);
+      font-weight: 400;
     }
 
     ::-webkit-scrollbar { width: 4px; }
@@ -111,7 +115,7 @@
     .site-logo-img { height: 46px; width: auto; display: block; flex-shrink: 0; }
     .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
     .logo-name {
-      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
+      font-family: var(--head); font-weight: 700; font-size: 0.9rem;
       letter-spacing: 0.03em; color: var(--white); text-transform: uppercase; white-space: nowrap;
     }
     .logo-sub {
@@ -123,12 +127,12 @@
       background: rgba(38,174,228,0.2);
     }
     .sb-nav-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700;
+      font-family: var(--head); font-size: 0.95rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan);
     }
     .sb-nav-right { display: flex; align-items: center; gap: 1.25rem; }
     .sb-nav-back {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.78rem; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--muted); text-decoration: none; white-space: nowrap;
       transition: color 0.2s;
@@ -152,11 +156,11 @@
       border-bottom: 1px solid rgba(38,174,228,0.08); flex-shrink: 0;
     }
     .section-eyebrow {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.68rem; font-weight: 600;
       letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
     }
     .section-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700;
+      font-family: var(--head); font-size: 1.05rem; font-weight: 700;
       letter-spacing: 0.05em; text-transform: uppercase;
       color: var(--white); margin-top: 0.15rem;
     }
@@ -180,7 +184,7 @@
     }
     .cam-icon-wrap svg { width: 26px; height: 26px; }
     .cam-model {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; font-weight: 700;
+      font-family: var(--head); font-size: 0.88rem; font-weight: 700;
       letter-spacing: 0.02em; color: var(--white); line-height: 1.1;
     }
     .cam-type-label {
@@ -195,13 +199,13 @@
       border-top: 1px solid rgba(38,174,228,0.08); flex-shrink: 0;
     }
     .how-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.68rem; font-weight: 600;
       letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--muted); margin-bottom: 0.5rem;
     }
     .how-item { display: flex; gap: 0.4rem; font-size: 0.7rem; color: var(--muted); line-height: 1.7; }
     .how-n {
-      color: var(--cyan); font-family: 'Rajdhani', sans-serif;
+      color: var(--cyan); font-family: var(--head);
       font-weight: 700; min-width: 14px; flex-shrink: 0;
     }
 
@@ -215,7 +219,7 @@
     .tb-group { display: flex; align-items: center; gap: 0.45rem; }
     .tb-sep { width: 1px; height: 22px; background: rgba(38,174,228,0.14); flex-shrink: 0; }
     .tb-label {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.7rem; font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap;
     }
     .tb-input {
@@ -227,7 +231,7 @@
     .tb-btn {
       display: flex; align-items: center; gap: 0.3rem;
       background: var(--dark2); border: 1px solid rgba(38,174,228,0.2); color: var(--steel);
-      padding: 0.28rem 0.7rem; font-family: 'Rajdhani', sans-serif;
+      padding: 0.28rem 0.7rem; font-family: var(--head);
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
       cursor: pointer; transition: border-color 0.2s, color 0.2s; white-space: nowrap;
     }
@@ -243,7 +247,7 @@
     .tb-unit-toggle { display: inline-flex; border: 1px solid rgba(38,174,228,0.2); overflow: hidden; flex-shrink: 0; }
     .tb-unit {
       background: var(--dark2); border: none; color: var(--steel);
-      padding: 0.28rem 0.6rem; font-family: 'Rajdhani', sans-serif;
+      padding: 0.28rem 0.6rem; font-family: var(--head);
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
       cursor: pointer; transition: background 0.2s, color 0.2s;
     }
@@ -261,7 +265,7 @@
     .tb-dropdown.open .tb-menu { display: flex; }
     .tb-menu-item {
       background: none; border: none; color: var(--steel); text-align: left;
-      padding: 0.5rem 0.85rem; font-family: 'Rajdhani', sans-serif;
+      padding: 0.5rem 0.85rem; font-family: var(--head);
       font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
       cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s;
     }
@@ -293,7 +297,7 @@
     .upload-hint.hidden { opacity: 0; }
     .upload-hint-icon { opacity: 0.22; }
     .upload-hint-text {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.95rem; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: center;
     }
     .upload-hint-sub { font-size: 0.78rem; color: var(--muted); opacity: 0.6; text-align: center; }
@@ -312,7 +316,7 @@
     .prop-empty { font-size: 0.78rem; color: var(--muted); line-height: 1.65; text-align: center; padding-top: 0.5rem; }
     #prop-cam { display: none; }
     #prop-shape { display: none; }
-    .prop-model { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; }
+    .prop-model { font-family: var(--head); font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; }
     .prop-type { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.9rem; }
     .prop-spec-row {
       display: flex; justify-content: space-between;
@@ -326,7 +330,7 @@
     .prop-field { display: flex; flex-direction: column; gap: 0.45rem; }
     .prop-field-lbl {
       display: flex; justify-content: space-between;
-      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.7rem; font-weight: 600;
       letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
     }
     .prop-field-lbl b { color: var(--cyan); font-weight: 600; }
@@ -335,7 +339,7 @@
     .delete-btn {
       width: 100%; margin-top: 1rem; background: transparent;
       border: 1px solid rgba(224,92,92,0.3); color: #e05c5c;
-      padding: 0.5rem; font-family: 'Rajdhani', sans-serif;
+      padding: 0.5rem; font-family: var(--head);
       font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
       cursor: pointer; transition: background 0.2s, border-color 0.2s;
     }
@@ -421,7 +425,7 @@
     }
 
     .tut-step-label {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.65rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.65rem; font-weight: 600;
       letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan);
       margin-bottom: 0.35rem;
     }
@@ -431,14 +435,14 @@
     }
     .tut-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
     .tut-skip {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.7rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.7rem; font-weight: 600;
       letter-spacing: 0.08em; text-transform: uppercase;
       background: none; border: none; color: var(--muted); cursor: pointer;
       padding: 0; transition: color 0.2s;
     }
     .tut-skip:hover { color: var(--steel); }
     .tut-next {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.75rem; font-weight: 700;
+      font-family: var(--head); font-size: 0.75rem; font-weight: 700;
       letter-spacing: 0.08em; text-transform: uppercase;
       background: var(--cyan); color: var(--dark); border: none; cursor: pointer;
       padding: 0.3rem 0.8rem;
@@ -464,7 +468,7 @@
     }
     .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
     .modal-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700;
+      font-family: var(--head); font-size: 1.3rem; font-weight: 700;
       letter-spacing: 0.05em; text-transform: uppercase; color: var(--white);
     }
     .modal-title span { color: var(--cyan); }
@@ -488,7 +492,7 @@
       color: var(--cyan);
     }
     .export-opt-title {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 700;
+      font-family: var(--head); font-size: 0.9rem; font-weight: 700;
       letter-spacing: 0.04em; text-transform: uppercase; color: var(--white);
       margin-bottom: 0.3rem;
     }
@@ -500,7 +504,7 @@
     .consult-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
     .cf-field { display: flex; flex-direction: column; gap: 0.3rem; }
     .cf-label {
-      font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 600;
+      font-family: var(--head); font-size: 0.68rem; font-weight: 600;
       letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
     }
     .cf-input, .cf-textarea {
@@ -515,7 +519,7 @@
     .cf-textarea { resize: vertical; min-height: 70px; }
     .cf-submit {
       background: var(--cyan); color: var(--dark); border: none; cursor: pointer;
-      font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 700;
+      font-family: var(--head); font-size: 0.9rem; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase; padding: 0.75rem;
       clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
       transition: opacity 0.2s;
@@ -525,7 +529,7 @@
     .cf-note { font-size: 0.7rem; color: var(--muted); line-height: 1.5; text-align: center; }
     .cf-success {
       text-align: center; padding: 1rem;
-      font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 600;
+      font-family: var(--head); font-size: 1rem; font-weight: 600;
       letter-spacing: 0.04em; color: var(--cyan);
       display: none;
     }
@@ -1965,7 +1969,7 @@ function buildExportDataUrl() {
   ec.beginPath(); ec.moveTo(0, H); ec.lineTo(W, H); ec.stroke();
 
   ec.fillStyle = '#26aee4';
-  ec.font = '700 12px Rajdhani, sans-serif';
+  ec.font = '700 12px "Archivo Expanded", sans-serif';
   ec.textAlign = 'left'; ec.textBaseline = 'middle';
   ec.fillText('OVERWATCH SYSTEMS INTEGRATED', 16, H + FH / 2);
 

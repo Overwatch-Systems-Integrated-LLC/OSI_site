@@ -67,21 +67,23 @@
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-44PPPMTQKS"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* Re-themed to the OSI "As-Built" identity (control-room dark). Tokens mirror design/tokens.css. */
   :root {
-    --bg: #090d12;
-    --panel: #0e1520;
-    --panel-2: #141e2e;
-    --line: #223047;
-    --text: #eaf2f8;
-    --muted: #93a6bb;
-    --accent: #26aee4;
-    --track: #223047;
+    --bg: #0B1420;
+    --panel: #10202F;
+    --panel-2: #16293B;
+    --line: #28425C;
+    --text: #EAF2F8;
+    --muted: #9DB2C4;
+    --accent: #E8A317;
+    --track: #28425C;
     --ok: #35d07f;
     --no: #e5615b;
-    --head: 'Rajdhani', 'Oswald', 'Arial Narrow', sans-serif;
-    --body: 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    --head: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
+    --body: 'IBM Plex Sans', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
   body {
@@ -104,7 +106,7 @@
   .site-logo-img { height: 46px; width: auto; display: block; flex-shrink: 0; }
   .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
   .logo-name {
-    font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.9rem;
+    font-family: var(--head); font-weight: 700; font-size: 0.9rem;
     letter-spacing: 0.03em; color: var(--text); text-transform: uppercase; white-space: nowrap;
   }
   .logo-sub {
@@ -113,12 +115,12 @@
   }
   .sb-nav-divider { width: 1px; height: 30px; background: rgba(38,174,228,0.2); }
   .sb-nav-title {
-    font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 700;
+    font-family: var(--head); font-size: 0.95rem; font-weight: 700;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
   }
   .sb-nav-right { display: flex; align-items: center; gap: 1.25rem; }
   .sb-nav-back {
-    font-family: 'Rajdhani', sans-serif; font-size: 0.78rem; font-weight: 600;
+    font-family: var(--head); font-size: 0.78rem; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--muted); text-decoration: none; white-space: nowrap;
     transition: color 0.2s;
@@ -159,7 +161,7 @@
   select {
     width: 100%; appearance: none; -webkit-appearance: none;
     background: var(--panel-2)
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%2326aee4' stroke-width='2' fill='none' stroke-linecap='round'/></svg>")
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23E8A317' stroke-width='2' fill='none' stroke-linecap='round'/></svg>")
       no-repeat right 0.9rem center;
     color: var(--text); font-family: var(--body); font-size: 1rem; font-weight: 600;
     border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 2.2rem 0.7rem 0.9rem;
@@ -242,7 +244,7 @@
     </div>
     <div class="sb-nav-right">
       <a href="camera-sandbox.html" class="sb-nav-back">Coverage Sandbox</a>
-      <a href="/blog/" class="sb-nav-back">Blog</a>
+      <a href="/blog/" class="sb-nav-back">Resources</a>
       <a href="../index.html" class="sb-nav-back">&larr; Back to OSI</a>
     </div>
   </nav>
