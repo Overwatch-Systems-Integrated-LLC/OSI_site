@@ -10,5 +10,9 @@
   },
   "dependencies": {
     "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "node-html-parser": "^9.0.0",
+    "turndown": "^7.2.4"
   }
 }

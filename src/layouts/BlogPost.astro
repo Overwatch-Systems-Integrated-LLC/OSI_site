@@ -1,0 +1,81 @@
+---
+import Base from './Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const { post } = Astro.props;
+const { title, description, pubDate, category, author, image, readingTime } = post.data;
+const dateStr = pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const url = new URL(`/blog/${post.id}/`, Astro.site).href;
+
+const catClass = 'cat-' + category.toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, '');
+
+// Preserve Article + Breadcrumb schema (SAB Finding 2)
+const articleSchema = {
+  '@context': 'https://schema.org', '@type': 'BlogPosting',
+  headline: title, description, datePublished: pubDate.toISOString(),
+  image: image || undefined,
+  author: { '@type': 'Person', name: author, jobTitle: 'Owner / Operator', worksFor: { '@type': 'Organization', name: 'Overwatch Systems Integrated' } },
+  publisher: { '@type': 'Organization', name: 'Overwatch Systems Integrated', url: 'https://www.overwatchsi.com' },
+  mainEntityOfPage: url, articleSection: category,
+};
+const breadcrumbSchema = {
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Blog', item: 'https://www.overwatchsi.com/blog/' },
+    { '@type': 'ListItem', position: 2, name: category, item: 'https://www.overwatchsi.com/blog/' },
+    { '@type': 'ListItem', position: 3, name: title, item: url },
+  ],
+};
+---
+<Base title={`${title} | OSI Blog`} description={description}>
+  <Nav />
+  <article class="container post">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="/blog/">Resources</a> <span aria-hidden="true">/</span> {category}</nav>
+    <span class="eyebrow">{category}</span>
+    <h1>{title}</h1>
+    <div class="post-meta mono">
+      <span>{author} · Owner / Operator</span>
+      <span>{dateStr}{readingTime ? ` · ${readingTime} min read` : ''}</span>
+    </div>
+    {image && <div class="post-hero" role="img" aria-label={title} style={`background-image:url("${image}")`}></div>}
+    <div class="prose">
+      <slot />
+    </div>
+    <aside class="post-cta">
+      <div class="strip mono"><span>NEXT STEP</span><span>NORTHEAST ALABAMA</span></div>
+      <div class="in">
+        <h2>Get a free coverage design</h2>
+        <p>Tell us the facility and what you are trying to protect. We will come back with an engineered coverage design — no obligation.</p>
+        <a class="btn btn--primary" href="/#contact">Request a free assessment →</a>
+      </div>
+    </aside>
+  </article>
+  <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} is:inline />
+
+  <style>
+    .post { max-width: 760px; padding-block: var(--sp-8); }
+    .crumb { font-family: var(--font-mono); font-size: var(--fs-100); letter-spacing: .08em; color: var(--text-muted); margin-bottom: var(--sp-5); }
+    .crumb a { color: var(--brand); text-decoration: none; }
+    .post h1 { font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem); margin: var(--sp-3) 0 var(--sp-4); line-height: 1.08; }
+    .post-meta { display: flex; gap: var(--sp-5); flex-wrap: wrap; font-size: var(--fs-100); letter-spacing: .06em; color: var(--text-muted); padding-bottom: var(--sp-5); border-bottom: var(--bw-hair) solid var(--border); }
+    .post-hero { aspect-ratio: 16 / 8; background-size: cover; background-position: center; margin: var(--sp-6) 0; border: var(--bw-hair) solid var(--border); }
+    .prose { font-size: var(--fs-400); line-height: 1.7; color: var(--text); }
+    .prose :global(h2) { font-family: var(--font-display); font-weight: var(--fw-display); font-size: var(--fs-600); letter-spacing: var(--ls-display); margin: var(--sp-7) 0 var(--sp-3); }
+    .prose :global(h3) { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-500); margin: var(--sp-6) 0 var(--sp-3); }
+    .prose :global(p) { margin-bottom: var(--sp-4); color: var(--text-muted); }
+    .prose :global(ul), .prose :global(ol) { margin: 0 0 var(--sp-4) var(--sp-5); color: var(--text-muted); }
+    .prose :global(li) { margin-bottom: var(--sp-2); }
+    .prose :global(a) { color: var(--brand); }
+    .prose :global(strong) { color: var(--text); font-weight: var(--fw-semibold); }
+    .prose :global(blockquote) { border-left: 3px solid var(--accent); padding-left: var(--sp-4); margin: var(--sp-5) 0; color: var(--text); }
+    .post-cta { margin-top: var(--sp-8); border: var(--bw-strong) solid var(--border-strong); }
+    .post-cta .strip { display: flex; justify-content: space-between; background: var(--border-strong); color: var(--bg); padding: var(--sp-2) var(--sp-4); font-size: 11px; letter-spacing: .16em; }
+    .post-cta .in { padding: var(--sp-5); }
+    .post-cta h2 { font-size: var(--fs-500); margin-bottom: var(--sp-2); }
+    .post-cta p { color: var(--text-muted); margin-bottom: var(--sp-4); font-size: var(--fs-300); }
+  </style>
+</Base>

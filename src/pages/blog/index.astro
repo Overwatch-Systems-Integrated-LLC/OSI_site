@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<Base title="Resources — OSI | Industrial Surveillance, Engineered" description="Field notes on industrial video surveillance, network infrastructure, and evidence-grade documentation from Overwatch Systems Integrated.">
+  <Nav />
+
+  <header class="container blog-head">
+    <span class="eyebrow">Resources</span>
+    <h1>Field notes on engineered surveillance</h1>
+    <p class="lede">Coverage engineering, network capacity, NDAA compliance, and the real failure modes — written for the people who have to make the system hold up.</p>
+  </header>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <ul class="post-list">
+        {posts.map((p) => (
+          <li class="post-row">
+            <a href={`/blog/${p.id}/`}>
+              <div class="meta mono"><span>{p.data.category}</span><span>{fmt(p.data.pubDate)}{p.data.readingTime ? ` · ${p.data.readingTime} min` : ''}</span></div>
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+              <span class="more mono">Read →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section band band--panel" id="newsletter">
+    <div class="container">
+      <div class="cols-2">
+        <div class="sec-head" style="margin-bottom:0">
+          <span class="eyebrow">Stay current</span>
+          <h2>The field notes, in your inbox</h2>
+          <p class="lede">Occasional, technical, no fluff.</p>
+        </div>
+        <form id="news-form" novalidate>
+          <label class="mono nl-label" for="nl-email">Work email</label>
+          <div class="nl-row">
+            <input id="nl-email" name="email" type="email" required placeholder="you@facility.com" />
+            <button class="btn btn--primary" type="submit">Subscribe →</button>
+          </div>
+          <span id="news-status" class="form-status" role="status"></span>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style>
+    .blog-head { padding-block: var(--sp-8) var(--sp-6); }
+    .blog-head h1 { font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem); margin: var(--sp-3) 0 var(--sp-4); }
+    .post-list { list-style: none; }
+    .post-row { border-top: var(--bw-hair) solid var(--border); }
+    .post-row:last-child { border-bottom: var(--bw-hair) solid var(--border); }
+    .post-row a { display: block; padding: var(--sp-6) 0; text-decoration: none; color: var(--text); transition: padding-left var(--dur) var(--ease); }
+    .post-row a:hover { padding-left: var(--sp-4); }
+    .post-row .meta { display: flex; gap: var(--sp-4); font-size: var(--fs-100); letter-spacing: .1em; text-transform: uppercase; color: var(--brand); margin-bottom: var(--sp-3); }
+    .post-row h2 { font-size: var(--fs-600); max-width: 30ch; margin-bottom: var(--sp-3); }
+    .post-row p { color: var(--text-muted); max-width: 62ch; }
+    .post-row .more { display: inline-block; margin-top: var(--sp-3); color: var(--brand); font-size: var(--fs-100); letter-spacing: .06em; }
+    .nl-label { display: block; font-size: var(--fs-100); letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-2); }
+    .nl-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+    .nl-row input { flex: 1 1 260px; font-family: var(--font-sans); font-size: var(--fs-300); color: var(--text); background: var(--surface); border: var(--bw-hair) solid var(--border); padding: var(--sp-3); }
+    #news-status { display: inline-block; margin-top: var(--sp-3); }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var f = document.getElementById('news-form'), s = document.getElementById('news-status');
+      if (!f) return;
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!window.OSIHubSpot) { s.textContent = 'Signup unavailable — email sales@overwatchsi.com.'; return; }
+        var email = f.querySelector('[name=email]').value;
+        s.textContent = 'Subscribing…';
+        window.OSIHubSpot.submit('newsletter', { email: email }).then(function () {
+          f.reset(); s.textContent = 'Subscribed. Talk soon.';
+        }).catch(function () { s.textContent = 'Something went wrong — please try again.'; });
+      });
+    })();
+  </script>
+</Base>
