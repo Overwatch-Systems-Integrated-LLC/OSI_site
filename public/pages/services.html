@@ -187,7 +187,7 @@
     .svc-icon { width:64px; height:64px; border:var(--bw-strong) solid var(--border-strong); display:flex; align-items:center; justify-content:center; margin-bottom:var(--sp-4); }
     .svc-icon svg { width:32px; height:32px; stroke:var(--brand); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
     .svc-code { font-family:var(--font-mono); font-size:var(--fs-100); letter-spacing:.14em; text-transform:uppercase; color:var(--text-muted); display:inline-block; padding-bottom:var(--sp-2); border-bottom:2px solid var(--accent); margin-bottom:var(--sp-3); }
-    .svc-name { font-family:var(--font-display); font-size:var(--fs-600); font-weight:var(--fw-display); line-height:var(--lh-snug); color:var(--text); }
+    .svc-q { font-family:var(--font-display); font-size:var(--fs-600); font-weight:var(--fw-display); letter-spacing:var(--ls-display); line-height:var(--lh-snug); color:var(--text); margin-bottom:var(--sp-4); max-width:26ch; }
 
     .svc-body p { font-size:var(--fs-300); color:var(--text-muted); line-height:var(--lh-normal); margin-bottom:var(--sp-4); max-width:60ch; }
     .svc-list { list-style:none; display:flex; flex-direction:column; gap:var(--sp-3); margin-bottom:var(--sp-6); }
@@ -252,7 +252,7 @@
 <header class="page-header">
   <div class="container inner">
     <span class="eyebrow">What we do</span>
-    <h1>Surveillance, engineered <span class="mk">around your facility.</span></h1>
+    <h1>How much of your facility is your camera system <span class="mk">not actually watching?</span></h1>
     <p class="sub">From a single camera to a fully engineered surveillance system, OSI delivers solutions built around your environment, your requirements, and your budget.</p>
     <div class="cta">
       <a class="btn btn--primary" href="/#contact">Get a free coverage design →</a>
@@ -266,10 +266,10 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div class="svc-code">SVC-01 / Surveillance</div>
-      <div class="svc-name">Video Surveillance</div>
     </div>
     <div class="svc-body">
-      <p>Industrial video surveillance engineered around your facility and threat profile. OSI designs, installs, and maintains complete surveillance systems, configured, tested, and documented to a professional standard so your team always knows exactly what's in place and why.</p>
+      <h2 class="svc-q">What makes surveillance "industrial" instead of just cameras?</h2>
+      <p>Industrial surveillance is engineered around your facility and threat profile, not pulled off a shelf. OSI designs, installs, tests, and documents complete IP camera systems on platforms like Milestone and Axis VMS, so your team always knows exactly what is covered and why.</p>
       <ul class="svc-list">
         <li>IP camera systems — fixed, PTZ, and specialty lenses</li>
         <li>Thermal and standard cameras rated for high-heat and hazardous environments</li>
@@ -289,10 +289,10 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div class="svc-code">SVC-02 / Hazardous</div>
-      <div class="svc-name">Hazardous Environment Solutions</div>
     </div>
     <div class="svc-body">
-      <p>When the environment itself is the challenge, standard equipment isn't enough. OSI specializes in deploying reliable surveillance systems in conditions where off-the-shelf solutions fail. We understand the compliance requirements and the real-world conditions, because we've worked in them.</p>
+      <h2 class="svc-q">What happens when the environment itself breaks standard cameras?</h2>
+      <p>When heat, dust, vibration, or corrosives defeat off-the-shelf gear, OSI deploys surveillance rated for the conditions: explosion-proof enclosures for Class I, II, and III areas and intrinsically safe options for Division 2, designed by people who have worked in those environments.</p>
       <ul class="svc-list">
         <li>Explosion-proof camera and sensor enclosures (Class I, II, III environments)</li>
         <li>Extreme temperature rated equipment for heat and cold exposure</li>
@@ -312,10 +312,10 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
       <div class="svc-code">SVC-03 / Network</div>
-      <div class="svc-name">Surveillance Network Infrastructure</div>
     </div>
     <div class="svc-body">
-      <p>A surveillance system is only as strong as the network behind it. OSI handles the full network stack using Netgear-certified expertise, building networks designed specifically for the demands of industrial video surveillance, not repurposed office IT.</p>
+      <h2 class="svc-q">Why can't surveillance just run on the office network?</h2>
+      <p>Because a surveillance system is only as strong as the network behind it. OSI builds the full stack (Cat6/Cat6A, fiber, managed switching, VLAN segmentation) with Netgear-certified expertise, sized for continuous industrial video rather than repurposed office IT.</p>
       <ul class="svc-list">
         <li>Structured cabling — Cat6/Cat6A design and installation</li>
         <li>Fiber optic runs for long-distance and high-bandwidth links</li>
@@ -335,11 +335,10 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
       <div class="svc-code">SVC-04 / Engineering</div>
-      <div class="svc-name">System Design &amp; Engineering</div>
     </div>
     <div class="svc-body">
-      <p>Every system starts with engineering, not equipment. OSI designs each surveillance system around a site assessment, a coverage plan, and a network capacity plan, so cameras are placed for real coverage and the network is sized to grow instead of hitting a wall in year two.</p>
-      <p>We place a strong emphasis on clear, precise documentation for every project, giving your team a complete and accurate picture of the system from day one.</p>
+      <h2 class="svc-q">Why does every OSI system start with engineering, not equipment?</h2>
+      <p>Because cameras placed without a plan leave blind spots and networks that hit a wall in year two. OSI designs each system from a site assessment, a coverage plan, and a network capacity plan, then delivers complete as-built documentation so your team has an accurate picture from day one.</p>
       <ul class="svc-list">
         <li>Site walkthrough and coverage assessment</li>
         <li>Camera placement design based on operational blind spots</li>
@@ -359,15 +358,15 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.21H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 7.29 7.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
       <div class="svc-code">SVC-05 / Monitoring</div>
-      <div class="svc-name">24/7 Monitoring</div>
     </div>
     <div class="svc-body">
-      <p>Through a trusted professional monitoring partnership, OSI clients have access to around-the-clock system monitoring with rapid alert response. Your facility stays protected even when your team isn't on site.</p>
+      <h2 class="svc-q">Who is watching when your team goes home?</h2>
+      <p>Through a trusted professional monitoring partnership, OSI clients get around-the-clock monitoring with rapid, video-verified alert response, so your facility stays protected after hours and false dispatches stay low.</p>
       <ul class="svc-list">
         <li>24/7 alarm monitoring through a professional central station</li>
         <li>Video verified alarm response to reduce false dispatches</li>
         <li>Intrusion and environmental alert monitoring</li>
-        <li>Seamless integration with your installed OSI system</li>
+        <li>Direct integration with your installed OSI system</li>
         <li>Rapid escalation protocols tailored to your facility</li>
       </ul>
       <a href="/#contact" class="btn btn--primary svc-cta">Request a consultation →</a>
@@ -381,10 +380,10 @@
     <div class="svc-side">
       <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
       <div class="svc-code">SVC-06 / Lifecycle</div>
-      <div class="svc-name">Maintenance &amp; Support</div>
     </div>
     <div class="svc-body">
-      <p>A system that isn't maintained is a system waiting to fail. OSI offers ongoing maintenance agreements across every service area: surveillance, networking, and hazardous environment systems. We stay local, we know your system, and we respond fast when something needs attention.</p>
+      <h2 class="svc-q">What keeps a surveillance system from quietly failing over time?</h2>
+      <p>A maintenance plan. An unmaintained system is one waiting to fail. OSI offers ongoing agreements across surveillance, networking, and hazardous environments, and because we stay local we know your system and respond fast, whether we installed it or you inherited it from a prior integrator.</p>
       <ul class="svc-list">
         <li>Scheduled preventive maintenance visits</li>
         <li>Camera cleaning, lens adjustment, and health checks</li>
@@ -409,7 +408,7 @@
             <div class="cam-item">
               <div class="cam-fov" style="width:70px;background:linear-gradient(to bottom,color-mix(in srgb,var(--brand) 55%,transparent),transparent);"></div>
               <svg width="34" height="34" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="2" y="11" width="15" height="6" rx="1" stroke="#18487A" stroke-width="1.5"/><path d="M17 12.5 L26 9.5 L26 18.5 Z" fill="#18487A" opacity="0.4"/><circle cx="5.5" cy="14" r="1.5" fill="#18487A"/></svg>
-              <span class="cam-label">Bullet</span>
+              <span class="cam-label">Fixed</span>
             </div>
             <div class="cam-item">
               <div class="cam-fov" style="width:52px;background:linear-gradient(to bottom,color-mix(in srgb,var(--accent) 65%,transparent),transparent);"></div>
@@ -419,7 +418,7 @@
             <div class="cam-item">
               <div class="cam-fov" style="width:48px;height:48px;margin-bottom:-8px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--brand) 45%,transparent),transparent);"></div>
               <svg width="34" height="34" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="11" stroke="#18487A" stroke-width="1.5"/><circle cx="14" cy="14" r="7" stroke="#18487A" stroke-width="1" opacity="0.5"/><circle cx="14" cy="14" r="2.5" fill="#18487A"/></svg>
-              <span class="cam-label">Fisheye</span>
+              <span class="cam-label">Varifocal</span>
             </div>
           </div>
         </div>
@@ -428,7 +427,7 @@
           <div class="tool-title">Camera Coverage <span class="mk">Sandbox</span></div>
           <p class="tool-desc">Upload a Google Maps screenshot or facility floor plan, then drag and drop Axis cameras to visualize coverage zones, overlap areas, and blind spots before committing to a design.</p>
           <ul class="tool-feats">
-            <li>4 Axis camera models: Bullet, PTZ, Multidirectional &amp; Fisheye</li>
+            <li>14 real Axis camera models, from fixed and varifocal optics to PTZ</li>
             <li>Real-time FOV cones scaled to published Axis datasheet specs</li>
             <li>Overlap detection — brighter zones show multi-camera coverage</li>
             <li>Export your layout as a PNG to share with your team</li>
