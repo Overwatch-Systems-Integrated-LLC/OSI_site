@@ -1930,7 +1930,15 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
           'Exported a camera plan from the Camera Coverage Sandbox.' + _ctx
       });
     }
-  } catch (_) {}
+  } catch (err) {
+    // HubSpot is a CRM side-effect, so a failure here must NOT block the plan delivery below,
+    // which is what the visitor was actually promised. But it must not be invisible either.
+    // hubspot.js already throws a detailed error (HTTP status + response body); this used to be
+    // `catch (_) {}`, which discarded it, so a rejected lead looked identical to a captured one
+    // and the lead was lost with no trace anywhere.
+    console.error('[sandbox] HubSpot lead submission FAILED (plan delivery continues):',
+      (err && err.message) ? err.message : err);
+  }
 
   // WF11: deliver plan to the submitted email — this is the gate
   fetch('https://n8n-production-aedf.up.railway.app/webhook/osi-sandbox-export', {
