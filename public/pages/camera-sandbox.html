@@ -1950,7 +1950,20 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
       cameraTypes: state.cameras.map(function(c) { var d = DEFS.find(function(x){return x.id===c.type;}); return d ? d.model : c.type; }).join(', '),
       imageDataUrl: imageDataUrl
     })
-  }).catch(function() {});
+  }).then(function (res) {
+    // fetch only rejects on NETWORK failure: a 500 from n8n resolves normally, so an erroring
+    // workflow never reached the catch below and was invisible twice over. This is the call that
+    // actually delivers the plan, and the success message renders regardless, so a silent failure
+    // here means the visitor is told their plan is coming and it never arrives.
+    if (!res.ok) {
+      console.error('[sandbox] WF11 plan delivery FAILED: HTTP ' + res.status +
+        ' - the visitor was still shown "your camera plan is on its way"');
+    }
+  }).catch(function (err) {
+    // Network-level failure (offline, DNS, CORS, Railway down).
+    console.error('[sandbox] WF11 plan delivery request FAILED - the visitor was still shown ' +
+      '"your camera plan is on its way":', (err && err.message) ? err.message : err);
+  });
 
   const successEl = document.getElementById('cf-success');
   successEl.innerHTML = '&#x2713; &nbsp; Your camera plan is on its way.<br>'
