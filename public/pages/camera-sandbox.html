@@ -1904,6 +1904,9 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
   const errEl   = document.getElementById('export-error');
 
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Set explicitly: this element is now shared with the delivery-failure message, so a stale
+    // "we could not send your plan" must not linger over a validation problem.
+    errEl.textContent = 'Please enter your name and a valid email address.';
     errEl.style.display = 'block'; return;
   }
   errEl.style.display = 'none';
@@ -1940,30 +1943,41 @@ document.getElementById('cf-submit').addEventListener('click', async () => {
       (err && err.message) ? err.message : err);
   }
 
-  // WF11: deliver plan to the submitted email — this is the gate
-  fetch('https://n8n-production-aedf.up.railway.app/webhook/osi-sandbox-export', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name, email, company,
-      cameraCount: state.cameras.length,
-      cameraTypes: state.cameras.map(function(c) { var d = DEFS.find(function(x){return x.id===c.type;}); return d ? d.model : c.type; }).join(', '),
-      imageDataUrl: imageDataUrl
-    })
-  }).then(function (res) {
-    // fetch only rejects on NETWORK failure: a 500 from n8n resolves normally, so an erroring
-    // workflow never reached the catch below and was invisible twice over. This is the call that
-    // actually delivers the plan, and the success message renders regardless, so a silent failure
-    // here means the visitor is told their plan is coming and it never arrives.
-    if (!res.ok) {
-      console.error('[sandbox] WF11 plan delivery FAILED: HTTP ' + res.status +
-        ' - the visitor was still shown "your camera plan is on its way"');
-    }
-  }).catch(function (err) {
-    // Network-level failure (offline, DNS, CORS, Railway down).
-    console.error('[sandbox] WF11 plan delivery request FAILED - the visitor was still shown ' +
-      '"your camera plan is on its way":', (err && err.message) ? err.message : err);
-  });
+  // WF11: deliver plan to the submitted email — this is the gate, so its outcome decides what
+  // the visitor is shown. Awaited deliberately: it used to be fire-and-forget.
+  let delivered = false;
+  try {
+    const res = await fetch('https://n8n-production-aedf.up.railway.app/webhook/osi-sandbox-export', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name, email, company,
+        cameraCount: state.cameras.length,
+        cameraTypes: state.cameras.map(function(c) { var d = DEFS.find(function(x){return x.id===c.type;}); return d ? d.model : c.type; }).join(', '),
+        imageDataUrl: imageDataUrl
+      })
+    });
+    // fetch only rejects on NETWORK failure: a 500 from n8n resolves normally, so the status has
+    // to be checked explicitly or an erroring workflow counts as a success.
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    delivered = true;
+  } catch (err) {
+    console.error('[sandbox] WF11 plan delivery FAILED:', (err && err.message) ? err.message : err);
+  }
+
+  // The visitor is told the truth. This used to be fire-and-forget with the success message
+  // rendering unconditionally, so when delivery failed they were told their plan was on its way
+  // and nothing had been sent. Telling someone their plan is coming when it is not is worse than
+  // asking them to try again.
+  if (!delivered) {
+    errEl.innerHTML = 'We could not send your plan just now. Please try again, or email '
+      + '<a href="mailto:sales@overwatchsi.com" style="color:inherit;text-decoration:underline">sales@overwatchsi.com</a>'
+      + ' and we will send it over.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Try Again →';
+    return;
+  }
 
   const successEl = document.getElementById('cf-success');
   successEl.innerHTML = '&#x2713; &nbsp; Your camera plan is on its way.<br>'
