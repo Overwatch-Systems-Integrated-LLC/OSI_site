@@ -14,5 +14,8 @@
   "devDependencies": {
     "node-html-parser": "^9.0.0",
     "turndown": "^7.2.4"
+  },
+  "overrides": {
+    "sharp": ">=0.35.0"
   }
 }
