@@ -1,0 +1,227 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+// /audit — self-serve consultation landing page (SMO bus #316, Barry-approved
+// advisory proposal #1). Single job: convert an in-ICP Calhoun County operator
+// into a booked 45-minute on-site audit request. Copy is SMO-approved and used
+// verbatim. Brand rules on this page: no bullet characters, no em dashes, second
+// person, no hype, geo = Calhoun County only, no MSRP, no invented specs, no
+// claims of completed OSI installs.
+//
+// The form posts to a DEDICATED HubSpot form ('audit' key in /js/hubspot.js) so
+// these leads keep source attribution, per the camera-sandbox attribution lesson
+// (#254/#257). ⚠ The real form GUID and the lead-source property key are pending
+// Barry's confirmation; until the GUID is set the form degrades to the email/phone
+// fallback (isConfigured('audit') === false).
+
+const title = 'Free On-Site Camera Audit | Overwatch Systems Integrated';
+const description = 'Book a free 45-minute on-site camera audit for your Calhoun County facility. You keep a written coverage and compliance assessment, under NDA, with no quote on the visit.';
+
+const faq = [
+  { q: 'Is it actually free?', a: 'Yes, no cost, no obligation, no quote on the visit, you keep the written findings.' },
+  { q: 'Who shows up?', a: 'Barry Fuller, the owner, not a subcontractor.' },
+  { q: 'Will you try to sell me on the visit?', a: 'No, no quote on site, ask for a proposal later if you want one.' },
+  { q: 'What about our security details getting out?', a: 'Mutual NDA before the walkthrough, the findings are yours.' },
+  { q: 'How long?', a: '45 minutes on site, no prep from your team.' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Base title={title} description={description}>
+  <Nav />
+
+  <!-- HERO -->
+  <header class="container">
+    <div class="audit-hero">
+      <span class="eyebrow">Calhoun County / On-Site Camera Audit</span>
+      <h1>Would your cameras identify who did it, or just prove something happened?</h1>
+      <p class="sub">Most industrial camera systems were installed to check a box, not to hold up when an incident actually matters. In 45 minutes on site I will walk your facility with you and show you exactly where your coverage and compliance fall short today, in plain operator language.</p>
+      <div class="cta">
+        <a class="btn btn--primary" href="#request">Request your on-site audit</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- WHAT YOU GET -->
+  <section class="section band band--panel">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">What you get</span>
+        <h2>What you walk away with</h2>
+      </div>
+      <div class="audit-get">
+        <div class="item"><span class="n">01</span><p>A plain-language map of where your current coverage leaves gaps an incident could exploit.</p></div>
+        <div class="item"><span class="n">02</span><p>An NDAA and FIPS compliance check on the cameras you already have.</p></div>
+        <div class="item"><span class="n">03</span><p>The top findings verbally before I leave your lot.</p></div>
+        <div class="item"><span class="n">04</span><p>A one-page written findings sheet plus prioritized fix roadmap within 48 hours.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE + WHY LOW RISK (the one dark band) -->
+  <section class="section band band--dark" data-theme="dark">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">The guarantee</span>
+        <h2>Low risk, and yours to keep</h2>
+      </div>
+      <div class="cols-2">
+        <p class="proof-lead">45 minutes, and you keep a written coverage-and-compliance assessment. Yours to keep, under NDA, whether or not we ever work together. I do not quote on the visit.</p>
+        <p class="proof-body">A mutual NDA means the findings stay yours. I run every walkthrough personally, so nothing gets handed to a junior tech, and I bring 20 plus years and Axis-authorized training to your site. There is no quote and no pitch on the visit.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT HAPPENS NEXT -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">What happens next</span>
+        <h2>Three steps, no prep on your side</h2>
+      </div>
+      <div class="cols-3">
+        <div class="step"><span class="n">1</span><p>You send the request below. It takes under a minute.</p></div>
+        <div class="step"><span class="n">2</span><p>I confirm a 45-minute window that fits your operation. Zero prep on your side.</p></div>
+        <div class="step"><span class="n">3</span><p>I walk the facility with you, give you the top findings on the spot, and send the written sheet plus roadmap within 48 hours.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUEST FORM -->
+  <section class="section band band--panel" id="request">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">Start here</span>
+        <h2>Request your on-site audit</h2>
+      </div>
+      <p class="scarcity">I run each audit personally, so I cap them at 5 a month. Calhoun County businesses only.</p>
+      <div class="cols-2" style="margin-top: var(--sp-6)">
+        <p class="lede">Send the request and I will reach out within one business day to confirm your window. Prefer to talk first? Call <a href="tel:+12562400681">(256) 240-0681</a> or email <a href="mailto:sales@overwatchsi.com">sales@overwatchsi.com</a>.</p>
+        <div>
+          <div id="audit-form-wrap">
+            <form id="audit-form" novalidate>
+              <div class="field-grid">
+                <label>Name<input name="fullname" type="text" required autocomplete="name" /></label>
+                <label>Company<input name="company" type="text" required autocomplete="organization" /></label>
+                <label>Work email<input name="email" type="email" required autocomplete="email" /></label>
+                <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel" /></label>
+                <label class="full">What prompted the request (optional)<textarea name="prompt" rows="4" placeholder="Anything you already have concerns about? Optional."></textarea></label>
+              </div>
+              <div class="form-row">
+                <button class="btn btn--primary" type="submit">Request your on-site audit</button>
+                <span id="audit-status" class="form-status" role="status"></span>
+              </div>
+            </form>
+          </div>
+          <div id="audit-confirm" class="audit-confirm" tabindex="-1" hidden>
+            <h3>Request received</h3>
+            <p>I will reach out within one business day to confirm your window.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <span class="eyebrow">Common questions</span>
+        <h2>Before you ask</h2>
+      </div>
+      <div class="faq">
+        {faq.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+
+  <script is:inline>
+    (function () {
+      var form = document.getElementById('audit-form');
+      var status = document.getElementById('audit-status');
+      var formWrap = document.getElementById('audit-form-wrap');
+      var confirmBox = document.getElementById('audit-confirm');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!window.OSIHubSpot || !window.OSIHubSpot.isConfigured('audit')) {
+          status.textContent = 'Request form is not live yet. Please email sales@overwatchsi.com or call (256) 240-0681.';
+          return;
+        }
+        var fd = new FormData(form);
+        var name = window.OSIHubSpot.splitName(fd.get('fullname'));
+        status.textContent = 'Sending…';
+        var payload = {
+          email: fd.get('email'),
+          firstname: name.firstname,
+          lastname: name.lastname,
+          company: fd.get('company'),
+          phone: fd.get('phone'),
+          message: fd.get('prompt')
+          // ⚠ LEAD SOURCE ATTRIBUTION - the point of this dedicated form.
+          // Once Barry confirms the exact lead-source property internal name, add it here, e.g.:
+          //   lead_source: 'self-serve: free-audit'
+          // (unless the dedicated HubSpot form already stamps it via a hidden default field).
+        };
+        window.OSIHubSpot.submit('audit', payload).then(function () {
+          formWrap.style.display = 'none';
+          confirmBox.hidden = false;
+          confirmBox.focus();
+        }).catch(function (err) {
+          // A rejected lead must never look identical to a captured one (sandbox lesson).
+          console.error('[audit] HubSpot lead submission FAILED:', err);
+          status.textContent = 'Something went wrong. Please email sales@overwatchsi.com or call (256) 240-0681.';
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .audit-hero { padding-block: var(--sp-8); max-width: 62ch; }
+    .audit-hero h1 { font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem); font-weight: var(--fw-heavy); line-height: var(--lh-tight); margin: var(--sp-4) 0 var(--sp-5); }
+    .audit-hero .sub { font-size: var(--fs-400); color: var(--text-muted); margin-bottom: var(--sp-6); }
+    .audit-hero .cta { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
+
+    .audit-get { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6) var(--sp-7); }
+    .audit-get .item { padding-top: var(--sp-4); border-top: 2px solid var(--accent); }
+    .audit-get .n { font-family: var(--font-mono); font-size: var(--fs-100); letter-spacing: .14em; color: var(--text-muted); }
+    .audit-get p { font-size: var(--fs-400); color: var(--text); margin-top: var(--sp-3); max-width: 42ch; }
+    @media (max-width: 780px) { .audit-get { grid-template-columns: 1fr; gap: var(--sp-6); } }
+
+    .step .n { font-family: var(--font-display); font-weight: var(--fw-heavy); font-size: var(--fs-700); color: var(--brand); line-height: 1; }
+    .step p { margin-top: var(--sp-3); color: var(--text-muted); font-size: var(--fs-300); max-width: 34ch; }
+
+    .scarcity { font-family: var(--font-mono); font-size: var(--fs-200); letter-spacing: .04em; color: var(--brand); border-left: 3px solid var(--accent); padding-left: var(--sp-4); max-width: 64ch; }
+
+    .audit-confirm { border-left: 3px solid var(--accent); padding: var(--sp-5); background: var(--surface); }
+    .audit-confirm h3 { font-size: var(--fs-500); }
+    .audit-confirm p { color: var(--text-muted); margin-top: var(--sp-3); }
+
+    .faq details { border-top: var(--bw-hair) solid var(--border); padding: var(--sp-4) 0; }
+    .faq details:last-child { border-bottom: var(--bw-hair) solid var(--border); }
+    .faq summary { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: var(--fs-400); color: var(--text); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4); }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; font-family: var(--font-mono); color: var(--accent); font-weight: var(--fw-semibold); }
+    .faq details[open] summary::after { content: "-"; }
+    .faq p { color: var(--text-muted); margin-top: var(--sp-3); max-width: 64ch; }
+  </style>
+</Base>
