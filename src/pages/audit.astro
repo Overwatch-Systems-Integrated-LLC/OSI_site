@@ -177,10 +177,9 @@ const faqSchema = {
           company: fd.get('company'),
           phone: fd.get('phone'),
           message: fd.get('prompt')
-          // ⚠ LEAD SOURCE ATTRIBUTION - the point of this dedicated form.
-          // Once Barry confirms the exact lead-source property internal name, add it here, e.g.:
-          //   lead_source: 'self-serve: free-audit'
-          // (unless the dedicated HubSpot form already stamps it via a hidden default field).
+          // Lead source ('self-serve: free-audit') is stamped server-side by a hidden
+          // default field on the dedicated audit HubSpot form (Option A, Barry 2026-07-28),
+          // so the page intentionally does not send a lead-source field here.
         };
         window.OSIHubSpot.submit('audit', payload).then(function () {
           formWrap.style.display = 'none';

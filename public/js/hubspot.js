@@ -27,10 +27,10 @@
     contact: '3d6d2b5f-0f88-4787-8f9f-48585ae3280f',
     newsletter: '684c24b4-b7f5-4971-a683-eda20b0e254b',
     sandbox: 'e16288f0-029d-4a42-90e2-ea11d199e1e7',
-    // ⚠ PENDING: paste the dedicated /audit form GUID from HubSpot (Barry to confirm).
-    // While this keeps the 'REPLACE_WITH' sentinel, isConfigured('audit') is false and
-    // the /audit form degrades gracefully to the "email us" fallback.
-    audit: 'REPLACE_WITH_AUDIT_FORM_GUID'
+    // Dedicated /audit self-serve consultation form (Barry-provided GUID, 2026-07-28).
+    // Lead source is stamped server-side by a hidden default field on this form
+    // (Option A), so the /audit page intentionally sends no lead-source field.
+    audit: 'ee433b1b-933a-4220-a213-e09e28df7332'
   };
 
   function endpoint(formKey) {
