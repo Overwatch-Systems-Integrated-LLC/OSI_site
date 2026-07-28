@@ -15,15 +15,22 @@
   var PORTAL_ID = '245760841'; // OSI HubSpot account (na2)
 
   // ── Form GUIDs ──────────────────────────────────────────────────────────────
-  // Create these 3 forms in HubSpot, then paste their GUIDs here.
+  // Create these forms in HubSpot, then paste their GUIDs here.
   //   contact     fields: email, firstname, lastname, phone, message
   //   newsletter  fields: email
   //   sandbox     fields: email, firstname, lastname, company
+  //   audit       fields: email, firstname, lastname, company, phone, message
+  //               DEDICATED form for the /audit self-serve consultation page (not the
+  //               shared 'contact' form) so those leads keep source attribution.
   // (A form GUID looks like "a1b2c3d4-1234-5678-9abc-de0123456789".)
   var FORMS = {
     contact: '3d6d2b5f-0f88-4787-8f9f-48585ae3280f',
     newsletter: '684c24b4-b7f5-4971-a683-eda20b0e254b',
-    sandbox: 'e16288f0-029d-4a42-90e2-ea11d199e1e7'
+    sandbox: 'e16288f0-029d-4a42-90e2-ea11d199e1e7',
+    // Dedicated /audit self-serve consultation form (Barry-provided GUID, 2026-07-28).
+    // The /audit page stamps lead_source = 'self-serve: free-audit' in its submission
+    // (Option B), because the form-submit API does not apply the form's hidden defaults.
+    audit: 'ee433b1b-933a-4220-a213-e09e28df7332'
   };
 
   function endpoint(formKey) {
