@@ -176,10 +176,11 @@ const faqSchema = {
           lastname: name.lastname,
           company: fd.get('company'),
           phone: fd.get('phone'),
-          message: fd.get('prompt')
-          // Lead source ('self-serve: free-audit') is stamped server-side by a hidden
-          // default field on the dedicated audit HubSpot form (Option A, Barry 2026-07-28),
-          // so the page intentionally does not send a lead-source field here.
+          message: fd.get('prompt'),
+          // Lead-source attribution for the dedicated audit form. Sent explicitly
+          // because the form-submit API does not apply the form's hidden-field defaults
+          // (Option B, Barry 2026-07-28). Property internal name: lead_source.
+          lead_source: 'self-serve: free-audit'
         };
         window.OSIHubSpot.submit('audit', payload).then(function () {
           formWrap.style.display = 'none';

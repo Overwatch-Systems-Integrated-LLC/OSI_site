@@ -28,8 +28,8 @@
     newsletter: '684c24b4-b7f5-4971-a683-eda20b0e254b',
     sandbox: 'e16288f0-029d-4a42-90e2-ea11d199e1e7',
     // Dedicated /audit self-serve consultation form (Barry-provided GUID, 2026-07-28).
-    // Lead source is stamped server-side by a hidden default field on this form
-    // (Option A), so the /audit page intentionally sends no lead-source field.
+    // The /audit page stamps lead_source = 'self-serve: free-audit' in its submission
+    // (Option B), because the form-submit API does not apply the form's hidden defaults.
     audit: 'ee433b1b-933a-4220-a213-e09e28df7332'
   };
 
