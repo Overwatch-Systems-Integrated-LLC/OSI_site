@@ -62,6 +62,7 @@ const blogSchema = {
           <span class="eyebrow">Stay current</span>
           <h2>The field notes, in your inbox</h2>
           <p class="lede">Occasional, technical, no fluff.</p>
+          <p class="nl-consent">One email per new post. Unsubscribe in one click, any time.</p>
         </div>
         <form id="news-form" novalidate>
           <label class="mono nl-label" for="nl-email">Work email</label>
@@ -96,6 +97,7 @@ const blogSchema = {
     .nl-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
     .nl-row input { flex: 1 1 260px; font-family: var(--font-sans); font-size: var(--fs-300); color: var(--text); background: var(--surface); border: var(--bw-hair) solid var(--border); padding: var(--sp-3); }
     #news-status { display: inline-block; margin-top: var(--sp-3); }
+    .nl-consent { font-size: var(--fs-100); color: var(--text-muted); margin-top: var(--sp-2); }
   </style>
 
   <script is:inline>
